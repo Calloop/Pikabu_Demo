@@ -1,4 +1,11 @@
 <resources>
-    <string name="app_name">Pikabu_Demo</string>
+    <string name="app_name">Pikabu Демо</string>
     <string name="button_sign_in">Войти</string>
+    <string name="textview_sign_in_title">Авторизация</string>
+    <string name="ic_sign_in_logo">Pikabu Logo</string>
+    <string name="textview_sign_in_description">Введите никнейм, email или номер телефона, начинающийся с символа «+»</string>
+    <string name="button_sign_in_enter">Войти</string>
+    <string name="button_sign_in_registration">Регистрация</string>
+    <string name="textView_sign_in_login">Логин</string>
+    <string name="textView_sign_in_password">Пароль</string>
 </resources>
