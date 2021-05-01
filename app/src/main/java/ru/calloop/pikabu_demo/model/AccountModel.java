@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo;
+package ru.calloop.pikabu_demo.model;
 
 public class AccountModel {
 

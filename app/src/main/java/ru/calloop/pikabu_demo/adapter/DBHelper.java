@@ -1,14 +1,12 @@
-package ru.calloop.pikabu_demo;
+package ru.calloop.pikabu_demo.adapter;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
+import ru.calloop.pikabu_demo.model.AccountModel;
 
 public class DBHelper extends SQLiteOpenHelper {
 

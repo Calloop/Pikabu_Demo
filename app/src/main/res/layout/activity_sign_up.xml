@@ -161,11 +161,11 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="513dp"
+        android:contentDescription="@string/imageButton_sign_up_cancel"
         app:layout_constraintBottom_toTopOf="@+id/button_sign_in_from_sign_up_activity"
         app:layout_constraintEnd_toStartOf="@+id/imageView_logo_sign_up"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
-        android:contentDescription="@string/imageButton_sign_up_cancel" />
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

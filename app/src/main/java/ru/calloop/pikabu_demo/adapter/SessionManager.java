@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo;
+package ru.calloop.pikabu_demo.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
