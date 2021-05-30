@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_toolbar_search_main_activity"
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/ic_toolbar_refresh_main_activity"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/sortingMethod"
+        android:icon="@drawable/ic_logo"
+        android:title="@string/item_sortingMethod_toolbar_main_activity"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/hideViewed"
+        android:icon="@drawable/ic_logo"
+        android:title="@string/item_hideViewed_toolbar_main_activity"
+        app:showAsAction="never" />
+
+</menu>
