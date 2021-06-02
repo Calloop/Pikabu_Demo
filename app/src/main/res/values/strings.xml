@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Pikabu Демо</string>
-    <string name="button_sign_in_from_main_activity">Войти</string>
     <string name="button_sign_in_from_sign_up_activity">Авторизация</string>
     <string name="textview_sign_in_title">Авторизация</string>
     <string name="ic_sign_in_logo">Pikabu Logo</string>
@@ -18,27 +17,20 @@
     <string name="hint_sign_up_password">Пароль *</string>
     <string name="imageButton_sign_up_cancel">Отменить регистрацию</string>
     <string name="imageButton_cancel_sign_in">Отменить авторизацию</string>
-    <string name="ic_toolbar_menu_activity_main">Посты</string>
-    <string name="tab1_appbar_activity_main">Горячее</string>
-    <string name="tab2_appbar_activity_main">Лучшее</string>
-    <string name="tab3_appbar_activity_main">Свежее</string>
-    <string name="tab4_appbar_activity_main">Моя лента</string>
     <string name="item_sortingMethod_toolbar_main_activity">Сортировка</string>
     <string name="item_hideViewed_toolbar_main_activity">Скрыть просмотренное</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Поиск</string>
     <string name="refresh">Обновить</string>
-    <string name="create_post">Создать пост</string>
-    <string name="title_activity_drawer_main">DrawerMainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_settings">Settings</string>
+    <string name="tab1_appbar">Горячее</string>
+    <string name="tab2_appbar">Лучшее</string>
+    <string name="tab3_appbar">Свежее</string>
+    <string name="tab4_appbar">Моя лента</string>
 </resources>
