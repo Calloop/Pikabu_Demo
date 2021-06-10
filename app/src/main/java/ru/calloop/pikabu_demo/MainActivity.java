@@ -1,24 +1,19 @@
 package ru.calloop.pikabu_demo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Button;
-import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -28,10 +23,7 @@ import ru.calloop.pikabu_demo.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    Toolbar toolbarMain;
-    FloatingActionButton fabCreatePost;
     Button buttonSignIn;
-    ImageButton imageButtonCreatePost;
     SessionManager sessionManager;
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -48,18 +40,17 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(view -> Snackbar
-                .make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        setSupportActionBar(binding.appBarMain.toolbarMain);
+        binding.appBarMain.fab.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, CreatePostActivity.class);
+            startActivity(intent);
+        });
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_settings)
-                .setOpenableLayout(drawer)
-                .build();
+                R.id.nav_home, R.id.nav_settings).setOpenableLayout(drawer).build();
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_content_main);
@@ -80,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_toolbar, menu);
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
         return true;
     }
 
@@ -113,11 +104,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        buttonSignIn.setOnClickListener(v -> {
 //            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-//            startActivity(intent);
-//        });
-//
-//        imageButtonCreatePost.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, CreatePostActivity.class);
 //            startActivity(intent);
 //        });
 }

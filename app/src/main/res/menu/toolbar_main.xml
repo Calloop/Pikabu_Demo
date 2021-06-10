@@ -14,12 +14,11 @@
 
     <item
         android:icon="@drawable/ic_logo"
-        android:title="@string/item_sortingMethod_toolbar_main_activity"
+        android:title="@string/item_sorting_toolbar_main_activity"
         app:showAsAction="never" />
 
     <item
         android:icon="@drawable/ic_logo"
         android:title="@string/item_hideViewed_toolbar_main_activity"
         app:showAsAction="never" />
-
 </menu>

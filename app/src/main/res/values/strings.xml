@@ -17,7 +17,7 @@
     <string name="hint_sign_up_password">Пароль *</string>
     <string name="imageButton_sign_up_cancel">Отменить регистрацию</string>
     <string name="imageButton_cancel_sign_in">Отменить авторизацию</string>
-    <string name="item_sortingMethod_toolbar_main_activity">Сортировка</string>
+    <string name="item_sorting_toolbar_main_activity">Сортировка</string>
     <string name="item_hideViewed_toolbar_main_activity">Скрыть просмотренное</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -33,4 +33,7 @@
     <string name="tab2_appbar">Лучшее</string>
     <string name="tab3_appbar">Свежее</string>
     <string name="tab4_appbar">Моя лента</string>
+    <string name="preview">Предпросмотр</string>
+    <string name="edit">Редактировать</string>
+    <string name="add_post">Добавить пост</string>
 </resources>

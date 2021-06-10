@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/ic_create_post_preview"
+        android:title="@string/preview"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:icon="@drawable/ic_create_post_edit"
+        android:title="@string/edit"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:icon="@drawable/ic_create_post_add_post"
+        android:title="@string/add_post"
+        app:showAsAction="ifRoom" />
+</menu>

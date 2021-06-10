@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/appBarMain"
-        layout="@layout/app_bar_main"
+        layout="@layout/appbar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -20,84 +20,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:headerLayout="@layout/navheader_main"
+        app:menu="@menu/drawer_main" />
 </androidx.drawerlayout.widget.DrawerLayout>
-
-<!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="wrap_content">-->
-
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:id="@+id/appbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-
-<!--        <androidx.appcompat.widget.Toolbar-->
-<!--            android:id="@+id/toolbarMain"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_scrollFlags="scroll|enterAlways"-->
-<!--            app:navigationIcon="@drawable/ic_toolbar_menu_main_activity"-->
-<!--            app:title="@string/ic_toolbar_menu_activity_main" />-->
-
-<!--        <com.google.android.material.tabs.TabLayout-->
-<!--            android:id="@+id/tabs"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_scrollFlags="scroll|enterAlways"-->
-<!--            app:tabMode="scrollable">-->
-
-<!--            <com.google.android.material.tabs.TabItem-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/tab1_appbar_activity_main" />-->
-
-<!--            <com.google.android.material.tabs.TabItem-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/tab2_appbar_activity_main" />-->
-
-<!--            <com.google.android.material.tabs.TabItem-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/tab3_appbar_activity_main" />-->
-
-<!--            <com.google.android.material.tabs.TabItem-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/tab4_appbar_activity_main" />-->
-<!--        </com.google.android.material.tabs.TabLayout>-->
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
-
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:orientation="vertical">-->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/content"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:orientation="vertical" />-->
-<!--        </LinearLayout>-->
-<!--    </androidx.core.widget.NestedScrollView>-->
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/fabCreatePost"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom|end"-->
-<!--        android:layout_margin="16dp"-->
-<!--        android:contentDescription="@string/create_post"-->
-<!--        app:layout_anchorGravity="bottom|right|end"-->
-<!--        app:srcCompat="@drawable/ic_create_main_activity" />-->
-<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
