@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_home, R.id.nav_settings).setOpenableLayout(drawer).build();
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment_content_main);
+                .findFragmentById(R.id.fragment_container_view_content_main);
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(MainActivity.this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment_content_main);
+                .findFragmentById(R.id.fragment_container_view_content_main);
         NavController navController = navHostFragment.getNavController();
         //NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)

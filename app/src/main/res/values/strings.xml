@@ -36,4 +36,5 @@
     <string name="preview">Предпросмотр</string>
     <string name="edit">Редактировать</string>
     <string name="add_post">Добавить пост</string>
+    <string name="add_block_create_post">Добавить текст</string>
 </resources>

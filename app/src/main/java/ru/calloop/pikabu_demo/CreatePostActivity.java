@@ -1,13 +1,13 @@
 package ru.calloop.pikabu_demo;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import ru.calloop.pikabu_demo.databinding.ActivityCreatePostBinding;
-import ru.calloop.pikabu_demo.databinding.ActivityMainBinding;
 
 public class CreatePostActivity extends AppCompatActivity {
 
@@ -25,6 +25,12 @@ public class CreatePostActivity extends AppCompatActivity {
         //setSupportActionBar(toolbar);
         setSupportActionBar(binding.appBarCreatePost.toolbarCreatePost);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Begin the transaction
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.fragment_container_view_create_post, CreatePostAddBlockFragment.class, null)
+                .commit();
     }
 
     @Override
