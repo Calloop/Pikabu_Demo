@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/appbar_create_post">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view_create_post"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="fragment_container_view_create_post"
@@ -13,7 +17,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!-- android:name="ru.calloop.pikabu_demo.CreatePostAddBlockFragment"-->
-    <!-- tools:layout="@layout/fragment_add_block_create_post" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
