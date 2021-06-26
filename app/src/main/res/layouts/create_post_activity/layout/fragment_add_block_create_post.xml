@@ -9,8 +9,7 @@
         android:id="@+id/textView"
         android:layout_width="206dp"
         android:layout_height="176dp"
-        android:layout_gravity="center"
         android:text="TextView"
-        android:textSize="50sp" />
+        android:textSize="70sp" />
 
 </FrameLayout>

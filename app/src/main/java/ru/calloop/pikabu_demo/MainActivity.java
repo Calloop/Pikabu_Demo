@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     SessionManager sessionManager;
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
 
     TabLayout tabLayout;
     ViewPager2 viewPager;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ru.calloop.pikabu_demo.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbarMain);
@@ -54,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_container_view_content_main);
+        assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(MainActivity.this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_container_view_content_main);
+        assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         //NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
@@ -87,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ViewPagerAdapter createViewAdapter() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
-        return adapter;
+        return new ViewPagerAdapter(this);
     }
 
 //        if (sessionManager.getLogin() == true)

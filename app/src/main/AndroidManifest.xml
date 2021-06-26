@@ -12,12 +12,11 @@
         android:theme="@style/Theme.Pikabu_Demo">
         <activity
             android:name=".CreatePostActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.Pikabu_Demo.NoActionBar" />
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".SignInActivity" />
-        <activity android:name=".MainActivity"
-            android:theme="@style/Theme.Pikabu_Demo.NoActionBar" >
+        <activity
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
