@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_block_list_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_block_list_create_post_list.xml" value="0.19010416666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/activity_create_post.xml" value="0.22" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/appbar_create_post.xml" value="0.20092592592592592" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/content_create_post.xml" value="0.20092592592592592" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_add_block_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_add_block_photo_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_add_block_text_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_block_list_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/list_content_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/appbar_main.xml" value="0.1814814814814815" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/content_main.xml" value="0.18888888888888888" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
