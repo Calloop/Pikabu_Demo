@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".CreatePostActivity">
+
+    <Button
+        android:id="@+id/button_add_text_create_post"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:contentDescription="TODO" />
+
+    <Button
+        android:id="@+id/button_add_photo_create_post"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:contentDescription="TODO" />
+
+    <Button
+        android:id="@+id/button_delete_block_create_post"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:contentDescription="TODO" />
+
+    <ImageButton
+        android:id="@+id/imageButton_add_video_create_post"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:contentDescription="TODO" />
+</LinearLayout>

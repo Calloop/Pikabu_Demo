@@ -3,16 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/preview_create_post"
         android:icon="@drawable/ic_create_post_preview"
         android:title="@string/preview"
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/edit_create_post"
         android:icon="@drawable/ic_create_post_edit"
         android:title="@string/edit"
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/add_post_create_post"
         android:icon="@drawable/ic_create_post_add_post"
         android:title="@string/add_post"
         app:showAsAction="ifRoom" />
