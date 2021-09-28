@@ -92,6 +92,8 @@ public class CreatePostActivity extends AppCompatActivity {
             }
 
             CreatePostActivity.this.startSupportActionMode(actionModeCallback);
+
+            Toast.makeText(this,"test", Toast.LENGTH_SHORT).show();
             return true;
         }
 

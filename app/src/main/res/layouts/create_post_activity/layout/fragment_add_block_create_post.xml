@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".CreatePostAddBlockFragment">
+    android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/button_add_block_create_post"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Добавить блок"
         android:textAlignment="textStart"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:drawableLeftCompat="@android:drawable/ic_menu_add" />
-</FrameLayout>
+        app:drawableLeftCompat="@android:drawable/ic_menu_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

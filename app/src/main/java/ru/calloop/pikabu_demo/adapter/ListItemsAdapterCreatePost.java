@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -38,36 +39,18 @@ public class ListItemsAdapterCreatePost extends
     @NonNull
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_text_block_create_post, parent, false);
-
-        FrameLayout.LayoutParams frameLayoutParams = new FrameLayout
-                .LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT);
-
-        FrameLayout frameLayout = view.findViewById(R.id.frameTest);
+        View view = null;
 
         if (viewType == TYPE_ITEM1) {
-            EditText textBlockCreatePost = new EditText(view.getContext());
-            textBlockCreatePost.setLayoutParams(frameLayoutParams);
-            textBlockCreatePost.setEms(10);
-            textBlockCreatePost.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            textBlockCreatePost.setHint("Введите текст");
-            textBlockCreatePost.setId(R.id.text_block_create_post);
-
-            frameLayout.addView(textBlockCreatePost);
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_text_block_create_post, parent, false);
         } else if (viewType == TYPE_ITEM2) {
-            int imageResource = view.getResources().getIdentifier("@drawable/ic_launcher_background", null, view.getContext().getPackageName());
-
-            ImageView imageBlockCreatePost = new ImageView(view.getContext());
-            imageBlockCreatePost.setLayoutParams(frameLayoutParams);
-            imageBlockCreatePost.setImageResource(imageResource);
-
-            frameLayout.addView(imageBlockCreatePost);
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_photo_block_create_post, parent, false);
         } else if (viewType == TYPE_ITEM3) {
-
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_add_block_create_post, parent, false);
         }
-
 
 //        if (viewType == TYPE_ITEM1) {
 //            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_text_block_create_post, parent, false);
