@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo;
+package ru.calloop.pikabu_demo.mainPage;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +17,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import ru.calloop.pikabu_demo.adapter.SessionManager;
-import ru.calloop.pikabu_demo.adapter.ViewPagerAdapter;
+import ru.calloop.pikabu_demo.createPostPage.CreatePostActivity;
+import ru.calloop.pikabu_demo.R;
+import ru.calloop.pikabu_demo.userAccountPage.SessionManager;
 import ru.calloop.pikabu_demo.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo;
+package ru.calloop.pikabu_demo.createPostPage.fragments;
 
 import android.os.Bundle;
 
@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+
+import ru.calloop.pikabu_demo.R;
+import ru.calloop.pikabu_demo.createPostPage.CreatePostActivity;
 
 public class CreatePostAddBlockFragment extends Fragment {
 
@@ -27,9 +29,9 @@ public class CreatePostAddBlockFragment extends Fragment {
 
         buttonAddBlockCreatePost = view.findViewById(R.id.button_add_block_create_post);
 
+
         buttonAddBlockCreatePost.setOnClickListener(v -> {
-            ((CreatePostActivity) requireActivity()).ButtonAddBlockCreatePost();
-            Toast.makeText(requireActivity(), "TODO PANEL", Toast.LENGTH_SHORT).show();
+            ((CreatePostActivity) requireActivity()).buttonAddBlockCreatePost();
         });
 
         return view;

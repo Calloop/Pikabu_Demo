@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo;
+package ru.calloop.pikabu_demo.mainPage;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import ru.calloop.pikabu_demo.R;
 
 public class Tab1MainFragment extends Fragment {
     private static final String ARG_COUNT = "param1";

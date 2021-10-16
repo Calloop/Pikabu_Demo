@@ -1,11 +1,11 @@
-package ru.calloop.pikabu_demo.adapter;
+package ru.calloop.pikabu_demo.mainPage;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import ru.calloop.pikabu_demo.Tab1MainFragment;
+import ru.calloop.pikabu_demo.mainPage.Tab1MainFragment;
 
 public class ViewPagerAdapter  extends FragmentStateAdapter {
     private static final int CARD_ITEM_SIZE = 4;

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="75dp"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".CreatePostActivity">
+    tools:context=".createPostPage.CreatePostActivity">
 
     <Button
         android:id="@+id/button_add_text_create_post"
@@ -13,7 +13,7 @@
         android:contentDescription="TODO" />
 
     <Button
-        android:id="@+id/button_add_photo_create_post"
+        android:id="@+id/button_add_image_create_post"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"

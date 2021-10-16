@@ -23,16 +23,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--    <FrameLayout-->
-    <!--        android:id="@+id/fragment_container_view_create_post"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:layout_marginTop="50dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textField" />-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_create_post"
         android:layout_width="match_parent"
@@ -50,17 +40,15 @@
         android:gravity="center"
         android:text="Добавьте текстовые блоки, фото или видео"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/include2"
+        app:layout_constraintBottom_toTopOf="@+id/container_content_buttons_create_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/include2"
-        layout="@layout/fragment_content_buttons_create_post"
+        android:id="@+id/container_content_buttons_create_post"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:name="ru.calloop.pikabu_demo.ContentButtonsCreatePostFragment"/>
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

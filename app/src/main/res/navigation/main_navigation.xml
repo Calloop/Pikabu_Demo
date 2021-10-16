@@ -6,13 +6,13 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="ru.calloop.pikabu_demo.ui.home.HomeFragment"
+        android:name="ru.calloop.pikabu_demo.mainPage.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="ru.calloop.pikabu_demo.ui.settings.SettingsFragment"
+        android:name="ru.calloop.pikabu_demo.mainPage.ui.settings.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

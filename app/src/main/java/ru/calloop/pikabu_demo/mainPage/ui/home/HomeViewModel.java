@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.home;
+package ru.calloop.pikabu_demo.mainPage.ui.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo;
+package ru.calloop.pikabu_demo.userAccountPage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import ru.calloop.pikabu_demo.adapter.DBHelper;
-import ru.calloop.pikabu_demo.adapter.SessionManager;
+import ru.calloop.pikabu_demo.R;
+import ru.calloop.pikabu_demo.mainPage.MainActivity;
 
 public class SignInActivity extends AppCompatActivity{
 
