@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="75dp"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".createPostPage.CreatePostActivity">
+    tools:context=".createPostPage.View.CreatePostActivity">
 
     <Button
         android:id="@+id/button_add_text_create_post"

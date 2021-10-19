@@ -17,7 +17,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import ru.calloop.pikabu_demo.createPostPage.CreatePostActivity;
+import ru.calloop.pikabu_demo.createPostPage.View.CreatePostActivity;
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.userAccountPage.SessionManager;
 import ru.calloop.pikabu_demo.databinding.ActivityMainBinding;

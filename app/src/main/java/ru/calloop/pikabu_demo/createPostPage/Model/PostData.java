@@ -1,15 +1,15 @@
-package ru.calloop.pikabu_demo.createPostPage.models;
+package ru.calloop.pikabu_demo.createPostPage.Model;
 
 public class PostData {
 
-    int type;
+    int type, image;
     String text;
-    int image;
 
-    public PostData(int type, String text, int image) {
+    public PostData(int type, int image, String text) {
         this.type = type;
         this.text = text;
         this.image = image;
+
     }
 
     public int getType() {

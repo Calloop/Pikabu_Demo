@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pikabu_Demo">
         <activity
-            android:name=".createPostPage.CreatePostActivity"
+            android:name=".createPostPage.View.CreatePostActivity"
             android:parentActivityName=".mainPage.MainActivity"
             android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity android:name=".userAccountPage.SignUpActivity" />

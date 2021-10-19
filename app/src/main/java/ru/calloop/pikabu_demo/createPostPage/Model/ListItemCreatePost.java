@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.createPostPage.models;
+package ru.calloop.pikabu_demo.createPostPage.Model;
 
 public interface ListItemCreatePost {
     int getID();

@@ -1,32 +1,41 @@
 package ru.calloop.pikabu_demo.createPostPage.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostPage.models.PostData;
+import ru.calloop.pikabu_demo.createPostPage.Model.PostData;
 
 public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final LayoutInflater inflater;
-    private final List<PostData> postBlocks = new ArrayList<>();
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    private final List<PostData> postBlocks;
+    private OnItemClickListener listener;
 
     private static final int TYPE_ADDBLOCK = 0;
     private static final int TYPE_TEXTBLOCK = 1;
     private static final int TYPE_IMAGEBLOCK = 2;
 
-    public BlocksListCreatePostAdapter(Context context) {
-        this.inflater = LayoutInflater.from(context);
+    public BlocksListCreatePostAdapter(List<PostData> postBlocks, OnItemClickListener listener) {
+        this.postBlocks = postBlocks;
+        this.listener = listener;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -47,16 +56,15 @@ public class BlocksListCreatePostAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        int type = getItemViewType(position);
-
-        if (type == TYPE_ADDBLOCK) {
-        } else if (type == TYPE_TEXTBLOCK) {
+        if (holder.getItemViewType() == TYPE_ADDBLOCK) {
+            AddBlockViewHolder addBlockViewHolder = (AddBlockViewHolder) holder;
+        } else if (holder.getItemViewType() == TYPE_TEXTBLOCK) {
+            TextViewHolder textViewHolder = (TextViewHolder) holder;
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-
         if (postBlocks.get(position).getType() == 0) {
             return TYPE_ADDBLOCK;
         } else if (postBlocks.get(position).getType() == 1) {
@@ -71,13 +79,27 @@ public class BlocksListCreatePostAdapter extends
         return postBlocks.size();
     }
 
-    static class AddBlockViewHolder extends RecyclerView.ViewHolder {
+    public class AddBlockViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+        private Button button;
+
         public AddBlockViewHolder(View view) {
             super(view);
+            button = view.findViewById(R.id.button_add_block_create_post);
+
+            button.setOnClickListener(view1 -> {
+                Toast.makeText(view1.getContext(), "CLICKED", Toast.LENGTH_SHORT).show();
+            });
+
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
         }
     }
 
-    static class TextViewHolder extends RecyclerView.ViewHolder {
+    public class TextViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
 
         public TextViewHolder(View view) {
@@ -87,8 +109,8 @@ public class BlocksListCreatePostAdapter extends
     }
 
     public void createBlock(int type) {
-        PostData emptyData = new PostData(0, null, 0);
-        PostData postData = new PostData(type, null, 0);
+        PostData emptyData = new PostData(0, 0, null);
+        PostData postData = new PostData(type, 0, null);
         if (postBlocks.size() == 0) {
             postBlocks.add(emptyData);
         }

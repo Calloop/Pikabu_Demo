@@ -9,7 +9,7 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostPage.CreatePostActivity;
+import ru.calloop.pikabu_demo.createPostPage.View.CreatePostActivity;
 
 public class MenuCreatePostFragment extends Fragment {
 

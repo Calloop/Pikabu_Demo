@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.createPostPage;
+package ru.calloop.pikabu_demo.createPostPage.View;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,23 +10,28 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
+import ru.calloop.pikabu_demo.createPostPage.CreatePostContract;
+import ru.calloop.pikabu_demo.createPostPage.Model.PostData;
+import ru.calloop.pikabu_demo.createPostPage.Presenter.CreatePostPresenter;
 import ru.calloop.pikabu_demo.createPostPage.adapters.BlocksListCreatePostAdapter;
-import ru.calloop.pikabu_demo.createPostPage.fragments.CreatePostAddBlockFragment;
 import ru.calloop.pikabu_demo.createPostPage.fragments.MenuCreatePostFragment;
-import ru.calloop.pikabu_demo.createPostPage.models.PostData;
 
-public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.View {
+public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.IView {
 
-    private CreatePostContract.Presenter presenter;
+    private CreatePostContract.IPresenter iPresenter;
     private BlocksListCreatePostAdapter adapter;
+    private BlocksListCreatePostAdapter.OnItemClickListener listener;
+
+    private List<PostData> list = new ArrayList<>();
+
     private TextView textViewDescriptionCreatePost;
     private ActionMode actionMode;
 
@@ -41,7 +46,11 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
             setFragmentManager();
         }
         setToolbar();
-        setRecyclerView();
+
+        iPresenter = new CreatePostPresenter(this);
+        iPresenter.setDataToListview();
+        setAdapter();
+        setOnClickListener();
     }
 
     //region [SET: TOOLBAR, FRAGMENT MANAGER, RECYCLER VIEW]
@@ -59,14 +68,23 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
                 .commit();
     }
 
-    private void setRecyclerView() {
+    private void setAdapter() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new BlocksListCreatePostAdapter(this);
+        adapter = new BlocksListCreatePostAdapter(list, listener);
 
         RecyclerView recyclerView = findViewById(R.id.list_create_post);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void setOnClickListener() {
+        if (adapter != null)
+        {
+            adapter.setOnItemClickListener((view, position) -> {
+
+            });
+        }
     }
     //endregion
 
@@ -174,9 +192,8 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
+    public void setDataToListview(List<PostData> list) {
+        this.list = list;
     }
     //endregion
 }
