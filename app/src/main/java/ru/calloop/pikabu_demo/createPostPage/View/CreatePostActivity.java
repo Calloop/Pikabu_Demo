@@ -19,15 +19,17 @@ import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.createPostPage.CreatePostContract;
+import ru.calloop.pikabu_demo.createPostPage.Model.PostDataModel;
 import ru.calloop.pikabu_demo.createPostPage.Model.PostData;
 import ru.calloop.pikabu_demo.createPostPage.Presenter.CreatePostPresenter;
 import ru.calloop.pikabu_demo.createPostPage.adapters.BlocksListCreatePostAdapter;
 import ru.calloop.pikabu_demo.createPostPage.fragments.MenuCreatePostFragment;
 
-public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.IView {
+public class CreatePostActivity extends AppCompatActivity {
 
-    private CreatePostContract.IPresenter iPresenter;
+    private CreatePostPresenter presenter;
     private BlocksListCreatePostAdapter adapter;
+    private DbHelper dbHelper;
     private BlocksListCreatePostAdapter.OnItemClickListener listener;
 
     private List<PostData> list = new ArrayList<>();
@@ -45,10 +47,8 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         if (savedInstanceState == null) {
             setFragmentManager();
         }
-        setToolbar();
 
-        iPresenter = new CreatePostPresenter(this);
-        iPresenter.setDataToListview();
+        setToolbar();
         setAdapter();
         setOnClickListener();
     }
@@ -70,12 +70,18 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     private void setAdapter() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new BlocksListCreatePostAdapter(list, listener);
+        adapter = new BlocksListCreatePostAdapter(listener);
 
         RecyclerView recyclerView = findViewById(R.id.list_create_post);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        dbHelper = new DbHelper(this);
+        PostDataModel model = new PostDataModel(dbHelper);
+        presenter = new CreatePostPresenter(model);
+        presenter.attachView(this);
+        presenter.viewIsReady();
     }
 
     private void setOnClickListener() {
@@ -108,6 +114,11 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
             Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
             return true;
+        }
+
+        if (itemId == R.id.add_post_create_post)
+        {
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -192,8 +203,10 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     }
 
     @Override
-    public void setDataToListview(List<PostData> list) {
-        this.list = list;
+    protected void onDestroy() {
+        dbHelper.close();
+        presenter.detachView();
+        super.onDestroy();
     }
     //endregion
 }

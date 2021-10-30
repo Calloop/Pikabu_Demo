@@ -2,37 +2,61 @@ package ru.calloop.pikabu_demo.createPostPage.Model;
 
 public class PostData {
 
-    int type, image;
-    String text;
+    private int id, postId, dataPosition, dataType;
+    private String dataValue;
 
-    public PostData(int type, int image, String text) {
-        this.type = type;
-        this.text = text;
-        this.image = image;
-
+    public PostData() {
     }
 
-    public int getType() {
-        return type;
+    public PostData(int dataType) {
+        this.dataType = dataType;
     }
 
-    public void setType(int id) {
-        this.type = id;
+    public PostData(int id, int postId, int dataPosition, int dataType, String dataValue) {
+        this.id = id;
+        this.postId = postId;
+        this.dataPosition = dataPosition;
+        this.dataType = dataType;
+        this.dataValue = dataValue;
     }
 
-    public String getText() {
-        return text;
+    public int getId() {
+        return id;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getImage() {
-        return image;
+    public int getPostId() {
+        return postId;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
+    public int getDataPosition() {
+        return dataPosition;
+    }
+
+    public void setDataPosition(int dataPosition) {
+        this.dataPosition = dataPosition;
+    }
+
+    public int getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(int dataType) {
+        this.dataType = dataType;
+    }
+
+    public String getDataValue() {
+        return dataValue;
+    }
+
+    public void setDataValue(String dataValue) {
+        this.dataValue = dataValue;
     }
 }

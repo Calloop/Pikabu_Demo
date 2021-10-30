@@ -1,23 +1,60 @@
 package ru.calloop.pikabu_demo.createPostPage.Presenter;
 
-import java.util.List;
+import ru.calloop.pikabu_demo.createPostPage.Model.PostDataModel;
+import ru.calloop.pikabu_demo.createPostPage.View.CreatePostActivity;
 
-import ru.calloop.pikabu_demo.createPostPage.CreatePostContract;
-import ru.calloop.pikabu_demo.createPostPage.Model.ListItemCreatePostModel;
-import ru.calloop.pikabu_demo.createPostPage.Model.PostData;
+public class CreatePostPresenter {
+    private CreatePostActivity view;
+    private PostDataModel postDataModel;
 
-public class CreatePostPresenter implements CreatePostContract.IPresenter {
-    private final CreatePostContract.IView iView;
-    private final CreatePostContract.IModel iModel;
-
-    public CreatePostPresenter(CreatePostContract.IView iView) {
-        this.iView = iView;
-        iModel = new ListItemCreatePostModel(iView);
+    public CreatePostPresenter(PostDataModel postDataModel) {
+        this.postDataModel = postDataModel;
     }
 
-    @Override
-    public void setDataToListview() {
-        List<PostData> list = iModel.getListFromDatabase();
-        iView.setDataToListview(list);
+    public void attachView(CreatePostActivity createPostActivity) {
+        view = createPostActivity;
+    }
+
+    public void detachView() {
+        view = null;
+    }
+
+    public void viewIsReady() {
+        loadData();
+    }
+
+    public void loadData() {
+        postDataModel.loadData(items -> view.showData(items));
+    }
+
+    public void add() {
+//        PostData postData = iView.getData;
+//        if (TextUtils.isEmpty(postData.getType()) || TextUtils.isEmpty(postData.getText())) {
+//            iView.showToast(R.string.empty_values);
+//            return;
+//        }
+//
+//        ContentValues cv = new ContentValues(2);
+//        cv.put(DbHelper., postData.getType());
+//        cv.put(UserTable.COLUMN.EMAIL, postData.getText());
+//        iView.showProgress();
+//        iModel.addUser(cv, new PostDataModel().CompleteCallback() {
+//            @Override
+//            public void onComplete() {
+//                iView.hideProgress();
+//                loadUsers();
+//            }
+//        });
+    }
+
+    public void clear() {
+//        iView.showProgress();
+//        iModel.clearUsers(new PostDataModel().CompleteCallback() {
+//            @Override
+//            public void onComplete() {
+//                iView.hideProgress();
+//                loadUsers();
+//            }
+//        });
     }
 }

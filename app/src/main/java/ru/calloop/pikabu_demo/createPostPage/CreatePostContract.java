@@ -15,5 +15,6 @@ public interface CreatePostContract {
 
     interface IModel {
         List<PostData> getListFromDatabase();
+        //loadData();
     }
 }
