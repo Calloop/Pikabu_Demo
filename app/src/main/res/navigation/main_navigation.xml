@@ -2,17 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/home_fragment">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="ru.calloop.pikabu_demo.mainPage.ui.home.HomeFragment"
+        android:id="@+id/home_fragment"
+        android:name="ru.calloop.pikabu_demo.mainActivity.mainActivityUI.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_settings"
-        android:name="ru.calloop.pikabu_demo.mainPage.ui.settings.SettingsFragment"
+        android:id="@+id/settings_fragment"
+        android:name="ru.calloop.pikabu_demo.mainActivity.mainActivityUI.settings.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

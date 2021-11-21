@@ -4,17 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <include
+        android:id="@+id/include_add_block_create_post"
+        layout="@layout/fragment_add_block_create_post"
+        app:layout_constraintBottom_toTopOf="@+id/editText_textBlock_createPost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/editText_textBlock_createPost"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="150dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/include_add_block_create_post" />
 
-    <include layout="@layout/editing_menu_create_post" />
+    <include
+        layout="@layout/editing_menu_create_post"
+        android:layout_width="75dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_textBlock_createPost"
+        app:layout_constraintEnd_toEndOf="@+id/editText_textBlock_createPost"
+        app:layout_constraintTop_toTopOf="@+id/editText_textBlock_createPost" />
 </androidx.constraintlayout.widget.ConstraintLayout>

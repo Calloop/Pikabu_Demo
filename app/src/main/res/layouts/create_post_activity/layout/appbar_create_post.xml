@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".createPostPage.View.CreatePostActivity">
+    tools:context=".createPostActivity.CreatePostActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.Pikabu_Demo.AppBarOverlay">
+        android:theme="@style/Theme.NavigationDrawer.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_create_post"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Pikabu_Demo.PopupOverlay" />
+            app:popupTheme="@style/Theme.NavigationDrawer.PopupOverlay" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_create_post" />
