@@ -19,7 +19,7 @@ public abstract class PikabuDB extends RoomDatabase {
             synchronized (PikabuDB.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            PikabuDB.class, "pikabu")
+                            PikabuDB.class, "Pikabu")
                             .build();
                 }
             }

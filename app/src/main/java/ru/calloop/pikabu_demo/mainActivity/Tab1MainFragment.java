@@ -11,25 +11,24 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PikabuDB;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
 
 public class Tab1MainFragment extends Fragment {
+    private List<PostItem> postItemList;
 
     private BlocksListMainAdapter adapter;
 
     List<PostItem> postItems;
 
-    public static Tab1MainFragment newInstance(int page, String title) {
-        Tab1MainFragment fragment = new Tab1MainFragment();
-        return fragment;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //((MainActivity) getActivity()).setAboutDataListener(this);
     }
 
     @Override
@@ -37,12 +36,13 @@ public class Tab1MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab1_main, container, false);
 
-        assert getArguments() != null;
-        postItems = getArguments().getParcelable("postItems");
-        //postItems = new ArrayList<>();
-        //postItems.add(new PostItem(1, 1, 1, 1, "lolo"));
+//        if (getArguments() != null) {
+//            postItems = getArguments().getParcelable("postItems");
+//        }
+        postItems = new ArrayList<>(1);
+        postItems.add(new PostItem(1, 1, 1, 1, "lolo"));
         adapter = new BlocksListMainAdapter(postItems);
-        Log.e("postItems", adapter.postItems.get(0).getDataValue());
+        Log.e("postItems", adapter.postItemList.get(0).getDataValue());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 
@@ -58,6 +58,11 @@ public class Tab1MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
+//    @Override
+//    public void onDataReceived(List<PostItem> postItemList) {
+//        this.postItemList = postItemList;
+//    }
 }
 
 //public class Tab1MainFragment extends Fragment {

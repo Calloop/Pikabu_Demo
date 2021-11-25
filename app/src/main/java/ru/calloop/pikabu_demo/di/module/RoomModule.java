@@ -1,6 +1,5 @@
 package ru.calloop.pikabu_demo.di.module;
 
-import android.app.Application;
 import android.content.Context;
 
 import androidx.room.Room;
@@ -11,8 +10,8 @@ import dagger.Module;
 import dagger.Provides;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PikabuDB;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemDao;
-import ru.calloop.pikabu_demo.services.PostItemRepository;
-import ru.calloop.pikabu_demo.services.impl.PostItemRepositoryImpl;
+import ru.calloop.pikabu_demo.services.IPostItemRepository;
+import ru.calloop.pikabu_demo.services.impl.PostItemRepository;
 
 @Module
 public class RoomModule {
@@ -39,7 +38,7 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    PostItemRepository providesPostItemRepository() {
-        return new PostItemRepositoryImpl(context);
+    IPostItemRepository providesPostItemRepository() {
+        return new PostItemRepository(context);
     }
 }

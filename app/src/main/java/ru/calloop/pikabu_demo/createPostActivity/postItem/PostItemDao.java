@@ -16,10 +16,10 @@ import io.reactivex.rxjava3.core.Observable;
 @Dao
 public interface PostItemDao {
     @Query("SELECT * FROM postItems")
-    List<PostItem> getAll();
+    Observable<List<PostItem>> getAll();
 
     @Query("SELECT * FROM postItems WHERE id = :id")
-    PostItem getById(int id);
+    Observable<PostItem> getById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(PostItem postItem);

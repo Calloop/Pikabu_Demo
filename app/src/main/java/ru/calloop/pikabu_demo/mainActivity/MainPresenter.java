@@ -1,34 +1,38 @@
 package ru.calloop.pikabu_demo.mainActivity;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import java.util.List;
 
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.observers.DisposableObserver;
-import ru.calloop.pikabu_demo.createPostActivity.CreatePostContract;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemModel;
 
 public class MainPresenter implements MainContract.IPresenter {
-    private MainContract.IView view;
-    private final PostItemModel postItemModel;
+    MutableLiveData<List<PostItem>> postItemList = new MutableLiveData();
 
-    public MainPresenter(PostItemModel postItemModel) {
-        this.postItemModel = postItemModel;
+    void init
+
+    {
+        loadPostItemList();
     }
 
-    public void attachView(MainContract.IView view) {
-        this.view = view;
+//    public void attachView(MainContract.IView view) {
+//        this.view = view;
+//    }
+//
+//    public void detachView() {
+//        view = null;
+//    }
+//
+//    public void viewIsReady() {
+//        loadPostItems();
+//    }
+
+    public LiveData<List<PostItem>> getPostItemList() {
+        return postItemList;
     }
 
-    public void detachView() {
-        view = null;
-    }
-
-    public void viewIsReady() {
-        loadPostItems();
-    }
-
-    public void loadPostItems() {
+    public void loadPostItemList() {
         //getObservable().subscribeWith(getObserver());
         //postItemModel.loadPostItems(items -> view.showPostItems(items));
     }

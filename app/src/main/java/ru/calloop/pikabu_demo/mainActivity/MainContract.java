@@ -18,9 +18,9 @@ public interface MainContract {
     }
 
     interface IPresenter {
-        void attachView(MainContract.IView view);
-        void detachView();
-        void viewIsReady();
+//        void attachView(MainContract.IView view);
+//        void detachView();
+//        void viewIsReady();
 
         //void loadPostItems();
     }

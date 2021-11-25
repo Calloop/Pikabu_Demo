@@ -8,10 +8,10 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
 
-public interface PostItemRepository {
+public interface IPostItemRepository {
 
-    List<PostItem> getAll();
-    PostItem getById(int id);
+    Observable<List<PostItem>> getAll();
+    Observable<PostItem> getById(int id);
 //    void insert(PostItem postItem);
 //    int delete(PostItem postItem);
 }

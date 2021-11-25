@@ -1,40 +1,31 @@
 package ru.calloop.pikabu_demo.createPostActivity.postItem;
 
 import android.app.Application;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.rxjava3.core.Observable;
-import ru.calloop.pikabu_demo.createPostActivity.CreatePostContract;
-import ru.calloop.pikabu_demo.services.PostItemRepository;
-import ru.calloop.pikabu_demo.services.impl.PostItemRepositoryImpl;
+import ru.calloop.pikabu_demo.services.IPostItemRepository;
 
-public class PostItemModel extends AndroidViewModel {
-    private PostItemRepository repository;
-
-    private List<PostItem> postItems;
-
-    private PostItemDao postItemDao;
-
-    public PostItemModel(Application application) {
-        super(application);
-        postItemDao = PikabuDB.getDatabase(application).getPostItemDao();
-        //repository = new PostItemRepositoryImpl(application);
-        //postItems = repository.getAll();
-    }
-
-    public List<PostItem> getAll() {
-        return postItemDao.getAll();
-    }
+public class PostItemModel {
+        //extends AndroidViewModel {
+//    private IPostItemRepository repository;
+//
+//    private List<PostItem> postItems;
+//
+//    private PostItemDao postItemDao;
+//
+//    public PostItemModel(Application application) {
+//        super(application);
+//        postItemDao = PikabuDB.getDatabase(application).getPostItemDao();
+//        //repository = new PostItemRepositoryImpl(application);
+//        //postItems = repository.getAll();
+//    }
+//
+//    public List<PostItem> getAll() {
+//        return postItemDao.getAll();
+//    }
 
 //    public interface LoadEntriesCallback {
 //        void onLoad(List<PostItem> data);

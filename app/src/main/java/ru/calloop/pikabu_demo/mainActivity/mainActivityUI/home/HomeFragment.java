@@ -15,8 +15,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.io.Serializable;
+import java.util.List;
+
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.createPostActivity.CreatePostActivity;
+import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
 import ru.calloop.pikabu_demo.mainActivity.HomeAdapter;
 
 public class HomeFragment extends Fragment {

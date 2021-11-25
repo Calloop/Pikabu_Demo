@@ -2,33 +2,24 @@ package ru.calloop.pikabu_demo.mainActivity;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 
-import javax.inject.Inject;
-
-import ru.calloop.pikabu_demo.App;
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PikabuDB;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemModel;
-import ru.calloop.pikabu_demo.services.PostItemRepository;
 
 public class MainActivity extends AppCompatActivity implements MainContract.IView {
     private MainPresenter mainPresenter;
@@ -43,21 +34,26 @@ public class MainActivity extends AppCompatActivity implements MainContract.IVie
 //    //@Inject
 //    PostItemModel postItemModel;
 
+//    private OnAboutDataReceivedListener mAboutDataListener;
+//
+//    public interface OnAboutDataReceivedListener {
+//        void onDataReceived(List<PostItem> postItemList);
+//    }
+//
+//    public void setAboutDataListener(OnAboutDataReceivedListener listener) {
+//        this.mAboutDataListener = listener;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_main);
 
-        PikabuDB database = Room.databaseBuilder(getApplicationContext(), PikabuDB.class, "Pikabu").allowMainThreadQueries().build();
-        postItems = new ArrayList<>();
-        postItems.add(new PostItem(1, 1, 1, 1, "lolo"));
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("postItems", postItems);
-// set Fragmentclass Arguments
-        Tab1MainFragment fragment = new Tab1MainFragment();
-        fragment.setArguments(bundle);
+        // set Fragmentclass Arguments
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        HomeFragment homeFragment = HomeFragment.newInstance(postItems);
+//        transaction.add(R.id.nav_host_fragment, homeFragment);
+//        transaction.commit();
 
 //        getSupportFragmentManager().beginTransaction()
 //                .replace(R.id.nav_host_fragment, fragment).commit();
@@ -87,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.IVie
         NavigationUI.setupWithNavController(navigationView, navController);
 
         setPresenter();
+
+        //Toast.makeText(this, MessageFormat.format("{0}", Objects.requireNonNull(navController.getCurrentDestination()).getDisplayName()), Toast.LENGTH_SHORT).show();
     }
 
     @Override

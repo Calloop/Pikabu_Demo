@@ -4,35 +4,27 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.BlocksListCreatePostAdapter;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
 
 public class BlocksListMainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public List<PostItem> postItems;
+    public List<PostItem> postItemList;
+    private Context context;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
-    public BlocksListMainAdapter(List<PostItem> postItems) {
-        this.postItems = postItems;
+    public BlocksListMainAdapter(List<PostItem> postItemList) {
+        this.postItemList = postItemList;
     }
-
-//    public void setData(List<PostItem> postItems) {
-//        this.postItems = postItems;
-//        notifyDataSetChanged();
-//    }
 
     @NonNull
     @Override
@@ -52,16 +44,16 @@ public class BlocksListMainAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if (holder.getItemViewType() == TYPE_TEXT_BLOCK) {
             BlocksListMainAdapter.TextViewHolder textViewHolder = (BlocksListMainAdapter.TextViewHolder) holder;
 
-            textViewHolder.getTextView().setText(postItems.get(position).getDataValue());
+            textViewHolder.getTextView().setText(postItemList.get(position).getDataValue());
         }
         // тут создавать холдер и с ним делать действия типа нажатий
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (postItems.get(position).getDataType() == 1) {
+        if (postItemList.get(position).getDataType() == 1) {
             return TYPE_TEXT_BLOCK;
-        } else if (postItems.get(position).getDataType() == 2) {
+        } else if (postItemList.get(position).getDataType() == 2) {
             return TYPE_IMAGE_BLOCK;
         } else {
             return 0;
@@ -70,7 +62,7 @@ public class BlocksListMainAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return postItems.size();
+        return postItemList.size();
     }
 
     public class TextViewHolder extends RecyclerView.ViewHolder {
