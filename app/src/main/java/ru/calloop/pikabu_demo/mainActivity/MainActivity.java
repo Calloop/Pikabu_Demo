@@ -14,14 +14,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.text.MessageFormat;
 import java.util.List;
-import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
 
-public class MainActivity extends AppCompatActivity implements MainContract.IView {
+public class MainActivity extends AppCompatActivity {
     private MainPresenter mainPresenter;
     private AppBarConfiguration appBarConfiguration;
 //    private BlocksListMainAdapter adapter;
@@ -83,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.IVie
         NavigationUI.setupWithNavController(navigationView, navController);
 
         setPresenter();
-
-        //Toast.makeText(this, MessageFormat.format("{0}", Objects.requireNonNull(navController.getCurrentDestination()).getDisplayName()), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -104,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.IVie
     }
 
     private void setPresenter() {
-        //adapter = new BlocksListMainAdapter(postItems);
+
+//        adapter = new BlocksListMainAdapter(postItems);
 //        postItemModel = new ViewModelProvider(this).get(PostItemModel.class);
 //        postItemModel.getAll().observe(this, posts -> adapter.setData(posts));
 

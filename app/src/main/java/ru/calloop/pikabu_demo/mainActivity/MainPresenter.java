@@ -1,38 +1,70 @@
 package ru.calloop.pikabu_demo.mainActivity;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import java.util.List;
 
+
+import ru.calloop.pikabu_demo.createPostActivity.postItem.PikabuDB;
+import ru.calloop.pikabu_demo.createPostActivity.postItem.Post;
+import ru.calloop.pikabu_demo.createPostActivity.postItem.PostAndPostItem;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
+import ru.calloop.pikabu_demo.services.impl.PostItemRepository;
+import ru.calloop.pikabu_demo.services.impl.PostRepository;
 
 public class MainPresenter implements MainContract.IPresenter {
-    MutableLiveData<List<PostItem>> postItemList = new MutableLiveData();
+    private MainContract.IView view;
+    //MutableLiveData<List<PostItem>> postItemList = new MutableLiveData<>();
+    private PostRepository repository;
 
-    void init
+    public MainPresenter() {
 
-    {
-        loadPostItemList();
     }
 
-//    public void attachView(MainContract.IView view) {
-//        this.view = view;
-//    }
-//
-//    public void detachView() {
-//        view = null;
-//    }
-//
-//    public void viewIsReady() {
-//        loadPostItems();
-//    }
-
-    public LiveData<List<PostItem>> getPostItemList() {
-        return postItemList;
+    public void attachView(MainContract.IView view) {
+        this.view = view;
+        PikabuDB database = PikabuDB.getDatabase(this.view.getContext());
+        repository = new PostRepository(database.getPostDao());
     }
 
-    public void loadPostItemList() {
+    public void detachView() {
+        view = null;
+    }
+
+    public void viewIsReady() {
+        loadAll();
+    }
+
+    @Override
+    public List<PostAndPostItem> getPostItems(List<Integer> postIdList) {
+        return repository.getPostItems(postIdList);
+    }
+
+    public List<Post> getAllPosts(int startPosition, int limitCount) {
+        return repository.getAllPosts(startPosition, limitCount);
+    }
+
+//    @Override
+//    public void deleteAll(List<PostItem> postItemList)
+//    {
+//        repository.deleteAll(postItemList);
+//    }
+
+//    public void insertItem(PostItem postItem) {
+//        repository.insertItem(postItem);
+//    }
+
+    public void loadAll() {
+
+
+//        CompositeDisposable compositeDisposable = new CompositeDisposable();
+//
+//        Disposable disposable = interactor.getAll()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(list -> postItemList.postValue(list), error -> Log.d("RxJava", "Error getting info from interactor into presenter"));
+//
+//        compositeDisposable.add(disposable);
+//        compositeDisposable.dispose();
+
         //getObservable().subscribeWith(getObserver());
         //postItemModel.loadPostItems(items -> view.showPostItems(items));
     }

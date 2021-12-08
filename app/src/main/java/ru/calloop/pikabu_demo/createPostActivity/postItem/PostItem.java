@@ -1,17 +1,20 @@
 package ru.calloop.pikabu_demo.createPostActivity.postItem;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import static androidx.room.ForeignKey.CASCADE;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
-@Entity(tableName = "postItems")
+@Entity(tableName = "postItems", indices = {@Index(value = "post_id", unique = true)},
+        foreignKeys = @ForeignKey(entity = Post.class, parentColumns = "id",
+                childColumns = "post_id", onDelete = CASCADE))
 public class PostItem {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
     @ColumnInfo(name = "post_id")
@@ -23,9 +26,7 @@ public class PostItem {
     @ColumnInfo(name = "data_value")
     private String dataValue;
 
-    public PostItem(int id, int postId, int dataPosition, int dataType, String dataValue) {
-        this.id = id;
-        this.postId = postId;
+    public PostItem(int dataPosition, int dataType, String dataValue) {
         this.dataPosition = dataPosition;
         this.dataType = dataType;
         this.dataValue = dataValue;

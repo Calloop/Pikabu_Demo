@@ -7,32 +7,32 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
+import ru.calloop.pikabu_demo.createPostActivity.postItem.PikabuDB;
+import ru.calloop.pikabu_demo.createPostActivity.postItem.Post;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemModel;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemDbHelper;
+import ru.calloop.pikabu_demo.mainActivity.MainContract;
+import ru.calloop.pikabu_demo.services.impl.PostItemRepository;
+import ru.calloop.pikabu_demo.services.impl.PostRepository;
 
 public class CreatePostPresenter implements CreatePostContract.IPresenter {
-
-    List<PostItem> postItems;
-
-//    LiveData<List<PostItem>> getAll() {
-//        return postItems;
-//    }
+    private CreatePostContract.IView view;
+    private PostRepository repository;
 
     public void loadEntry() {
         //postItems..subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<ViewModel>() {
         //}
-        }
+    }
 
-    private CreatePostContract.IView view;
-    private final PostItemModel postItemModel;
+    public CreatePostPresenter() {
 
-    public CreatePostPresenter(PostItemModel postItemModel) {
-        this.postItemModel = postItemModel;
     }
 
     public void attachView(CreatePostContract.IView view) {
         this.view = view;
+        PikabuDB database = PikabuDB.getDatabase(view.getContext());
+        repository = new PostRepository(database.getPostDao());
     }
 
     public void detachView() {
@@ -44,18 +44,34 @@ public class CreatePostPresenter implements CreatePostContract.IPresenter {
     }
 
     @Override
-    public void addEntry(List<PostItem> postItems) {
-        ContentValues cv = new ContentValues(4);
-
-        for (PostItem postItem1 : postItems) {
-            cv.put(PostItemDbHelper.COLUMN.POST_ID, postItem1.getPostId());
-            cv.put(PostItemDbHelper.COLUMN.POSITION, postItem1.getDataPosition());
-            cv.put(PostItemDbHelper.COLUMN.TYPE, postItem1.getDataType());
-            cv.put(PostItemDbHelper.COLUMN.VALUE, postItem1.getDataValue());
-
-            //postItemModel.addEntry(cv, this::loadPostItems);
-        }
+    public long insertPost(Post post) {
+        return repository.insertPost(post);
     }
+
+    @Override
+    public void insertPostItemList(List<PostItem> postItemList) {
+        repository.insertPostItemList(postItemList);
+    }
+
+//    @Override
+//    public void deleteAll(List<PostItem> postItemList)
+//    {
+//        repository.deleteAll(postItemList);
+//    }
+
+//    @Override
+//    public void addEntry(List<PostItem> postItems) {
+//        ContentValues cv = new ContentValues(4);
+//
+//        for (PostItem postItem : postItems) {
+//            cv.put(PostItemDbHelper.COLUMN.POST_ID, postItem.getPostId());
+//            cv.put(PostItemDbHelper.COLUMN.POSITION, postItem.getDataPosition());
+//            cv.put(PostItemDbHelper.COLUMN.TYPE, postItem.getDataType());
+//            cv.put(PostItemDbHelper.COLUMN.VALUE, postItem.getDataValue());
+//
+//            //postItemModel.addEntry(cv, this::loadPostItems);
+//        }
+//    }
 }
 
 //    @Override

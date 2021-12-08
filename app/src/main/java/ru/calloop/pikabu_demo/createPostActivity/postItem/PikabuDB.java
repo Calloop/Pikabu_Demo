@@ -6,13 +6,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.Database;
 
-@Database(entities = {PostItem.class}, version = PikabuDB.VERSION)
+@Database(entities = {Post.class, PostItem.class}, version = PikabuDB.VERSION)
 public abstract class PikabuDB extends RoomDatabase {
 
     static final int VERSION = 1;
     private static PikabuDB INSTANCE;
 
-    public abstract PostItemDao getPostItemDao();
+    public abstract PostDao getPostDao();
 
     public static PikabuDB getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -20,6 +20,7 @@ public abstract class PikabuDB extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PikabuDB.class, "Pikabu")
+                            .allowMainThreadQueries()
                             .build();
                 }
             }

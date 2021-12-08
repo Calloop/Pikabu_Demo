@@ -1,6 +1,5 @@
 package ru.calloop.pikabu_demo.createPostActivity.postItem;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -10,23 +9,23 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Observable;
-
 @Dao
 public interface PostItemDao {
     @Query("SELECT * FROM postItems")
-    Observable<List<PostItem>> getAll();
+    List<PostItem> getAll();
 
     @Query("SELECT * FROM postItems WHERE id = :id")
-    Observable<PostItem> getById(int id);
+    PostItem getById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(PostItem postItem);
+    void insertAll(List<PostItem> postItemList);
 
     @Update
     void update(PostItem postItem);
 
     @Delete
     int delete(PostItem postItem);
+
+    @Delete
+    void deleteAll(List<PostItem> postItemList);
 }

@@ -1,19 +1,29 @@
 package ru.calloop.pikabu_demo.mainActivity.mainActivityUI.home;
 
+import android.app.Application;
+import android.content.Context;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+import java.util.List;
 
-    private MutableLiveData<String> mText;
+import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
+import ru.calloop.pikabu_demo.services.impl.PostItemRepository;
 
-    public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
-    }
+public class HomeViewModel {
 
-    public LiveData<String> getText() {
-        return mText;
-    }
+//    private PostItemRepository repository;
+//
+//    private final LiveData<List<PostItem>> postItemList;
+//
+//    public HomeViewModel(Application application) {
+//        super(application);
+//        repository = new PostItemRepository(application);
+//        postItemList = repository.getAll();
+//    }
+//
+//    LiveData<List<PostItem>> getAll() { return postItemList; }
 }

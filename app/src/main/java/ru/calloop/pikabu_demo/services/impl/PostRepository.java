@@ -8,13 +8,13 @@ import ru.calloop.pikabu_demo.createPostActivity.postItem.Post;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostAndPostItem;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostDao;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
-import ru.calloop.pikabu_demo.services.IPostItemRepository;
+import ru.calloop.pikabu_demo.services.IPostRepository;
 
-public class PostItemRepository implements IPostItemRepository {
+public class PostRepository implements IPostRepository {
     PostDao postDao;
 
     @Inject
-    public PostItemRepository(PostDao postDao) {
+    public PostRepository(PostDao postDao) {
         this.postDao = postDao;
     }
 
@@ -24,12 +24,9 @@ public class PostItemRepository implements IPostItemRepository {
     }
 
     @Override
-    public List<Post> getAllPosts(int startPosition, int limitCount)
-    {
+    public List<Post> getAllPosts(int startPosition, int limitCount) {
         return postDao.getAllPosts(0, 5);
     }
-
-    
 
     @Override
     public long insertPost(Post post) {
@@ -40,30 +37,4 @@ public class PostItemRepository implements IPostItemRepository {
     public void insertPostItemList(List<PostItem> postItemList) {
         postDao.insertPostItemList(postItemList);
     }
-
-//    @Override
-//    public PostItem getById(int id) {
-//        return postItemDao.getById(id);
-//    }
-//
-//    @Override
-//    public void insertAll(List<PostItem> postItemList) {
-//        postItemDao.insertAll(postItemList);
-//    }
-//
-//    @Override
-//    public void deleteAll(List<PostItem> postItemList)
-//    {
-//        postItemDao.deleteAll(postItemList);
-//    }
-
-//    @Override
-//    public void insertItem(PostItem postItem) {
-//        postItemDao.insertItem(postItem);
-//    }
-//
-//    @Override
-//    public int delete(PostItem postItem) {
-//        return PostItemDao.delete(postItem);
-//    }
 }

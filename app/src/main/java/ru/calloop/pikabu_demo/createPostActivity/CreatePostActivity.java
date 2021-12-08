@@ -1,5 +1,7 @@
 package ru.calloop.pikabu_demo.createPostActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,18 +15,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemDbHelper;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemModel;
+import ru.calloop.pikabu_demo.createPostActivity.postItem.Post;
 import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
 import ru.calloop.pikabu_demo.createPostActivity.fragments.MenuCreatePostFragment;
+import ru.calloop.pikabu_demo.mainActivity.MainActivity;
 
 public class CreatePostActivity extends AppCompatActivity implements CreatePostContract.IView {
 
-    private CreatePostPresenter createPostPresenter;
+    private CreatePostPresenter presenter;
     private BlocksListCreatePostAdapter adapter;
     private BlocksListCreatePostAdapter.OnItemClickListener listener;
 
@@ -63,8 +66,10 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     }
 
     private void setAdapter() {
+        presenter = new CreatePostPresenter();
+        presenter.attachView(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new BlocksListCreatePostAdapter(listener);
+        adapter = new BlocksListCreatePostAdapter();
 
         RecyclerView recyclerView = findViewById(R.id.list_create_post);
         recyclerView.setHasFixedSize(true);
@@ -80,9 +85,9 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     private void setOnClickListener() {
         if (adapter != null) {
-            adapter.setOnItemClickListener((view, position) -> {
-
-            });
+//            adapter.setOnItemClickListener((view, position) -> {
+//
+//            });
 
         }
     }
@@ -111,8 +116,16 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
         }
 
         if (itemId == R.id.add_post_create_post) {
-            createPostPresenter.addEntry(adapter.postItems);
-            showToast("CREATED");
+            long postId = presenter.insertPost(new Post(0));
+            adapter.savePostItems();
+
+            for (PostItem postItem:
+                 adapter.postItemList) {
+                postItem.setPostId((int)postId);
+            }
+
+            presenter.insertPostItemList(adapter.postItemList);
+            startActivity(new Intent(CreatePostActivity.this, MainActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -153,7 +166,12 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     //region [SHOW EVENTS]
     public void showPostItems(List<PostItem> postItems) {
-        adapter.loadPostItems(postItems);
+        //adapter.loadPostItems(postItems);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     private void showToast(String message) {
@@ -167,7 +185,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
     }
 
     public void buttonAddTextCreatePostClicked() {
-        //adapter.createPostItem(1);
+        adapter.createPostItem(1);
         listIsEmpty();
         showToast("TEXT" + adapter.getItemCount());
     }
@@ -199,7 +217,7 @@ public class CreatePostActivity extends AppCompatActivity implements CreatePostC
 
     @Override
     protected void onDestroy() {
-        createPostPresenter.detachView();
+        presenter.detachView();
         super.onDestroy();
     }
     //endregion

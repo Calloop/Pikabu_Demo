@@ -10,6 +10,7 @@ import ru.calloop.pikabu_demo.di.module.RoomModule;
 
 public class App extends Application {
     private static AppComponent appComponent;
+    private static Context context;
 
     public static App getComponent(Context context) {
         return (App) context.getApplicationContext();
@@ -22,6 +23,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
 
 //        appComponent = DaggerAppComponent.builder()
 //                .appModule(new AppModule(this))

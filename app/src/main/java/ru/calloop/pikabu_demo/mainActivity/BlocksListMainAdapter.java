@@ -12,63 +12,51 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
+import ru.calloop.pikabu_demo.createPostActivity.postItem.PostAndPostItem;
 
-public class BlocksListMainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BlocksListMainAdapter extends RecyclerView.Adapter<BlocksListMainAdapter.ViewHolder> {
 
-    public List<PostItem> postItemList;
+    public List<PostAndPostItem> postAndPostItemList;
     private Context context;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
-    public BlocksListMainAdapter(List<PostItem> postItemList) {
-        this.postItemList = postItemList;
+    public BlocksListMainAdapter(List<PostAndPostItem> postAndPostItemList) {
+        this.postAndPostItemList = postAndPostItemList;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == TYPE_TEXT_BLOCK) {
-            return new BlocksListMainAdapter.TextViewHolder(LayoutInflater.from(parent.getContext())
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_text_block_main, parent, false));
         } else {
-            return new BlocksListMainAdapter.TextViewHolder(LayoutInflater.from(parent.getContext())
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_image_block_create_post, parent, false));
         }
         // ДОБАВИТЬ ОКНО С ОШИБКОЙ ЗАГРУЗКИ ДАННЫХ
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == TYPE_TEXT_BLOCK) {
-            BlocksListMainAdapter.TextViewHolder textViewHolder = (BlocksListMainAdapter.TextViewHolder) holder;
-
-            textViewHolder.getTextView().setText(postItemList.get(position).getDataValue());
-        }
-        // тут создавать холдер и с ним делать действия типа нажатий
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (postItemList.get(position).getDataType() == 1) {
-            return TYPE_TEXT_BLOCK;
-        } else if (postItemList.get(position).getDataType() == 2) {
-            return TYPE_IMAGE_BLOCK;
-        } else {
-            return 0;
-        }
+        return position;
     }
 
     @Override
     public int getItemCount() {
-        return postItemList.size();
+        return postAndPostItemList.size();
     }
 
-    public class TextViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView textView;
 
-        public TextViewHolder(View view) {
+        public ViewHolder(View view) {
             super(view);
             textView = view.findViewById(R.id.editText_textBlock_main);
         }
