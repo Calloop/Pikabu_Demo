@@ -8,10 +8,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PikabuDB;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostDao;
-import ru.calloop.pikabu_demo.services.IPostItemRepository;
-import ru.calloop.pikabu_demo.services.impl.PostItemRepository;
+import ru.calloop.pikabu_demo.PikabuDB;
+import ru.calloop.pikabu_demo.createPostActivity.models.PostDao;
+import ru.calloop.pikabu_demo.ui.signing.Post.IPostRepository;
+import ru.calloop.pikabu_demo.ui.signing.Post.PostRepository;
 
 @Module
 public class RoomModule {
@@ -32,13 +32,13 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    PostDao providesPostItemDao(PikabuDB database) {
+    PostDao providesPostDao(PikabuDB database) {
         return database.getPostDao();
     }
 
     @Singleton
     @Provides
-    IPostItemRepository providesPostItemRepository() {
-        return new PostItemRepository(database.getPostDao());
+    IPostRepository providesPostRepository() {
+        return new PostRepository(database.getPostDao());
     }
 }

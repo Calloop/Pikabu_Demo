@@ -1,13 +1,11 @@
 package ru.calloop.pikabu_demo.createPostActivity;
 
-import android.content.ContentValues;
 import android.content.Context;
 
 import java.util.List;
 
-import ru.calloop.pikabu_demo.createPostActivity.postItem.Post;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemModel;
+import ru.calloop.pikabu_demo.createPostActivity.models.Post;
+import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
 
 public interface CreatePostContract {
     interface IModel {
@@ -27,6 +25,8 @@ public interface CreatePostContract {
         void detachView();
 
         long insertPost(Post post);
+
+        void insert(Post post, List<PostItem> postItemList);
 
         void insertPostItemList(List<PostItem> postItemList);
 

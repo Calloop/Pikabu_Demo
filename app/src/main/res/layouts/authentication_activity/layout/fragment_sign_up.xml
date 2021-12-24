@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.signing.SignUpFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.NavigationDrawer.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_signUp"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.NavigationDrawer.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/signUpDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/textview_sign_up_description"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <EditText
+        android:id="@+id/editTextLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="name"
+        android:ems="10"
+        android:hint="Никнейм для Пикабу"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpDescription" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="name"
+        android:ems="10"
+        android:hint="Почтовый адрес"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLogin" />
+
+    <EditText
+        android:id="@+id/editTextPassword1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="name"
+        android:ems="10"
+        android:hint="Пароль"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+
+    <EditText
+        android:id="@+id/editTextPassword2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="name"
+        android:ems="10"
+        android:hint="Повторите пароль"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword1" />
+
+    <Button
+        android:id="@+id/buttonTryToRegister"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Зарегистрироваться"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword2" />
+
+    <Button
+        android:id="@+id/buttonGoToSignIn"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="К авторизации"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonTryToRegister" />
+</androidx.constraintlayout.widget.ConstraintLayout>

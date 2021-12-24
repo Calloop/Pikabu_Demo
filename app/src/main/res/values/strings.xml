@@ -5,7 +5,7 @@
     <string name="ic_sign_in_logo">Pikabu Logo</string>
     <string name="textview_sign_in_description">Введите никнейм, email или номер телефона, начинающийся с символа «+»</string>
     <string name="button_sign_in_enter">Войти</string>
-    <string name="button_sign_in_registration">Регистрация</string>
+    <string name="button_sign_in_registration">К регистрации</string>
     <string name="hint_sign_in_login">Логин</string>
     <string name="hint_sign_in_password">Пароль</string>
     <string name="textview_sign_up_title">Регистрация</string>

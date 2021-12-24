@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.CreatePostActivity;
+import ru.calloop.pikabu_demo.ui.createPost.CreatePostFragment;
 
 public class CreatePostAddBlockFragment extends Fragment {
 
@@ -31,7 +31,7 @@ public class CreatePostAddBlockFragment extends Fragment {
 
 
         buttonAddBlockCreatePost.setOnClickListener(v -> {
-            ((CreatePostActivity) requireActivity()).buttonAddBlockCreatePost();
+            //((CreatePostFragment) requireActivity()).buttonAddBlockCreatePost();
         });
 
         return view;

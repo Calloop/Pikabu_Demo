@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_navigation"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="ru.calloop.pikabu_demo.ui.main.home.HomeFragment"
+        android:label="Пикабу Демо"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="ru.calloop.pikabu_demo.ui.main.settings.SettingsFragment"
+        android:label="Настройки"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="ru.calloop.pikabu_demo.ui.createPost.CreatePostFragment"
+        android:label="Создать пост"
+        tools:layout="@layout/fragment_create_post"/>
+</navigation>

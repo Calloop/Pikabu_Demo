@@ -4,7 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ru.calloop.pikabu_demo.di.module.AppModule;
-import ru.calloop.pikabu_demo.mainActivity.Tab1MainFragment;
+import ru.calloop.pikabu_demo.ui.main.Tab1MainFragment;
 
 @Component(modules = {AppModule.class})
 @Singleton

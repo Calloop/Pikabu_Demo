@@ -12,13 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pikabu_Demo">
         <activity
-            android:name=".createPostActivity.CreatePostActivity"
-            android:parentActivityName=".mainActivity.MainActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
-        <activity android:name=".View.SignUpActivity" />
-        <activity android:name=".View.SignInActivity" />
-        <activity
-            android:name=".mainActivity.MainActivity"
+            android:name=".ui.mainActivity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

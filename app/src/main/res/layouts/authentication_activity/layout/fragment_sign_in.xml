@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.signing.SignInFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.NavigationDrawer.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_signIn"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.NavigationDrawer.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/signInDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/textview_sign_in_description"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <EditText
+        android:id="@+id/editTextLogin_signIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="login"
+        android:ems="10"
+        android:hint="@string/hint_sign_in_login"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signInDescription" />
+
+    <EditText
+        android:id="@+id/editTextPassword_signIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="password"
+        android:ems="10"
+        android:hint="@string/hint_sign_in_password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextLogin_signIn" />
+
+    <Button
+        android:id="@+id/buttonSendLoginData"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/button_sign_in_enter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextPassword_signIn" />
+
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/button_sign_in_registration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonSendLoginData" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_text_block_main.xml" value="0.1" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/activity.xml" value="0.16111111111111112" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/activity_sign_in.xml" value="0.22" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/activity_sign_up.xml" value="0.21" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_main.xml" value="0.15" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_main_post.xml" value="0.17" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_main_post_item.xml" value="0.19010416666666666" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_signIn.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_signUp.xml" value="0.1685185185185185" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_sign_in.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_sign_up.xml" value="0.15" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_text_block_main.xml" value="0.18" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/header_navigation_drawer_guest.xml" value="0.19010416666666666" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/menu/toolbar_authorization.xml" value="0.19010416666666666" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/activity_create_post.xml" value="0.19907407407407407" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/appbar_create_post.xml" value="0.19907407407407407" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/content_create_post.xml" value="0.19907407407407407" />
@@ -16,12 +28,22 @@
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_photo_block_create_post.xml" value="0.20416666666666666" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_text_block_create_post.xml" value="0.20416666666666666" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/list_content_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/activity.xml" value="0.1537037037037037" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/appbar_main.xml" value="0.1675925925925926" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/drawer_main.xml" value="0.1675925925925926" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/fragment_home.xml" value="0.1675925925925926" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/fragment_main.xml" value="0.16111111111111112" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/fragment_settings.xml" value="0.1685185185185185" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/fragment_tab1_main.xml" value="0.14537037037037037" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/header_navigation_drawer.xml" value="0.21" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/navheader_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/menu/drawer_activity.xml" value="0.19010416666666666" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/menu/drawer_main.xml" value="0.20102564102564102" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/menu/toolbar_activity.xml" value="0.19010416666666666" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/menu/toolbar_contextual_create_post.xml" value="0.20416666666666666" />
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/menu/toolbar_create_post.xml" value="0.19074074074074074" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/menu/toolbar_home.xml" value="0.19010416666666666" />
+        <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/menu/toolbar_main.xml" value="0.1685185185185185" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_block_list_create_post.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_block_list_create_post_list.xml" value="0.19010416666666666" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/activity_create_post.xml" value="0.22" />

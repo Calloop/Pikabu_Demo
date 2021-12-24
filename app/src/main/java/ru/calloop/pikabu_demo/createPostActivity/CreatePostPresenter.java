@@ -1,20 +1,11 @@
 package ru.calloop.pikabu_demo.createPostActivity;
 
-import android.content.ContentValues;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import java.util.List;
 
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PikabuDB;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.Post;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItem;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemModel;
-import ru.calloop.pikabu_demo.createPostActivity.postItem.PostItemDbHelper;
-import ru.calloop.pikabu_demo.mainActivity.MainContract;
-import ru.calloop.pikabu_demo.services.impl.PostItemRepository;
-import ru.calloop.pikabu_demo.services.impl.PostRepository;
+import ru.calloop.pikabu_demo.PikabuDB;
+import ru.calloop.pikabu_demo.createPostActivity.models.Post;
+import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.ui.signing.Post.PostRepository;
 
 public class CreatePostPresenter implements CreatePostContract.IPresenter {
     private CreatePostContract.IView view;
@@ -51,6 +42,12 @@ public class CreatePostPresenter implements CreatePostContract.IPresenter {
     @Override
     public void insertPostItemList(List<PostItem> postItemList) {
         repository.insertPostItemList(postItemList);
+    }
+
+    @Override
+    public void insert(Post post, List<PostItem> postItemList)
+    {
+        repository.insert(post, postItemList);
     }
 
 //    @Override
