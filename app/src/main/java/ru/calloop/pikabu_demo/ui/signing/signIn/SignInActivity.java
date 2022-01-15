@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.signing;
+package ru.calloop.pikabu_demo.ui.signing.signIn;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -6,12 +6,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.signingActivity.SessionManager;
+import ru.calloop.pikabu_demo.signingActivity.models.SessionManager;
 
 public class SignInActivity extends AppCompatActivity {
 

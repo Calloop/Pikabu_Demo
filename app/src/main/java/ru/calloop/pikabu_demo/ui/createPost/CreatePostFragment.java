@@ -1,5 +1,6 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +25,9 @@ import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.createPostActivity.CreatePostContract;
 import ru.calloop.pikabu_demo.createPostActivity.CreatePostPresenter;
 import ru.calloop.pikabu_demo.createPostActivity.adapters.BlocksListCreatePostAdapter;
+import ru.calloop.pikabu_demo.createPostActivity.models.Post;
 import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.signingActivity.models.Account;
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
 import ru.calloop.pikabu_demo.ui.main.home.HomeViewModel;
 
@@ -35,7 +38,7 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
 
     private CreatePostPresenter presenter;
     private BlocksListCreatePostAdapter adapter;
-    private BlocksListCreatePostAdapter.OnItemClickListener listener;
+    //private BlocksListCreatePostAdapter.OnItemClickListener listener;
 
     private TextView textViewDescriptionCreatePost;
     private ActionMode actionMode;
@@ -54,11 +57,10 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
     @Override
     public View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_post, container, false);
-        HomeViewModel model = new ViewModelProvider(this.requireActivity()).get(HomeViewModel.class);
+        HomeViewModel model = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         model.getState().observe(this, this::buttonsCreatePost);
 
         activity = (AppCompatActivity) getActivity();
-
 
         textViewDescriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
 
@@ -116,7 +118,7 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        int itemId = item.getItemId();
+        int itemId = item.getItemId();
 //
 //        if (itemId == R.id.edit_create_post) {
 //            if (actionMode != null) {
@@ -129,11 +131,13 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
 //            return true;
 //        }
 //
-//        if (itemId == R.id.add_post_create_post) {
-//            adapter.savePostItems();
-//            presenter.insert(new Post(0), adapter.postItemList);
-//            startActivity(new Intent(CreatePostFragment.this, MainActivity.class));
-//        }
+        if (itemId == R.id.add_post_create_post) {
+            adapter.savePostItems();
+            Log.d("SAVEPOST", "" + adapter.postItemList.get(0).getPostId());
+            Log.d("SAVEPOST", "" + adapter.postItemList.get(1).getPostId());
+            presenter.insert(new Post(1), adapter.postItemList);
+            //startActivity(new Intent(CreatePostFragment.this, MainActivity.class));
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -183,7 +187,6 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
 
     //region [CLICK EVENTS]
     private void buttonsCreatePost(int type) {
-        Log.d("TEST", "" + type);
         if (type != 0) {
             adapter.createPostItem(type);
             listIsEmpty();

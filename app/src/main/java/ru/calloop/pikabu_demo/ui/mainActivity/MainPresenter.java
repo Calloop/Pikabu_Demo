@@ -6,7 +6,7 @@ import java.util.List;
 import ru.calloop.pikabu_demo.PikabuDB;
 import ru.calloop.pikabu_demo.createPostActivity.models.Post;
 import ru.calloop.pikabu_demo.createPostActivity.models.PostAndPostItem;
-import ru.calloop.pikabu_demo.ui.signing.Post.PostRepository;
+import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 public class MainPresenter implements MainContract.IPresenter {
     private MainContract.IView view;

@@ -7,17 +7,19 @@ import androidx.room.RoomDatabase;
 import androidx.room.Database;
 
 import ru.calloop.pikabu_demo.createPostActivity.models.Post;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostDao;
+import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
 import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
 import ru.calloop.pikabu_demo.signingActivity.models.Account;
+import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountDao;
 
-@Database(entities = {Account.class, Post.class, PostItem.class}, version = PikabuDB.VERSION)
+@Database(entities = {Post.class, PostItem.class, Account.class}, version = PikabuDB.VERSION)
 public abstract class PikabuDB extends RoomDatabase {
 
     static final int VERSION = 1;
     private static PikabuDB INSTANCE;
 
-    public abstract PostDao getPostDao();
+    public abstract IPostDao getPostDao();
+    public abstract IAccountDao getAccountDao();
 
     public static PikabuDB getDatabase(final Context context) {
         if (INSTANCE == null) {

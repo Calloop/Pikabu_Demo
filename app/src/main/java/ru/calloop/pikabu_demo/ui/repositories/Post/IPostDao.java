@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.createPostActivity.models;
+package ru.calloop.pikabu_demo.ui.repositories.Post;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -10,8 +10,13 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import ru.calloop.pikabu_demo.createPostActivity.models.Post;
+import ru.calloop.pikabu_demo.createPostActivity.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.signingActivity.models.Account;
+
 @Dao
-public interface PostDao {
+public interface IPostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertPost(Post post);
 
@@ -27,8 +32,6 @@ public interface PostDao {
 
     @Query("SELECT id FROM posts LIMIT :startPosition, :limitCount")
     Integer getPostsId(int startPosition, int limitCount);
-
-
 
 
 //    @Transaction

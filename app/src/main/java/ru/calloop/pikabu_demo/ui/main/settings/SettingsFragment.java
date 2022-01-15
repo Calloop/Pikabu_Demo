@@ -1,9 +1,12 @@
 package ru.calloop.pikabu_demo.ui.main.settings;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.navigation.fragment.NavHostFragment;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
@@ -19,6 +22,8 @@ public class SettingsFragment extends BaseFragment {
     public View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.activity_navigation_controller);
+        Log.d("TEST", "" + navHostFragment.getChildFragmentManager().getBackStackEntryCount());
 //        Toolbar toolbar = view.findViewById(R.id.toolbar_settings);
 //        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
 //        DrawerLayout drawerLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.drawer_layout);

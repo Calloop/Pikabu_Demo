@@ -6,6 +6,7 @@ import java.util.List;
 
 import ru.calloop.pikabu_demo.createPostActivity.models.Post;
 import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.signingActivity.models.Account;
 
 public interface CreatePostContract {
     interface IModel {

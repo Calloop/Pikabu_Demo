@@ -1,7 +1,12 @@
 package ru.calloop.pikabu_demo.ui.mainActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -19,6 +25,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 
 import ru.calloop.pikabu_demo.R;
+import ru.calloop.pikabu_demo.signingActivity.models.SessionManager;
 
 public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
 
@@ -60,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
                 .findFragmentById(R.id.activity_navigation_controller);
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
+        navController.setGraph(R.navigation.activity_navigation);
 
         appBarConfiguration = new AppBarConfiguration
                 .Builder(navController.getGraph())
@@ -70,65 +78,30 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
                 navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-//        if (savedInstanceState == null) {
-//            MainFragment fragment = new MainFragment();
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .add(R.id.activity_navigation_controller, fragment)
-//                    .commit();
-//        }
-
-
-//        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-//        DaggerAppComponent.builder()
-//                .appModule(new AppModule(getApplication()))
-//                .roomModule(new RoomModule(getApplication()))
-//                .build()
-//                .inject(this);
-
-//        toolbar = findViewById(R.id.toolbar_main);
-//        setSupportActionBar(toolbar);
-
-//        navHostFragment =
-//                (NavHostFragment) getSupportFragmentManager()
-//                        .findFragmentById(R.id.main_navigation_controller);
-//        if (navHostFragment != null) {
-//            navController = navHostFragment.getNavController();
-//
-//            AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-//                    R.navigation.main_navigation)
-//                    .build();
-//            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//            NavigationUI.setupWithNavController(toolbar, navController);
-
-//            appBarConfiguration = new AppBarConfiguration.Builder(R.id.main_graph).build();
-//            navController.setGraph(R.navigation.main_navigation);
-//            navController.addOnDestinationChangedListener(this);
-//        }
-//
-//        NavigationUI.setupWithNavController(toolbar, navController);
-//        NavigationUI.setupActionBarWithNavController(this,
-//                navController, appBarConfiguration);
-
-
-//        fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .add(R.id.fragment_container_main, new MainFragment().newInstance())
-//                .addToBackStack("BaseFragments")
-//                .commit();
+        View headerLayout = navigationView.getHeaderView(0);
+        Button buttonDrawerSignIn = headerLayout.findViewById(R.id.buttonDrawerSignIn);
+        SharedPreferences sharedPreferences = getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(SessionManager.ID)) {
+            buttonDrawerSignIn.setVisibility(View.GONE);
+        }
+        buttonDrawerSignIn.setOnClickListener(view -> {
+            navController.navigate(R.id.action_homeFragment_to_signInFragment);
+        });
 
         setPresenter();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.activity_navigation_controller);
-        assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
+        NavController navController = Navigation.findNavController(this, R.id.activity_navigation_controller);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.activity_navigation_controller);
+//        assert navHostFragment != null;
+//        NavController navController = navHostFragment.getNavController();
+//        return NavigationUI.navigateUp(navController, appBarConfiguration)
+//                || super.onSupportNavigateUp();
     }
 
 //    @Override
@@ -154,9 +127,12 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
     }
 
 //    @Override
-//    public boolean onSupportNavigateUp() {
-//        return NavigationUI.navigateUp(navController, drawerLayout)
-//                || super.onSupportNavigateUp();
+//    public void onBackPressed()
+//    {
+//        if(navController.getCurrentDestination().getId() == R.id.signInFragment) {
+//            navController.navigate(R.id.action_signInFragment_to_homeFragment);
+//        }
+//        super.onBackPressed();
 //    }
 
     private void setPresenter() {

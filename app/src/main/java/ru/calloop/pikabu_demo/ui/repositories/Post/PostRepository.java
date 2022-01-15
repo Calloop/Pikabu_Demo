@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.signing.Post;
+package ru.calloop.pikabu_demo.ui.repositories.Post;
 
 import java.util.List;
 
@@ -6,35 +6,34 @@ import javax.inject.Inject;
 
 import ru.calloop.pikabu_demo.createPostActivity.models.Post;
 import ru.calloop.pikabu_demo.createPostActivity.models.PostAndPostItem;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostDao;
 import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
 
 public class PostRepository implements IPostRepository {
-    PostDao postDao;
+    IPostDao IPostDao;
 
     @Inject
-    public PostRepository(PostDao postDao) {
-        this.postDao = postDao;
+    public PostRepository(IPostDao IPostDao) {
+        this.IPostDao = IPostDao;
     }
 
     @Override
     public List<PostAndPostItem> getPostItems(int startPosition, int limitCount) {
-        return postDao.getPostItems(startPosition, limitCount);
+        return IPostDao.getPostItems(startPosition, limitCount);
     }
 
     @Override
     public List<Post> getAllPosts(int startPosition, int limitCount) {
-        return postDao.getAllPosts(0, 5);
+        return IPostDao.getAllPosts(0, 5);
     }
 
     @Override
     public long insertPost(Post post) {
-        return postDao.insertPost(post);
+        return IPostDao.insertPost(post);
     }
 
     @Override
     public void insertPostItemList(List<PostItem> postItemList) {
-        postDao.insertPostItemList(postItemList);
+        IPostDao.insertPostItemList(postItemList);
     }
 
     @Override

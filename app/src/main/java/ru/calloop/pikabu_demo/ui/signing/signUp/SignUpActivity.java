@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.signing;
+package ru.calloop.pikabu_demo.ui.signing.signUp;
 
 import android.os.Bundle;
 import android.widget.Button;

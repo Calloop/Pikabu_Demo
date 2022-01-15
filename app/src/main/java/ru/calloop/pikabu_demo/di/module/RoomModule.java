@@ -9,9 +9,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ru.calloop.pikabu_demo.PikabuDB;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostDao;
-import ru.calloop.pikabu_demo.ui.signing.Post.IPostRepository;
-import ru.calloop.pikabu_demo.ui.signing.Post.PostRepository;
+import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
+import ru.calloop.pikabu_demo.ui.repositories.Post.IPostRepository;
+import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 @Module
 public class RoomModule {
@@ -32,7 +32,7 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    PostDao providesPostDao(PikabuDB database) {
+    IPostDao providesPostDao(PikabuDB database) {
         return database.getPostDao();
     }
 
