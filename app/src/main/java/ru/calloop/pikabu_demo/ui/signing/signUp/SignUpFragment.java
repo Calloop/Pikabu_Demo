@@ -87,7 +87,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         } else if (id == R.id.buttonTryToRegister) {
             int passwordMinLength = 5;
 
-            if (AreFilledFields() && IsPasswordMinLength(passwordMinLength)
+            if (FieldsAreFilled() && IsPasswordMinLength(passwordMinLength)
                     && IsIdenticalPasswords() && IsNewAccount()) {
                 String login = editTextLogin.getText().toString();
                 String email = editTextEmail.getText().toString();
@@ -99,7 +99,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private boolean AreFilledFields() {
+    private boolean FieldsAreFilled() {
         EditText[] fields = {editTextLogin, editTextEmail, editTextPassword1, editTextPassword2};
         int errorCounter = 0;
 

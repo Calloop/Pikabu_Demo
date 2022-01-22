@@ -1,5 +1,7 @@
 package ru.calloop.pikabu_demo.ui.main.home;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,19 +20,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import ru.calloop.pikabu_demo.signingActivity.models.SessionManager;
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.mainActivity.adapters.HomeAdapter;
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
-    Toolbar toolbar;
-    AppCompatActivity activity;
+    private Toolbar toolbar;
+    private AppCompatActivity activity;
+    private NavController navController;
 
-    HomeAdapter homeAdapter;
-    ViewPager2 viewPager;
+    private HomeAdapter homeAdapter;
+    private ViewPager2 viewPager;
 
-    String[] tabTitles = {"ГОРЯЧЕЕ", "ЛУЧШЕЕ", "СВЕЖЕЕ", "МОЯ ЛЕНТА"};
+    private String[] tabTitles = {"ГОРЯЧЕЕ", "ЛУЧШЕЕ", "СВЕЖЕЕ", "МОЯ ЛЕНТА"};
 
     @Override
     public BaseFragment providerFragment() {
@@ -44,7 +48,8 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View providerFragmentView(LayoutInflater inflater,
+                                     ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         activity = (AppCompatActivity) getActivity();
@@ -62,11 +67,12 @@ public class HomeFragment extends BaseFragment {
 
         FloatingActionButton fab = view.findViewById(R.id.fab_home_to_create_post);
 
-        NavHostFragment navHostFragment = (NavHostFragment) activity.getSupportFragmentManager().findFragmentById(R.id.activity_navigation_controller);
+        NavHostFragment navHostFragment = (NavHostFragment) activity
+                .getSupportFragmentManager().findFragmentById(R.id.activity_navigation_controller);
         assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
 
-        fab.setOnClickListener(view1 -> navController.navigate(R.id.action_homeFragment_to_createPostFragment));
+        fab.setOnClickListener(this);
 
         return view;
     }
@@ -76,5 +82,21 @@ public class HomeFragment extends BaseFragment {
         menu.clear();
         inflater.inflate(R.menu.toolbar_home, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        if (id == R.id.fab_home_to_create_post) {
+            SharedPreferences sharedPreferences = requireContext()
+                    .getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
+            if (sharedPreferences.contains(SessionManager.AUTHORIZED)){
+                navController.navigate(R.id.action_homeFragment_to_createPostFragment);
+            } else {
+                navController.navigate(R.id.action_homeFragment_to_signInFragment);
+            }
+
+        }
     }
 }

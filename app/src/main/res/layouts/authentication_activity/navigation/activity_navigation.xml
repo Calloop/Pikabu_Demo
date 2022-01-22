@@ -26,7 +26,11 @@
         android:id="@+id/createPostFragment"
         android:name="ru.calloop.pikabu_demo.ui.createPost.CreatePostFragment"
         android:label="Создать пост"
-        tools:layout="@layout/fragment_create_post" />
+        tools:layout="@layout/fragment_create_post" >
+        <action
+            android:id="@+id/action_createPostFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signInFragment"
         android:name="ru.calloop.pikabu_demo.ui.signing.signIn.SignInFragment"
@@ -36,6 +40,9 @@
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment"
             app:popUpTo="@id/homeFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"

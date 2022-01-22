@@ -27,9 +27,9 @@ public class SessionManager {
         editor.commit();
     }
 
-    public boolean isSessionActive() {
-        return sharedPreferences.getBoolean(AUTHORIZED, true);
-    }
+//    public boolean isSessionActive() {
+//        return sharedPreferences.getBoolean(AUTHORIZED, true);
+//    }
 
     public void endUserSession() {
         editor.clear();

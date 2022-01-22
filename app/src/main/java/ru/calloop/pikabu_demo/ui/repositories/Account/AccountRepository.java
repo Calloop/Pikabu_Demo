@@ -2,8 +2,6 @@ package ru.calloop.pikabu_demo.ui.repositories.Account;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import javax.inject.Inject;
 
 import ru.calloop.pikabu_demo.PikabuDB;
@@ -29,7 +27,11 @@ public class AccountRepository implements IAccountRepository{
         AccountDao.createAccount(account);
     }
 
-    public int doLogin(String loginOrEmail, String password) {
-        return AccountDao.doLogin(loginOrEmail, password);
+    public boolean checkLoginOrEmailExists(String loginOrEmail) {
+        return AccountDao.checkLoginOrEmailExists(loginOrEmail);
+    }
+
+    public int checkPasswordIsCorrect(String password) {
+        return AccountDao.checkPasswordIsCorrect(password);
     }
 }

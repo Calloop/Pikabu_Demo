@@ -40,9 +40,12 @@ public interface IAccountDao {
     @Query("SELECT email FROM accounts WHERE email = :email LIMIT 1")
     boolean getEmail(String email);
 
-    @Query("SELECT id FROM accounts WHERE (login = :loginOrEmail OR email = " +
-            ":loginOrEmail) AND password = :password LIMIT 1")
-    int doLogin(String loginOrEmail, String password);
+    @Query("SELECT id FROM accounts WHERE login = :loginOrEmail OR email = " +
+            ":loginOrEmail LIMIT 1")
+    boolean checkLoginOrEmailExists(String loginOrEmail);
+
+    @Query("SELECT id FROM accounts WHERE password = :password LIMIT 1")
+    int checkPasswordIsCorrect(String password);
 
 //    @Query("SELECT * FROM accounts WHERE id = :id")
 //    LiveData<Account> getAccount(int id);

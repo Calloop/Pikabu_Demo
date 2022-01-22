@@ -1,79 +1,180 @@
 package ru.calloop.pikabu_demo.createPostActivity.adapters;
 
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
 
 public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final List<RecyclerView.ViewHolder> viewHolderList = new ArrayList<>();
 
-//    public interface OnItemClickListener {
-//        void onItemClick(View view, int position);
-//    }
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
-    public List<PostItem> postItemList = new ArrayList<>();
-//    private OnItemClickListener listener;
+    private List<PostItem> postItemList;
+    private List<PostItem> dbPostItemList;
+
+    private final List<Integer> prepareToDeleteItemsList = new ArrayList<>(10);
+    private final List<LayoutParams> layoutParamsList =
+            new ArrayList<>(10);
+    private LayoutParams editModeLayoutParams;
+    private final OnItemClickListener listener;
+    private boolean editModeIsActive, setDataModeIsActive;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
-    //public void setOnItemClickListener(OnItemClickListener listener) {
-//        this.listener = listener;
-//    }
+    public BlocksListCreatePostAdapter(OnItemClickListener listener) {
+        postItemList = new ArrayList<>(1);
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = null;
+        View view;
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         RecyclerView.ViewHolder holder = null;
 
-        if (viewType == TYPE_TEXT_BLOCK) {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_text_block_create_post, parent, false);
-            holder = new TextViewHolder(view);
-            viewHolderList.add(holder);
-        } else {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_image_block_create_post, parent, false);
-            holder = new ImageViewHolder(view);
-            viewHolderList.add(holder);
+        switch (viewType) {
+            case TYPE_TEXT_BLOCK:
+                view = layoutInflater
+                        .inflate(R.layout
+                                .fragment_text_block_create_post, parent, false);
+                holder = new TextViewHolder(view, listener, new CreatePostListener());
+                break;
+            case TYPE_IMAGE_BLOCK:
+                view = layoutInflater
+                        .inflate(R.layout
+                                .fragment_image_block_create_post, parent, false);
+                holder = new ImageViewHolder(view);
+                break;
         }
 
-        return holder;
+        return Objects.requireNonNull(holder);
         // ДОБАВИТЬ ОКНО С ОШИБКОЙ ЗАГРУЗКИ ДАННЫХ
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-//        if (holder.getItemViewType() == TYPE_TEXT_BLOCK) {
-//            TextViewHolder textViewHolder = (TextViewHolder) holder;
-//            textViewHolder.textView.setText();
+        switch (holder.getItemViewType()) {
+            case TYPE_TEXT_BLOCK:
+                TextViewHolder textViewHolder = (TextViewHolder) holder;
+                //textViewHolder.deleteTextBlock.setOnClickListener(textViewHolder);
+                textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
+                textViewHolder.textView.setText(postItemList.get(textViewHolder.getAdapterPosition()).getDataValue());
+//            textViewHolder.textView.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//                    postItemList.get(textViewHolder.getAdapterPosition()).setDataValue(editable.toString());
+//                }
+//            });
+
+//            if (setDataModeIsActive) {
+//                for (PostItem postItem :
+//                        postItemList) {
+//                    if (position == postItem.getDataPosition() - 1) {
+//                        postItem.setDataValue(textViewHolder.getTextViewValue());
+//                        Log.d("LISTING", "holder: " + position + "; pos :" + postItem.getDataPosition() + "; value: " + postItem.getDataValue());
+//
+//                    }
+//                }
+//            } else {
+//                for (PostItem postItem :
+//                        postItemList) {
+//                    if (position == postItem.getDataPosition() - 1) {
+//                        textViewHolder.setTextViewValue(postItem.getDataValue());
+//                        Log.d("LISTING", "holder: " + position + "; pos :" + postItem.getDataPosition() + "; value: " + postItem.getDataValue());
+//
+//                    }
+//                }
+//            }
+
+
+//            Log.d("VALUE", "BEFORE " + textViewHolder.getAdapterPosition() + ": "  + postItemList.get(position).getDataValue());
+//            postItemList.get(textViewHolder.getAdapterPosition()).setDataValue(textViewHolder.getTextViewValue());
+//            Log.d("VALUE", "AFTER : " + textViewHolder.getAdapterPosition() + ": "  + postItemList.get(position).getDataValue());
+//            if (editModeIsActive) {
+//                textViewHolder.menu.setVisibility(View.VISIBLE);
+//
+////                for (int itemPreparedToDelete :
+////                        prepareToDeleteItemsList) {
+////                    if (itemPreparedToDelete == textViewHolder.getAdapterPosition()) {
+////                        textViewHolder.itemView.setVisibility(View.GONE);
+////                    }
+////                }
+//            } else {
+//                textViewHolder.menu.setVisibility(View.GONE);
+//
+////                for (int itemPreparedToDelete :
+////                        prepareToDeleteItemsList) {
+////                    if (itemPreparedToDelete == textViewHolder.getAdapterPosition()) {
+////                        textViewHolder.itemView.setVisibility(View.VISIBLE);
+////                    }
+////                }
+//            }
+
+                if (editModeIsActive) {
+                    textViewHolder.menu.setVisibility(View.VISIBLE);
+
+//                textViewHolder.deleteTextBlock.setOnClickListener(view -> {
+//                    Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.GONE);
+//                    Objects.requireNonNull(textViewHolder.itemView)
+//                            .setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+//                });
+
+                } else {
+                    textViewHolder.menu.setVisibility(View.GONE);
+
+//                if (textViewHolder.itemView.getVisibility() == View.GONE) {
+//                    Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.VISIBLE);
+//                    Objects.requireNonNull(textViewHolder.itemView)
+//                            .setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+//                }
+                }
 //        } else {
 //
-//        }
-        //holder.getTextView().setText(postItemList.get(position).getDataValue());
+                break;
+            case TYPE_IMAGE_BLOCK:
+                break;
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (postItemList.get(position).getDataType() == 1) {
-            return TYPE_TEXT_BLOCK;
-        } else {
-            return TYPE_IMAGE_BLOCK;
-        }
+//        if (postItemList.get(position).getDataType() == 1) {
+//            return TYPE_TEXT_BLOCK;
+//        } else {
+//            return TYPE_IMAGE_BLOCK;
+//        }
+//
+        return postItemList.get(position).getDataType();
     }
 
     @Override
@@ -81,36 +182,47 @@ public class BlocksListCreatePostAdapter extends
         return postItemList.size();
     }
 
-//    public class AddBlockViewHolder extends RecyclerView.ViewHolder
-//            implements View.OnClickListener {
-//        private Button button;
-//
-//        public AddBlockViewHolder(View view) {
-//            super(view);
-//            button = view.findViewById(R.id.button_add_block_create_post);
-//
-//            button.setOnClickListener(view1 -> {
-//                Toast.makeText(view1.getContext(), "CLICKED", Toast.LENGTH_SHORT).show();
-//            });
-//
-//            view.setOnClickListener(this);
-//        }
-//
-//        @Override
-//        public void onClick(View view) {
-//        }
-//    }
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
 
-    public static class TextViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+    public static class TextViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+        private final EditText textView;
+        private final Button deleteTextBlock;
+        private final View menu;
+        private final OnItemClickListener listener;
+        private final CreatePostListener createPostListener;
 
-        public TextViewHolder(View view) {
+        public TextViewHolder(View view, OnItemClickListener listener, CreatePostListener createPostListener) {
             super(view);
             textView = view.findViewById(R.id.editText_textBlock_createPost);
+            deleteTextBlock = view.findViewById(R.id.button_delete_text_block_create_post2);
+            menu = view.findViewById(R.id.editing_menu);
+
+            this.listener = listener;
+            this.createPostListener = createPostListener;
+            view.setOnClickListener(this);
+            textView.addTextChangedListener(createPostListener);
         }
 
-        public TextView getTextView() {
-            return textView;
+        public String getTextViewValue() {
+            return textView.getText().toString();
+        }
+
+        public void setTextViewValue(String value) {
+            textView.setText(value);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int id = view.getId();
+
+            if (id == R.id.button_delete_text_block_create_post2) {
+                this.listener.onItemClick(view, getAdapterPosition());
+
+            }
         }
     }
 
@@ -134,35 +246,81 @@ public class BlocksListCreatePostAdapter extends
 //        notifyItemRangeInserted(posStart, postItemList.size());
 //    }
 
-    public void createPostItem(int type) {
-        PostItem postItem = new PostItem(postItemList.size() + 1, type, null);
-        //postItemList.add(postItemList.size(), postItem);
+//    private TextViewHolder editManager(View view, ViewGroup.LayoutParams layoutParams) {
+//        for (int itemPreparedToDelete :
+//                prepareToDeleteItemsList) {
+//            if (itemPreparedToDelete == textViewHolder.getAdapterPosition()) {
+//                textViewHolder.itemView.setVisibility(view);
+//                layoutParamsList.add(textViewHolder.itemView.getLayoutParams());
+//                textViewHolder.itemView
+//                        .setLayoutParams(layoutParamsList.get(itemPreparedToDelete));
+//            }
+//        }
+//        return
+//    }
+
+    public void createPostItem(PostItem postItem) {
         postItemList.add(postItem);
-        notifyItemInserted(postItemList.size());
+        notifyItemInserted(getItemCount());
     }
 
-    public boolean deletePostItem() {
+    public void deletePostItems() {
         if (getItemCount() > 0) {
-            postItemList.remove(getItemCount() - 1);
-            notifyItemRemoved(getItemCount());
-            return true;
-        } else return false;
+            for (int itemPreparedToDelete :
+                    prepareToDeleteItemsList) {
+                postItemList.remove(itemPreparedToDelete);
+                notifyItemRemoved(itemPreparedToDelete);
+                notifyItemRangeChanged(itemPreparedToDelete, getItemCount());
+            }
+        }
     }
 
-    public void savePostItems() {
-        for (RecyclerView.ViewHolder holder :
-                viewHolderList) {
-            PostItem postItem = postItemList.get(holder.getAdapterPosition());
+    public List<PostItem> getAdapterList() {
+        return dbPostItemList;
+    }
 
-            if (postItem.getDataType() == TYPE_TEXT_BLOCK) {
-                Log.d("GETDATATYPE", "" + postItem.getDataType());
-                TextViewHolder textViewHolder = (TextViewHolder) holder;
-                postItem.setDataValue(textViewHolder.textView.getText().toString());
-            } else {
-                Log.d("GETDATATYPE", "" + postItem.getDataType());
-                ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-                postItem.setDataValue("ImageHolder");
-            }
+    public void setAdapterList(List<PostItem> postItemList) {
+        this.postItemList = postItemList;
+        notifyItemRangeInserted(0, postItemList.size());
+    }
+
+    public void addPreparedToDeleteItem(int position) {
+        prepareToDeleteItemsList.add(position);
+    }
+
+    public void clearPreparedToDeleteItemList() {
+        prepareToDeleteItemsList.clear();
+        layoutParamsList.clear();
+    }
+
+    public void editModeIsActive(boolean state) {
+        editModeIsActive = state;
+    }
+
+    public void setDataModeIsActive(boolean state) {
+        setDataModeIsActive = state;
+    }
+
+    public class CreatePostListener implements TextWatcher {
+        private int position;
+
+        public void updatePosition(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            // no op
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            postItemList.get(position).setDataValue(charSequence.toString());
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
         }
     }
 }

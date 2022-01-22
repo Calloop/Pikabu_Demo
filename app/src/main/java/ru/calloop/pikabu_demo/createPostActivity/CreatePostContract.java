@@ -16,7 +16,6 @@ public interface CreatePostContract {
     }
 
     interface IView {
-        void showPostItems(List<PostItem> postItems);
         Context getContext();
     }
 

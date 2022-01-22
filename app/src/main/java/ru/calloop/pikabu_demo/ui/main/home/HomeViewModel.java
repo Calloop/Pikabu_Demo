@@ -1,22 +1,32 @@
 package ru.calloop.pikabu_demo.ui.main.home;
 
+import android.app.Application;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+import ru.calloop.pikabu_demo.PikabuDB;
+import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
+import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
-    private MutableLiveData<Integer> state;
+public class HomeViewModel extends AndroidViewModel {
+
+    private final MutableLiveData<Integer> state = new MutableLiveData<>();
+
+    public HomeViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public MutableLiveData<Integer> getState() {
-        if (state == null)
-        {
-            state = new MutableLiveData<>();
-        }
         return state;
     }
 
     public void setState(int type) {
-        state.setValue(type);
+        state.postValue(type);
     }
 }
 

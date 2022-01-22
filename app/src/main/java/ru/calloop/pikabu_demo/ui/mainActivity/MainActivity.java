@@ -27,31 +27,16 @@ import com.google.android.material.navigation.NavigationView;
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.signingActivity.models.SessionManager;
 
-public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
+public class MainActivity extends AppCompatActivity
+        implements View.OnClickListener {
 
-    Toolbar toolbar;
-    private ActionBarDrawerToggle drawerToggle;
-    NavHostFragment navHostFragment;
-    NavController navController;
+    private Toolbar toolbar;
+    private NavController navController;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private AppBarConfiguration appBarConfiguration;
-    FragmentManager fragmentManager;
-//    @Inject
-//    PostItemRepository postItemRepository;
-//
-//    //@Inject
-//    PostItemModel postItemModel;
-
-//    private OnAboutDataReceivedListener mAboutDataListener;
-//
-//    public interface OnAboutDataReceivedListener {
-//        void onDataReceived(List<PostItem> postItemList);
-//    }
-//
-//    public void setAboutDataListener(OnAboutDataReceivedListener listener) {
-//        this.mAboutDataListener = listener;
-//    }
+    private Button buttonDrawerSignIn, buttonDrawerSignOut;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +48,11 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigationView);
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.activity_navigation_controller);
         assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
         navController.setGraph(R.navigation.activity_navigation);
 
         appBarConfiguration = new AppBarConfiguration
@@ -79,21 +65,51 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         NavigationUI.setupWithNavController(navigationView, navController);
 
         View headerLayout = navigationView.getHeaderView(0);
-        Button buttonDrawerSignIn = headerLayout.findViewById(R.id.buttonDrawerSignIn);
-        SharedPreferences sharedPreferences = getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
-        if (sharedPreferences.contains(SessionManager.ID)) {
-            buttonDrawerSignIn.setVisibility(View.GONE);
-        }
-        buttonDrawerSignIn.setOnClickListener(view -> {
-            navController.navigate(R.id.action_homeFragment_to_signInFragment);
-        });
+        buttonDrawerSignIn = headerLayout.findViewById(R.id.buttonDrawerSignIn);
+        buttonDrawerSignOut = headerLayout.findViewById(R.id.buttonDrawerSignOut);
+
+        buttonDrawerSignIn.setOnClickListener(this);
+        buttonDrawerSignOut.setOnClickListener(this);
 
         setPresenter();
+        onUpdate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onUpdate();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        if (id == R.id.buttonDrawerSignIn) {
+            navController.navigate(R.id.action_homeFragment_to_signInFragment);
+        } else if (id == R.id.buttonDrawerSignOut) {
+            SessionManager sessionManager = new SessionManager(this);
+            sessionManager.endUserSession();
+            onUpdate();
+        }
+    }
+
+    private void onUpdate() {
+        sharedPreferences = getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains(SessionManager.AUTHORIZED)) {
+            buttonDrawerSignIn.setVisibility(View.GONE);
+            buttonDrawerSignOut.setVisibility(View.VISIBLE);
+        } else {
+            buttonDrawerSignIn.setVisibility(View.VISIBLE);
+            buttonDrawerSignOut.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.activity_navigation_controller);
+        NavController navController = Navigation
+                .findNavController(this, R.id.activity_navigation_controller);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
 //        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
@@ -103,12 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 //        return NavigationUI.navigateUp(navController, appBarConfiguration)
 //                || super.onSupportNavigateUp();
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.toolbar_main, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -120,20 +130,6 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-
-    }
-
-//    @Override
-//    public void onBackPressed()
-//    {
-//        if(navController.getCurrentDestination().getId() == R.id.signInFragment) {
-//            navController.navigate(R.id.action_signInFragment_to_homeFragment);
-//        }
-//        super.onBackPressed();
-//    }
 
     private void setPresenter() {
 

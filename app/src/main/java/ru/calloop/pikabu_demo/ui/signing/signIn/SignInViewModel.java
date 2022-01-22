@@ -22,7 +22,11 @@ public class SignInViewModel extends AndroidViewModel {
 //        return account;
 //    }
 
-    public int doLogin(String loginOrEmail, String password) {
-        return repository.doLogin(loginOrEmail, password);
+    public boolean checkLoginOrEmailExists(String loginOrEmail) {
+        return repository.checkLoginOrEmailExists(loginOrEmail);
+    }
+
+    public int checkPasswordIsCorrect(String password) {
+        return repository.checkPasswordIsCorrect(password);
     }
 }
