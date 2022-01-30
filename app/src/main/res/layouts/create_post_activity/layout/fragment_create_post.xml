@@ -46,7 +46,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_content_buttons_create_post"
-        android:name="ru.calloop.pikabu_demo.createPostActivity.fragments.MenuCreatePostFragment"
+        android:name="ru.calloop.pikabu_demo.ui.createPost.fragments.MenuCreatePostFragment"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         app:layout_constraintBottom_toBottomOf="parent"

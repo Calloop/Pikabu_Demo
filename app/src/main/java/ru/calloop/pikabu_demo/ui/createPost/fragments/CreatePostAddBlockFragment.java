@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.createPostActivity.fragments;
+package ru.calloop.pikabu_demo.ui.createPost.fragments;
 
 import android.os.Bundle;
 
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.createPost.CreatePostFragment;
 
 public class CreatePostAddBlockFragment extends Fragment {
 

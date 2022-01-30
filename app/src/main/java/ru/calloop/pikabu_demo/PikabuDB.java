@@ -6,9 +6,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.Database;
 
-import ru.calloop.pikabu_demo.createPostActivity.models.Post;
+import ru.calloop.pikabu_demo.ui.createPost.models.Post;
 import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 import ru.calloop.pikabu_demo.signingActivity.models.Account;
 import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountDao;
 

@@ -1,11 +1,10 @@
-package ru.calloop.pikabu_demo.createPostActivity;
+package ru.calloop.pikabu_demo.ui.createPost;
 
 import java.util.List;
 
 import ru.calloop.pikabu_demo.PikabuDB;
-import ru.calloop.pikabu_demo.createPostActivity.models.Post;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
-import ru.calloop.pikabu_demo.signingActivity.models.Account;
+import ru.calloop.pikabu_demo.ui.createPost.models.Post;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 public class CreatePostPresenter implements CreatePostContract.IPresenter {

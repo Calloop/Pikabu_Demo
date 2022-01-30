@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostAndPostItem;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 
 public class BlocksListMainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

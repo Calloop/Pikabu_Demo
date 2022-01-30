@@ -4,8 +4,8 @@ import android.content.Context;
 
 import java.util.List;
 
-import ru.calloop.pikabu_demo.createPostActivity.models.Post;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.createPost.models.Post;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostAndPostItem;
 
 public interface MainContract {
     interface IModel {

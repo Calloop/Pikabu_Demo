@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.List;
 
-import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 
 public class CreatePostDiffUtilCallback extends DiffUtil.Callback {
     private final List<PostItem> oldList;

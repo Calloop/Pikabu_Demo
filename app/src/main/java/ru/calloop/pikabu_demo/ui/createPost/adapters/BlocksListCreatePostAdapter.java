@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.createPostActivity.adapters;
+package ru.calloop.pikabu_demo.ui.createPost.adapters;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,15 +11,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 
 public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -35,15 +36,14 @@ public class BlocksListCreatePostAdapter extends
     private final List<LayoutParams> layoutParamsList =
             new ArrayList<>(10);
     private LayoutParams editModeLayoutParams;
-    private final OnItemClickListener listener;
+    private OnItemClickListener listener;
     private boolean editModeIsActive, setDataModeIsActive;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
-    public BlocksListCreatePostAdapter(OnItemClickListener listener) {
+    public BlocksListCreatePostAdapter() {
         postItemList = new ArrayList<>(1);
-        this.listener = listener;
     }
 
     @NonNull
@@ -276,12 +276,16 @@ public class BlocksListCreatePostAdapter extends
     }
 
     public List<PostItem> getAdapterList() {
-        return dbPostItemList;
+        return postItemList;
     }
 
     public void setAdapterList(List<PostItem> postItemList) {
         this.postItemList = postItemList;
         notifyItemRangeInserted(0, postItemList.size());
+    }
+
+    public void saveDbList() {
+
     }
 
     public void addPreparedToDeleteItem(int position) {
@@ -303,6 +307,7 @@ public class BlocksListCreatePostAdapter extends
 
     public class CreatePostListener implements TextWatcher {
         private int position;
+        private Timer timer;
 
         public void updatePosition(int position) {
             this.position = position;
@@ -310,17 +315,26 @@ public class BlocksListCreatePostAdapter extends
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            // no op
         }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            if (timer != null) {
+                timer.cancel();
+            }
+
             postItemList.get(position).setDataValue(charSequence.toString());
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    // do your actual work here
+                }
+            }, 200);
         }
     }
 }

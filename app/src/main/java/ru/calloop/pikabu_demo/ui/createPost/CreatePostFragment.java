@@ -1,9 +1,6 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,39 +13,29 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-import java.util.ListResourceBundle;
-import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.CreatePostContract;
-import ru.calloop.pikabu_demo.createPostActivity.CreatePostPresenter;
-import ru.calloop.pikabu_demo.createPostActivity.adapters.BlocksListCreatePostAdapter;
-import ru.calloop.pikabu_demo.createPostActivity.fragments.MenuCreatePostFragment;
-import ru.calloop.pikabu_demo.createPostActivity.models.Post;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
-import ru.calloop.pikabu_demo.signingActivity.models.SessionManager;
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
+import ru.calloop.pikabu_demo.ui.createPost.adapters.BlocksListCreatePostAdapter;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 import ru.calloop.pikabu_demo.ui.main.home.HomeViewModel;
 
-public class CreatePostFragment extends BaseFragment
-        implements CreatePostContract.IView,
-        BlocksListCreatePostAdapter.OnItemClickListener {
+public class CreatePostFragment extends BaseFragment implements CreatePostContract.IView {
 
-    private NavController navController;
     private AppCompatActivity activity;
-    private ActionMode actionMode;
+    private Toolbar toolbar;
+
     private CreatePostPresenter presenter;
     private BlocksListCreatePostAdapter adapter;
+    //private BlocksListCreatePostAdapter.OnItemClickListener listener;
+
     private TextView textViewDescriptionCreatePost;
-    private RecyclerView recyclerView;
+    private ActionMode actionMode;
 
     @Override
     public BaseFragment providerFragment() {
@@ -62,68 +49,40 @@ public class CreatePostFragment extends BaseFragment
     }
 
     @Override
-    public View providerFragmentView(LayoutInflater inflater,
-                                     ViewGroup container, Bundle savedInstanceState) {
+    public View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_post, container, false);
 
-        textViewDescriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
-        recyclerView = view.findViewById(R.id.list_create_post);
         activity = (AppCompatActivity) requireActivity();
+        textViewDescriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
 
-        setNavController();
         setToolbar();
+        setAdapter(view);
         setHomeViewModel();
-        setCreatePostViewModel();
-        setAdapter();
 
         return view;
     }
 
     //region [SET: TOOLBAR, FRAGMENT MANAGER, RECYCLER VIEW]
     private void setToolbar() {
-        Toolbar toolbar = activity.findViewById(R.id.toolbar_activity);
+        toolbar = activity.findViewById(R.id.toolbar_activity);
         activity.setSupportActionBar(toolbar);
     }
 
-    private void setNavController() {
-        NavHostFragment navHostFragment = (NavHostFragment) activity.getSupportFragmentManager()
-                .findFragmentById(R.id.activity_navigation_controller);
-        navController = Objects.requireNonNull(navHostFragment).getNavController();
-    }
-
-    private void setHomeViewModel() {
-        HomeViewModel model = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-        model.getState().observe(requireActivity(), type -> {
-            Log.d("TEST", "" + type);
-            if (type != 0) {
-                PostItem postItem =
-                        new PostItem(adapter.getItemCount() + 1, type, null);
-                adapter.createPostItem(postItem);
-                listIsEmpty();
-            }
-        });
-    }
-
-    private void setCreatePostViewModel() {
-        CreatePostViewModel createPostViewModel = new ViewModelProvider(requireActivity())
-                .get(CreatePostViewModel.class);
-        createPostViewModel.getList().observe(requireActivity(), this::updateAdapter);
-    }
-
-    private void setAdapter() {
+    private void setAdapter(View view) {
         presenter = new CreatePostPresenter();
         presenter.attachView(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        adapter = new BlocksListCreatePostAdapter( this);
-        //adapter.setHasStableIds(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+        adapter = new BlocksListCreatePostAdapter();
 
+        RecyclerView recyclerView = view.findViewById(R.id.list_create_post);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }
 
-    private void updateAdapter(List<PostItem> postItemList) {
-        adapter.setAdapterList(postItemList);
+    private void setHomeViewModel() {
+        HomeViewModel model = new ViewModelProvider(activity).get(HomeViewModel.class);
+        model.getState().observe(this, this::createPostItem);
     }
     //endregion
 
@@ -138,33 +97,25 @@ public class CreatePostFragment extends BaseFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-
-        if (itemId == R.id.edit_create_post) {
-            if (actionMode == null) {
-                actionMode = activity.startSupportActionMode(actionModeCallback);
-            } else
-                actionMode.finish();
-        } else if (itemId == R.id.add_post_create_post) {
-            adapter.notifyItemRangeChanged(0, adapter.getItemCount());
-            SharedPreferences sharedPreferences = activity
-                    .getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
-            int accountId = sharedPreferences.getInt(SessionManager.ID, 0);
-            presenter.insert(new Post(accountId), adapter.getAdapterList());
-            navController.navigate(R.id.action_createPostFragment_to_homeFragment);
+//
+//        if (itemId == R.id.edit_create_post) {
+//            if (actionMode != null) {
+//                return false;
+//            }
+//
+//            CreatePostFragment.this.startSupportActionMode(actionModeCallback);
+//
+//            Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
+//            return true;
+//        }
+//
+        if (itemId == R.id.add_post_create_post) {
+            //adapter.savePostItems();
+            //presenter.insert(new Post(1), adapter.postItemList);
+            //startActivity(new Intent(CreatePostFragment.this, MainActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        int id = view.getId();
-
-        if (id == R.id.button_delete_text_block_create_post2) {
-            //adapter.addPreparedToDeleteItem(position);
-            //adapter.notifyItemRangeChanged(0, adapter.getItemCount());
-            adapter.notifyItemChanged(position);
-        }
     }
     //endregion
 
@@ -174,9 +125,6 @@ public class CreatePostFragment extends BaseFragment
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.toolbar_contextual_create_post, menu);
             mode.setTitle("Редактирование");
-            //adapter.setDataModeIsActive(true);
-            adapter.editModeIsActive(true);
-            adapter.notifyItemRangeChanged(0, adapter.getItemCount());
             return true;
         }
 
@@ -187,13 +135,8 @@ public class CreatePostFragment extends BaseFragment
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int id = item.getItemId();
-
-            if (id == R.id.apply_edit_contextual_create_post) {
-//                adapter.deletePostItems();
-//                adapter.clearPreparedToDeleteItemList();
-//                adapter.editModeIsActive(false);
-//                adapter.notifyItemRangeChanged(0, adapter.getItemCount());
+            if (item.getItemId() == R.id.apply_edit_contextual_create_post) {
+                showToast("EDITING APPLIED");
                 mode.finish();
                 return true;
             } else {
@@ -203,39 +146,46 @@ public class CreatePostFragment extends BaseFragment
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            //adapter.setDataModeIsActive(false);
-            adapter.editModeIsActive(false);
-            adapter.notifyItemRangeChanged(0, adapter.getItemCount());
-//            adapter.clearPreparedToDeleteItemList();
-            //adapter.notifyItemRangeChanged(0, adapter.getItemCount());
             actionMode = null;
         }
     };
     //endregion
 
-    //region [CLICK EVENTS]
-    private void buttonsCreatePost(int type) {
-
+    //region [SHOW EVENTS]
+    public void showPostItems(List<PostItem> postItems) {
+        //adapter.loadPostItems(postItems);
     }
 
-//    private void buttonsCreatePost(int type) {
-//        if (type != 0) {
-//            someFragment.myClickMethod();
-//            PostItem postItem = new PostItem(getItemCount() + 1, type, null);
-//            adapter.createPostItem(type);
-//            listIsEmpty();
-//        }
-//    }
+    private void showToast(String message) {
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    //endregion
+
+    //region [CLICK EVENTS]
+    private void createPostItem(int type) {
+        if (type != 0) {
+            PostItem postItem = new PostItem(adapter.getItemCount(), type, null);
+            adapter.createPostItem(postItem);
+            listIsEmpty();
+        }
+    }
     //endregion
 
     //region [OPERATIONS]
-    private void listIsEmpty() {
-        textViewDescriptionCreatePost
-                .setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    public void listIsEmpty() {
+        if (adapter.getItemCount() == 0) {
+            textViewDescriptionCreatePost.setVisibility(View.VISIBLE);
+        } else
+            textViewDescriptionCreatePost.setVisibility(View.GONE);
+    }
+
+    public void checkEditMode() {
+        // скрыть кнопки редактирования
     }
 
     @Override
     public void onDestroy() {
+        //presenter.detachView();
         super.onDestroy();
     }
     //endregion

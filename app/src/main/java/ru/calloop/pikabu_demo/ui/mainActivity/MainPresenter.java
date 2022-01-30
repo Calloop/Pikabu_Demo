@@ -4,8 +4,8 @@ import java.util.List;
 
 
 import ru.calloop.pikabu_demo.PikabuDB;
-import ru.calloop.pikabu_demo.createPostActivity.models.Post;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.createPost.models.Post;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostAndPostItem;
 import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 public class MainPresenter implements MainContract.IPresenter {

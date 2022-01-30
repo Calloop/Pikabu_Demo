@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.createPostActivity.fragments;
+package ru.calloop.pikabu_demo.ui.createPost.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
-import ru.calloop.pikabu_demo.ui.createPost.CreatePostFragment;
 import ru.calloop.pikabu_demo.ui.main.home.HomeViewModel;
 
 public class MenuCreatePostFragment extends BaseFragment implements View.OnClickListener {

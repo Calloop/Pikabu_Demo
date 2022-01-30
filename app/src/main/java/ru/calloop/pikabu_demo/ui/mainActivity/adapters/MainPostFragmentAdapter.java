@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.createPostActivity.models.PostItem;
+import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 
 public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

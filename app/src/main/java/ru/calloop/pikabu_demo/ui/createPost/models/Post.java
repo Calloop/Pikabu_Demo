@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.createPostActivity.models;
+package ru.calloop.pikabu_demo.ui.createPost.models;
 
 import static androidx.room.ForeignKey.CASCADE;
 
