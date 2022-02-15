@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
@@ -18,8 +17,8 @@ import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 public class CreatePostViewModel extends AndroidViewModel {
 
     private IPostRepository repository;
-    private MutableLiveData<List<PostItem>> oldPostItemList;
-    private MutableLiveData<List<PostItem>> newPostItemList;
+    private MutableLiveData<List<PostItem>> localPostItemList;
+    private MutableLiveData<List<PostItem>> dbPostItemList;
 
     public CreatePostViewModel(@NonNull Application application) {
         super(application);
@@ -28,27 +27,27 @@ public class CreatePostViewModel extends AndroidViewModel {
         //postItemList = repository.getPostItems(0, 5);
     }
 
-    public MutableLiveData<List<PostItem>> getOldPostItemList() {
-        if (oldPostItemList == null)
+    public MutableLiveData<List<PostItem>> getLocalPostItemList() {
+        if (localPostItemList == null)
         {
-            oldPostItemList = new MutableLiveData<>();
+            localPostItemList = new MutableLiveData<>();
         }
-        return oldPostItemList;
+        return localPostItemList;
     }
 
-    public void setOldPostItemList(List<PostItem> oldPostItemList) {
-        this.oldPostItemList.postValue(oldPostItemList);
+    public void setLocalPostItemList(List<PostItem> localPostItemList) {
+        this.localPostItemList.postValue(localPostItemList);
     }
 
-    public MutableLiveData<List<PostItem>> getNewPostItemList() {
-        if (newPostItemList == null)
+    public MutableLiveData<List<PostItem>> getDbPostItemList() {
+        if (dbPostItemList == null)
         {
-            newPostItemList = new MutableLiveData<>();
+            dbPostItemList = new MutableLiveData<>();
         }
-        return newPostItemList;
+        return dbPostItemList;
     }
 
-    public void setNewPostItemList(List<PostItem> newPostItemList) {
-        this.newPostItemList.postValue(newPostItemList);
+    public void setDbPostItemList(List<PostItem> dbPostItemList) {
+        this.dbPostItemList.postValue(dbPostItemList);
     }
 }

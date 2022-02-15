@@ -29,7 +29,7 @@ public class BlocksListCreatePostAdapter extends
         void onItemClick(View view, int position);
     }
 
-    private List<PostItem> postItemList;
+    private List<PostItem> localPostItemList = new ArrayList<>();
     private List<PostItem> dbPostItemList;
 
     private final List<Integer> prepareToDeleteItemsList = new ArrayList<>(10);
@@ -41,10 +41,6 @@ public class BlocksListCreatePostAdapter extends
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
-
-    public BlocksListCreatePostAdapter() {
-        postItemList = new ArrayList<>(1);
-    }
 
     @NonNull
     @Override
@@ -79,7 +75,7 @@ public class BlocksListCreatePostAdapter extends
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
                 //textViewHolder.deleteTextBlock.setOnClickListener(textViewHolder);
                 textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
-                textViewHolder.textView.setText(postItemList.get(textViewHolder.getAdapterPosition()).getDataValue());
+                textViewHolder.textView.setText(localPostItemList.get(textViewHolder.getAdapterPosition()).getDataValue());
 //            textViewHolder.textView.addTextChangedListener(new TextWatcher() {
 //                @Override
 //                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -174,12 +170,12 @@ public class BlocksListCreatePostAdapter extends
 //            return TYPE_IMAGE_BLOCK;
 //        }
 //
-        return postItemList.get(position).getDataType();
+        return localPostItemList.get(position).getDataType();
     }
 
     @Override
     public int getItemCount() {
-        return postItemList.size();
+        return localPostItemList == null ? 0 : localPostItemList.size();
     }
 
     @Override
@@ -259,16 +255,21 @@ public class BlocksListCreatePostAdapter extends
 //        return
 //    }
 
-    public void createPostItem(PostItem postItem) {
-        postItemList.add(postItem);
-        notifyItemInserted(getItemCount());
+    public void clearList() {
+        localPostItemList.clear();
+        notifyItemRangeRemoved(0, localPostItemList.size());
+    }
+
+    public void createPostItem(List<PostItem> localPostItemList) {
+        //this.localPostItemList.clear();
+        this.localPostItemList.addAll(localPostItemList);
     }
 
     public void deletePostItems() {
         if (getItemCount() > 0) {
             for (int itemPreparedToDelete :
                     prepareToDeleteItemsList) {
-                postItemList.remove(itemPreparedToDelete);
+                localPostItemList.remove(itemPreparedToDelete);
                 notifyItemRemoved(itemPreparedToDelete);
                 notifyItemRangeChanged(itemPreparedToDelete, getItemCount());
             }
@@ -276,12 +277,16 @@ public class BlocksListCreatePostAdapter extends
     }
 
     public List<PostItem> getAdapterList() {
-        return postItemList;
+        return localPostItemList;
     }
 
     public void setAdapterList(List<PostItem> postItemList) {
-        this.postItemList = postItemList;
-        notifyItemRangeInserted(0, postItemList.size());
+        localPostItemList = postItemList;
+    }
+
+    public void setLocalPostItemList() {
+        localPostItemList = new ArrayList<>(1);
+        notifyItemRangeChanged(0, 0);
     }
 
     public void saveDbList() {
@@ -323,7 +328,7 @@ public class BlocksListCreatePostAdapter extends
                 timer.cancel();
             }
 
-            postItemList.get(position).setDataValue(charSequence.toString());
+            localPostItemList.get(position).setDataValue(charSequence.toString());
         }
 
         @Override

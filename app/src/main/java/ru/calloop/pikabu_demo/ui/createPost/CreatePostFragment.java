@@ -1,6 +1,7 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,9 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
@@ -29,6 +32,11 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
 
     private AppCompatActivity activity;
     private Toolbar toolbar;
+
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
+    private HomeViewModel homeViewModel;
+    private CreatePostViewModel createPostViewModel;
 
     private CreatePostPresenter presenter;
     private BlocksListCreatePostAdapter adapter;
@@ -49,15 +57,36 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
     }
 
     @Override
-    public View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View providerFragmentView
+            (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_post, container, false);
 
         activity = (AppCompatActivity) requireActivity();
+        recyclerView = view.findViewById(R.id.list_create_post);
+        layoutManager = new LinearLayoutManager(view.getContext());
         textViewDescriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
 
+        homeViewModel = new ViewModelProvider(activity).get(HomeViewModel.class);
+        //homeViewModel.getState().observe(activity, this::createPostItem);
+
+        createPostViewModel = new ViewModelProvider(activity).get(CreatePostViewModel.class);
+
         setToolbar();
-        setAdapter(view);
-        setHomeViewModel();
+        setAdapter();
+
+//        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+//            @Override
+//            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+//                int result = bundle.getInt("bundleKey");
+//                CreatePostFragment.this.createPostItem(result);
+//            }
+//        });
+
+        getChildFragmentManager()
+                .setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+                    int result = bundle.getInt("bundleKey");
+                    CreatePostFragment.this.createPostItem(result);
+                });
 
         return view;
     }
@@ -68,21 +97,23 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         activity.setSupportActionBar(toolbar);
     }
 
-    private void setAdapter(View view) {
+    private void setAdapter() {
         presenter = new CreatePostPresenter();
         presenter.attachView(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
-        adapter = new BlocksListCreatePostAdapter();
 
-        RecyclerView recyclerView = view.findViewById(R.id.list_create_post);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-    }
 
-    private void setHomeViewModel() {
-        HomeViewModel model = new ViewModelProvider(activity).get(HomeViewModel.class);
-        model.getState().observe(this, this::createPostItem);
+        adapter = new BlocksListCreatePostAdapter();
+        recyclerView.setAdapter(adapter);
+//        createPostViewModel.getLocalPostItemList()
+//                .observe(activity,
+//                        postItems -> {
+//                            adapter = new BlocksListCreatePostAdapter(postItems);
+//                            recyclerView.setAdapter(adapter);
+//                        });
+
+        //Log.d("TEST", "" + adapter.getItemCount());
     }
     //endregion
 
@@ -117,6 +148,8 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
 
         return super.onOptionsItemSelected(item);
     }
+
+
     //endregion
 
     //region [ACTION MODE]
@@ -164,8 +197,18 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
     //region [CLICK EVENTS]
     private void createPostItem(int type) {
         if (type != 0) {
-            PostItem postItem = new PostItem(adapter.getItemCount(), type, null);
-            adapter.createPostItem(postItem);
+            List<PostItem> test = new ArrayList<>(1);
+            PostItem postItem = new PostItem(0, type, null);
+            test.add(postItem);
+     //       Log.d("TEST", "" + adapter.getItemCount());
+            CreatePostDiffUtilCallback createPostDiffUtilCallback =
+                    new CreatePostDiffUtilCallback(adapter.getAdapterList(),
+                            test);
+            DiffUtil.DiffResult diffResult =
+                    DiffUtil.calculateDiff(createPostDiffUtilCallback);
+
+            adapter.createPostItem(test);
+            diffResult.dispatchUpdatesTo(adapter);
             listIsEmpty();
         }
     }

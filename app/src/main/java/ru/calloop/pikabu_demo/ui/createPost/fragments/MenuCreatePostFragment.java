@@ -45,13 +45,19 @@ public class MenuCreatePostFragment extends BaseFragment implements View.OnClick
     @Override
     public void onClick(View view) {
         int id = view.getId();
+        Bundle result = new Bundle();
 
         if (id == R.id.button_add_text_create_post) {
-            homeViewModel.setState(1);
+            result.putInt("bundleKey", 1);
+            //homeViewModel.setState(1);
         } else if (id == R.id.button_add_image_create_post) {
-            homeViewModel.setState(2);
+            result.putInt("bundleKey", 2);
+            //homeViewModel.setState(2);
         } else if (id == R.id.button_delete_block_create_post) {
-            homeViewModel.setState(3);
+            result.putInt("bundleKey", 3);
+            //homeViewModel.setState(3);
         }
+
+        getParentFragmentManager().setFragmentResult("requestKey", result);
     }
 }
