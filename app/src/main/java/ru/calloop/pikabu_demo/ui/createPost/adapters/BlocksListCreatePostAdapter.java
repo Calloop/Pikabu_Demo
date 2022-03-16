@@ -29,7 +29,7 @@ public class BlocksListCreatePostAdapter extends
         void onItemClick(View view, int position);
     }
 
-    private List<PostItem> localPostItemList = new ArrayList<>();
+    private List<PostItem> localPostItemList;
     private List<PostItem> dbPostItemList;
 
     private final List<Integer> prepareToDeleteItemsList = new ArrayList<>(10);
@@ -41,6 +41,10 @@ public class BlocksListCreatePostAdapter extends
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
+
+    public BlocksListCreatePostAdapter() {
+        localPostItemList = new ArrayList<>(1);
+    }
 
     @NonNull
     @Override
@@ -260,9 +264,11 @@ public class BlocksListCreatePostAdapter extends
         notifyItemRangeRemoved(0, localPostItemList.size());
     }
 
-    public void createPostItem(List<PostItem> localPostItemList) {
+    public void createPostItem(int type) {
         //this.localPostItemList.clear();
-        this.localPostItemList.addAll(localPostItemList);
+        PostItem postItem = new PostItem(0, type, null);
+        this.localPostItemList.add(postItem);
+        notifyItemInserted(localPostItemList.size() - 1);
     }
 
     public void deletePostItems() {

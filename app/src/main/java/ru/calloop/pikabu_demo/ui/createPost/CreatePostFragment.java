@@ -85,7 +85,7 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         getChildFragmentManager()
                 .setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
                     int result = bundle.getInt("bundleKey");
-                    CreatePostFragment.this.createPostItem(result);
+                    createPostItem(result);
                 });
 
         return view;
@@ -197,19 +197,23 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
     //region [CLICK EVENTS]
     private void createPostItem(int type) {
         if (type != 0) {
-            List<PostItem> test = new ArrayList<>(1);
-            PostItem postItem = new PostItem(0, type, null);
-            test.add(postItem);
-     //       Log.d("TEST", "" + adapter.getItemCount());
-            CreatePostDiffUtilCallback createPostDiffUtilCallback =
-                    new CreatePostDiffUtilCallback(adapter.getAdapterList(),
-                            test);
-            DiffUtil.DiffResult diffResult =
-                    DiffUtil.calculateDiff(createPostDiffUtilCallback);
+//            List<PostItem> test = new ArrayList<>(1);
+//            PostItem postItem = new PostItem(0, type, null);
+//            test.add(postItem);
+//     //       Log.d("TEST", "" + adapter.getItemCount());
+//            CreatePostDiffUtilCallback createPostDiffUtilCallback =
+//                    new CreatePostDiffUtilCallback(adapter.getAdapterList(),
+//                            test);
+//            DiffUtil.DiffResult diffResult =
+//                    DiffUtil.calculateDiff(createPostDiffUtilCallback);
+//
+//            adapter.createPostItem(type);
+//            diffResult.dispatchUpdatesTo(adapter);
+//            listIsEmpty();
 
-            adapter.createPostItem(test);
-            diffResult.dispatchUpdatesTo(adapter);
+            adapter.createPostItem(type);
             listIsEmpty();
+
         }
     }
     //endregion
