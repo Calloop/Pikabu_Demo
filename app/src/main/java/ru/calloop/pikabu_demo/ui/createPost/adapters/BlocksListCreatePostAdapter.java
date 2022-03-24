@@ -2,6 +2,8 @@ package ru.calloop.pikabu_demo.ui.createPost.adapters;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,25 +27,21 @@ import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
     private List<PostItem> localPostItemList;
     private List<PostItem> dbPostItemList;
 
-    private final List<Integer> prepareToDeleteItemsList = new ArrayList<>(10);
+    private final SparseArray<PostItem> prepareToDeleteItemsList;
     private final List<LayoutParams> layoutParamsList =
             new ArrayList<>(10);
     private LayoutParams editModeLayoutParams;
-    private OnItemClickListener listener;
-    private boolean editModeIsActive, setDataModeIsActive;
+    private boolean editModeIsActive;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
     public BlocksListCreatePostAdapter() {
         localPostItemList = new ArrayList<>(1);
+        prepareToDeleteItemsList = new SparseArray<>();
     }
 
     @NonNull
@@ -58,7 +56,7 @@ public class BlocksListCreatePostAdapter extends
                 view = layoutInflater
                         .inflate(R.layout
                                 .fragment_text_block_create_post, parent, false);
-                holder = new TextViewHolder(view, listener, new CreatePostListener());
+                holder = new TextViewHolder(view, new CreatePostListener());
                 break;
             case TYPE_IMAGE_BLOCK:
                 view = layoutInflater
@@ -78,8 +76,10 @@ public class BlocksListCreatePostAdapter extends
             case TYPE_TEXT_BLOCK:
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
                 //textViewHolder.deleteTextBlock.setOnClickListener(textViewHolder);
-                textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
                 textViewHolder.textView.setText(localPostItemList.get(textViewHolder.getAdapterPosition()).getDataValue());
+                textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
+
+                textViewHolder.deleteButton.setOnClickListener(view -> addPreparedToDeleteItem(textViewHolder.getAdapterPosition()));
 //            textViewHolder.textView.addTextChangedListener(new TextWatcher() {
 //                @Override
 //                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -187,23 +187,18 @@ public class BlocksListCreatePostAdapter extends
         return super.getItemId(position);
     }
 
-    public static class TextViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+    public static class TextViewHolder extends RecyclerView.ViewHolder{
         private final EditText textView;
-        private final Button deleteTextBlock;
         private final View menu;
-        private final OnItemClickListener listener;
+        private final Button deleteButton;
         private final CreatePostListener createPostListener;
 
-        public TextViewHolder(View view, OnItemClickListener listener, CreatePostListener createPostListener) {
+        public TextViewHolder(View view, CreatePostListener createPostListener) {
             super(view);
             textView = view.findViewById(R.id.editText_textBlock_createPost);
-            deleteTextBlock = view.findViewById(R.id.button_delete_text_block_create_post2);
             menu = view.findViewById(R.id.editing_menu);
-
-            this.listener = listener;
             this.createPostListener = createPostListener;
-            view.setOnClickListener(this);
+            deleteButton = menu.findViewById(R.id.button_delete_text_block_create_post2);
             textView.addTextChangedListener(createPostListener);
         }
 
@@ -213,16 +208,6 @@ public class BlocksListCreatePostAdapter extends
 
         public void setTextViewValue(String value) {
             textView.setText(value);
-        }
-
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
-
-            if (id == R.id.button_delete_text_block_create_post2) {
-                this.listener.onItemClick(view, getAdapterPosition());
-
-            }
         }
     }
 
@@ -267,19 +252,19 @@ public class BlocksListCreatePostAdapter extends
     public void createPostItem(int type) {
         //this.localPostItemList.clear();
         PostItem postItem = new PostItem(0, type, null);
-        this.localPostItemList.add(postItem);
+        localPostItemList.add(postItem);
         notifyItemInserted(localPostItemList.size() - 1);
     }
 
     public void deletePostItems() {
-        if (getItemCount() > 0) {
-            for (int itemPreparedToDelete :
-                    prepareToDeleteItemsList) {
-                localPostItemList.remove(itemPreparedToDelete);
-                notifyItemRemoved(itemPreparedToDelete);
-                notifyItemRangeChanged(itemPreparedToDelete, getItemCount());
-            }
-        }
+//        if (getItemCount() > 0) {
+//            for (int itemPreparedToDelete :
+//                    prepareToDeleteItemsList) {
+//                localPostItemList.remove(itemPreparedToDelete);
+//                notifyItemRemoved(itemPreparedToDelete);
+//                notifyItemRangeChanged(itemPreparedToDelete, getItemCount());
+//            }
+//        }
     }
 
     public List<PostItem> getAdapterList() {
@@ -300,7 +285,9 @@ public class BlocksListCreatePostAdapter extends
     }
 
     public void addPreparedToDeleteItem(int position) {
-        prepareToDeleteItemsList.add(position);
+        PostItem postItem = localPostItemList.get(position);
+        prepareToDeleteItemsList.put(position, postItem);
+        Log.d("TEST", "item: " + localPostItemList.get(position).getDataValue());
     }
 
     public void clearPreparedToDeleteItemList() {
@@ -310,10 +297,6 @@ public class BlocksListCreatePostAdapter extends
 
     public void editModeIsActive(boolean state) {
         editModeIsActive = state;
-    }
-
-    public void setDataModeIsActive(boolean state) {
-        setDataModeIsActive = state;
     }
 
     public class CreatePostListener implements TextWatcher {

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -128,18 +129,17 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-//
-//        if (itemId == R.id.edit_create_post) {
-//            if (actionMode != null) {
-//                return false;
-//            }
-//
-//            CreatePostFragment.this.startSupportActionMode(actionModeCallback);
-//
-//            Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
-//            return true;
-//        }
-//
+
+        if (itemId == R.id.edit_create_post) {
+            if (actionMode != null) {
+                return false;
+            }
+
+            activity.startSupportActionMode(actionModeCallback);
+            //Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         if (itemId == R.id.add_post_create_post) {
             //adapter.savePostItems();
             //presenter.insert(new Post(1), adapter.postItemList);
@@ -158,6 +158,8 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.toolbar_contextual_create_post, menu);
             mode.setTitle("Редактирование");
+            adapter.editModeIsActive(true);
+            adapter.notifyItemRangeChanged(0,adapter.getItemCount());
             return true;
         }
 
@@ -169,6 +171,8 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.apply_edit_contextual_create_post) {
+                adapter.editModeIsActive(false);
+                adapter.notifyItemRangeChanged(0,adapter.getItemCount());
                 showToast("EDITING APPLIED");
                 mode.finish();
                 return true;
@@ -180,6 +184,8 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             actionMode = null;
+            adapter.editModeIsActive(false);
+            adapter.notifyItemRangeChanged(0,adapter.getItemCount());
         }
     };
     //endregion
