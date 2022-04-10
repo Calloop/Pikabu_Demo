@@ -4,9 +4,8 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
-import ru.calloop.pikabu_demo.signingActivity.models.Account;
+import ru.calloop.pikabu_demo.ui.signing.models.Account;
 import ru.calloop.pikabu_demo.ui.repositories.Account.AccountRepository;
 
 public class SignUpViewModel extends AndroidViewModel {

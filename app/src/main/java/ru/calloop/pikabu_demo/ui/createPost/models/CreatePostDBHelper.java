@@ -14,4 +14,8 @@ public class CreatePostDBHelper {
     public List<PostItem> getLocalPostItemList() {
         return localPostItemList;
     }
+
+    public List<PostItem> getDbPostItemList() {
+        return dbPostItemList;
+    }
 }

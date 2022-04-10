@@ -2,12 +2,9 @@ package ru.calloop.pikabu_demo.ui.createPost.adapters;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,12 +25,7 @@ public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<PostItem> localPostItemList;
-    private List<PostItem> dbPostItemList;
-
-    private final SparseArray<PostItem> prepareToDeleteItemsList;
-    private final List<LayoutParams> layoutParamsList =
-            new ArrayList<>(10);
-    private LayoutParams editModeLayoutParams;
+    private final List<PostItem> prepareToDeleteItemsList;
     private boolean editModeIsActive;
 
     private static final int TYPE_TEXT_BLOCK = 1;
@@ -41,7 +33,7 @@ public class BlocksListCreatePostAdapter extends
 
     public BlocksListCreatePostAdapter() {
         localPostItemList = new ArrayList<>(1);
-        prepareToDeleteItemsList = new SparseArray<>();
+        prepareToDeleteItemsList = new ArrayList<>(1);
     }
 
     @NonNull
@@ -75,11 +67,9 @@ public class BlocksListCreatePostAdapter extends
         switch (holder.getItemViewType()) {
             case TYPE_TEXT_BLOCK:
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
-                //textViewHolder.deleteTextBlock.setOnClickListener(textViewHolder);
-                textViewHolder.textView.setText(localPostItemList.get(textViewHolder.getAdapterPosition()).getDataValue());
-                textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
 
-                textViewHolder.deleteButton.setOnClickListener(view -> addPreparedToDeleteItem(textViewHolder.getAdapterPosition()));
+                textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
+                textViewHolder.textView.setText(localPostItemList.get(textViewHolder.getAdapterPosition()).getDataValue());
 //            textViewHolder.textView.addTextChangedListener(new TextWatcher() {
 //                @Override
 //                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -140,23 +130,31 @@ public class BlocksListCreatePostAdapter extends
 ////                }
 //            }
 
+                //ViewGroup.LayoutParams layoutParams = textViewHolder.itemView.getLayoutParams();
+
                 if (editModeIsActive) {
                     textViewHolder.menu.setVisibility(View.VISIBLE);
 
-//                textViewHolder.deleteTextBlock.setOnClickListener(view -> {
-//                    Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.GONE);
-//                    Objects.requireNonNull(textViewHolder.itemView)
-//                            .setLayoutParams(new ViewGroup.LayoutParams(0, 0));
-//                });
-
+                    textViewHolder.deleteButton.setOnClickListener(view -> {
+                        addPreparedToDeleteItem(textViewHolder.getAdapterPosition());
+//                        Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.GONE);
+//
+//                        layoutParams.width = 0;
+//                        layoutParams.height = 0;
+//                        Objects.requireNonNull(textViewHolder.itemView)
+//                                .setLayoutParams(layoutParams);
+                    });
                 } else {
                     textViewHolder.menu.setVisibility(View.GONE);
-
-//                if (textViewHolder.itemView.getVisibility() == View.GONE) {
-//                    Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.VISIBLE);
-//                    Objects.requireNonNull(textViewHolder.itemView)
-//                            .setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-//                }
+//
+//                    if (textViewHolder.itemView.getVisibility() == View.GONE) {
+//                        Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.VISIBLE);
+//
+//                        layoutParams.width = 0;
+//                        layoutParams.height = 0;
+//                        Objects.requireNonNull(textViewHolder.itemView)
+//                                .setLayoutParams(layoutParams);
+//                    }
                 }
 //        } else {
 //
@@ -187,7 +185,7 @@ public class BlocksListCreatePostAdapter extends
         return super.getItemId(position);
     }
 
-    public static class TextViewHolder extends RecyclerView.ViewHolder{
+    public static class TextViewHolder extends RecyclerView.ViewHolder {
         private final EditText textView;
         private final View menu;
         private final Button deleteButton;
@@ -224,75 +222,34 @@ public class BlocksListCreatePostAdapter extends
         }
     }
 
-//    public void loadPostItems(List<PostItem> postItemList) {
-//        int posStart = postItemList.size();
-//        this.postItemList.clear();
-//        this.postItemList.addAll(postItemList);
-//        notifyItemRangeInserted(posStart, postItemList.size());
-//    }
-
-//    private TextViewHolder editManager(View view, ViewGroup.LayoutParams layoutParams) {
-//        for (int itemPreparedToDelete :
-//                prepareToDeleteItemsList) {
-//            if (itemPreparedToDelete == textViewHolder.getAdapterPosition()) {
-//                textViewHolder.itemView.setVisibility(view);
-//                layoutParamsList.add(textViewHolder.itemView.getLayoutParams());
-//                textViewHolder.itemView
-//                        .setLayoutParams(layoutParamsList.get(itemPreparedToDelete));
-//            }
-//        }
-//        return
-//    }
-
-    public void clearList() {
-        localPostItemList.clear();
-        notifyItemRangeRemoved(0, localPostItemList.size());
-    }
-
     public void createPostItem(int type) {
-        //this.localPostItemList.clear();
-        PostItem postItem = new PostItem(0, type, null);
+        PostItem postItem = new PostItem(localPostItemList.size(), type, null);
         localPostItemList.add(postItem);
         notifyItemInserted(localPostItemList.size() - 1);
-    }
-
-    public void deletePostItems() {
-//        if (getItemCount() > 0) {
-//            for (int itemPreparedToDelete :
-//                    prepareToDeleteItemsList) {
-//                localPostItemList.remove(itemPreparedToDelete);
-//                notifyItemRemoved(itemPreparedToDelete);
-//                notifyItemRangeChanged(itemPreparedToDelete, getItemCount());
-//            }
-//        }
     }
 
     public List<PostItem> getAdapterList() {
         return localPostItemList;
     }
 
-    public void setAdapterList(List<PostItem> postItemList) {
-        localPostItemList = postItemList;
+    public void updateList(List<PostItem> postItems) {
+        localPostItemList.clear();
+        localPostItemList = postItems;
+        notifyItemRangeChanged(0, localPostItemList.size());
     }
 
-    public void setLocalPostItemList() {
-        localPostItemList = new ArrayList<>(1);
-        notifyItemRangeChanged(0, 0);
-    }
-
-    public void saveDbList() {
-
+    public List<PostItem> getPrepareToDeleteItemsList() {
+        return prepareToDeleteItemsList;
     }
 
     public void addPreparedToDeleteItem(int position) {
-        PostItem postItem = localPostItemList.get(position);
-        prepareToDeleteItemsList.put(position, postItem);
-        Log.d("TEST", "item: " + localPostItemList.get(position).getDataValue());
+        prepareToDeleteItemsList.add(localPostItemList.get(position));
+        localPostItemList.remove(position);
+        notifyItemRemoved(position);
     }
 
     public void clearPreparedToDeleteItemList() {
         prepareToDeleteItemsList.clear();
-        layoutParamsList.clear();
     }
 
     public void editModeIsActive(boolean state) {
@@ -313,10 +270,6 @@ public class BlocksListCreatePostAdapter extends
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            if (timer != null) {
-                timer.cancel();
-            }
-
             localPostItemList.get(position).setDataValue(charSequence.toString());
         }
 

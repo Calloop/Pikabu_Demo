@@ -1,7 +1,6 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,18 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
@@ -35,11 +32,10 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
     private Toolbar toolbar;
 
     private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
     private HomeViewModel homeViewModel;
     private CreatePostViewModel createPostViewModel;
 
-    private CreatePostPresenter presenter;
+    //private CreatePostPresenter presenter;
     private BlocksListCreatePostAdapter adapter;
     //private BlocksListCreatePostAdapter.OnItemClickListener listener;
 
@@ -64,13 +60,13 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
 
         activity = (AppCompatActivity) requireActivity();
         recyclerView = view.findViewById(R.id.list_create_post);
-        layoutManager = new LinearLayoutManager(view.getContext());
         textViewDescriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
 
-        homeViewModel = new ViewModelProvider(activity).get(HomeViewModel.class);
         //homeViewModel.getState().observe(activity, this::createPostItem);
-
+        adapter = new BlocksListCreatePostAdapter();
         createPostViewModel = new ViewModelProvider(activity).get(CreatePostViewModel.class);
+        createPostViewModel.loadArrayList().observe(activity,
+                postItems -> adapter.updateList(postItems));
 
         setToolbar();
         setAdapter();
@@ -99,13 +95,11 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
     }
 
     private void setAdapter() {
-        presenter = new CreatePostPresenter();
-        presenter.attachView(this);
+//        presenter = new CreatePostPresenter();
+//        presenter.attachView(this);
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapter = new BlocksListCreatePostAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 //        createPostViewModel.getLocalPostItemList()
 //                .observe(activity,
@@ -141,6 +135,8 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         }
 
         if (itemId == R.id.add_post_create_post) {
+            createPostViewModel.setArrayList(adapter.getAdapterList());
+
             //adapter.savePostItems();
             //presenter.insert(new Post(1), adapter.postItemList);
             //startActivity(new Intent(CreatePostFragment.this, MainActivity.class));
@@ -159,7 +155,7 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
             mode.getMenuInflater().inflate(R.menu.toolbar_contextual_create_post, menu);
             mode.setTitle("Редактирование");
             adapter.editModeIsActive(true);
-            adapter.notifyItemRangeChanged(0,adapter.getItemCount());
+            adapter.notifyItemRangeChanged(0, adapter.getItemCount());
             return true;
         }
 
@@ -171,8 +167,7 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.apply_edit_contextual_create_post) {
-                adapter.editModeIsActive(false);
-                adapter.notifyItemRangeChanged(0,adapter.getItemCount());
+                adapter.clearPreparedToDeleteItemList();
                 showToast("EDITING APPLIED");
                 mode.finish();
                 return true;
@@ -185,7 +180,12 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         public void onDestroyActionMode(ActionMode mode) {
             actionMode = null;
             adapter.editModeIsActive(false);
-            adapter.notifyItemRangeChanged(0,adapter.getItemCount());
+            if (adapter.getPrepareToDeleteItemsList().size() > 0) {
+                adapter.getAdapterList().addAll(adapter.getPrepareToDeleteItemsList());
+                adapter.getAdapterList().sort(Comparator.comparing(PostItem::getDataPosition));
+            }
+            adapter.clearPreparedToDeleteItemList();
+            adapter.notifyItemRangeChanged(0, adapter.getItemCount());
         }
     };
     //endregion

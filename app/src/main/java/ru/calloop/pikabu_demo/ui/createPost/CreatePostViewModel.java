@@ -3,12 +3,12 @@ package ru.calloop.pikabu_demo.ui.createPost;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.room.TypeConverter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,33 +24,36 @@ import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 public class CreatePostViewModel extends AndroidViewModel {
 
-    private IPostRepository repository;
-    private MutableLiveData<List<PostItem>> postItemList;
+    private final IPostRepository postRepository;
+    private MutableLiveData<List<PostItem>> postItems;
     private final SharedPreferences sharedPreferences;
 
     public CreatePostViewModel(@NonNull Application application) {
         super(application);
         sharedPreferences = application
                 .getSharedPreferences("POST_CREATE_CACHE", Context.MODE_PRIVATE);
-//        IPostDao IPostDao = PikabuDB.getDatabase(application).getPostDao();
-//        repository = new PostRepository(IPostDao);
+        IPostDao postDao = PikabuDB.getDatabase(application).getPostDao();
+        postRepository = new PostRepository(postDao);
         //postItemList = repository.getPostItems(0, 5);
     }
 
-    MutableLiveData<List<PostItem>> getList() {
-        if (postItemList == null) {
-            postItemList = new MutableLiveData<>();
+    MutableLiveData<List<PostItem>> getPostItems() {
+        if (postItems == null) {
+            postItems = new MutableLiveData<>();
             //loadArrayList();
         }
-        return postItemList;
+        return postItems;
     }
 
-    public List<PostItem> loadArrayList() {
+    @TypeConverter
+    public MutableLiveData<List<PostItem>> loadArrayList() {
         Gson gson = new Gson();
         String json = sharedPreferences.getString("POST", null);
         Type type = new TypeToken<List<PostItem>>() {
         }.getType();
-        return gson.fromJson(json, type);
+
+        return json == null ? new MutableLiveData<>() : new MutableLiveData<>(gson.fromJson(json,
+                type));
     }
 
     public void setArrayList(List<PostItem> list) {
@@ -59,5 +62,15 @@ public class CreatePostViewModel extends AndroidViewModel {
         String json = gson.toJson(list);
         editor.putString("POST", json);
         editor.apply();
+    }
+
+    private final MutableLiveData<Integer> state = new MutableLiveData<>();
+
+    public MutableLiveData<Integer> getState() {
+        return state;
+    }
+
+    public void setState(int type) {
+        state.postValue(type);
     }
 }

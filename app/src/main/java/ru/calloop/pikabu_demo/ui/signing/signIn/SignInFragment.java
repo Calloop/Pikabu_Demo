@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,11 +19,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import java.text.MessageFormat;
 import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.signingActivity.models.SessionManager;
+import ru.calloop.pikabu_demo.ui.signing.models.SessionManager;
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
 
 public class SignInFragment extends BaseFragment implements View.OnClickListener {

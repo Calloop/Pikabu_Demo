@@ -1,33 +1,45 @@
 package ru.calloop.pikabu_demo.ui.main.home;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+
+import java.util.List;
 
 import ru.calloop.pikabu_demo.PikabuDB;
+import ru.calloop.pikabu_demo.ui.createPost.models.Post;
 import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
+import ru.calloop.pikabu_demo.ui.repositories.Post.IPostRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 public class HomeViewModel extends AndroidViewModel {
-
-    private final MutableLiveData<Integer> state = new MutableLiveData<>();
+    private final IPostRepository postRepository;
+    private LiveData<List<Post>> items;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
+        IPostDao postDao = PikabuDB.getDatabase(application).getPostDao();
+        postRepository = new PostRepository(postDao);
+        // items = postRepository.getAllPosts(0, 5);
     }
 
-    public MutableLiveData<Integer> getState() {
-        return state;
+    public LiveData<List<Post>> getItems() {
+        if (items == null) {
+            items = new MutableLiveData<>();
+            loadUsers();
+        }
+        return items;
     }
 
-    public void setState(int type) {
-        state.postValue(type);
+    private void loadUsers() {
+        // Do an asynchronous operation to fetch users.
     }
+
+
+
 }
 
 

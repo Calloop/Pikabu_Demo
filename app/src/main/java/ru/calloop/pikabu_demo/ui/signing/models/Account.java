@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.signingActivity.models;
+package ru.calloop.pikabu_demo.ui.signing.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

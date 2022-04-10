@@ -9,31 +9,31 @@ import ru.calloop.pikabu_demo.ui.createPost.models.PostAndPostItem;
 import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 
 public class PostRepository implements IPostRepository {
-    IPostDao IPostDao;
+    private final IPostDao postDao;
 
     @Inject
-    public PostRepository(IPostDao IPostDao) {
-        this.IPostDao = IPostDao;
+    public PostRepository(IPostDao postDao) {
+        this.postDao = postDao;
     }
 
     @Override
     public List<PostAndPostItem> getPostItems(int startPosition, int limitCount) {
-        return IPostDao.getPostItems(startPosition, limitCount);
+        return postDao.getPostItems(startPosition, limitCount);
     }
 
     @Override
     public List<Post> getAllPosts(int startPosition, int limitCount) {
-        return IPostDao.getAllPosts(0, 5);
+        return postDao.getAllPosts(0, 5);
     }
 
     @Override
     public long insertPost(Post post) {
-        return IPostDao.insertPost(post);
+        return postDao.insertPost(post);
     }
 
     @Override
     public void insertPostItemList(List<PostItem> postItemList) {
-        IPostDao.insertPostItemList(postItemList);
+        postDao.insertPostItemList(postItemList);
     }
 
     @Override

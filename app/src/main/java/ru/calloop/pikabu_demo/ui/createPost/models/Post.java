@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import ru.calloop.pikabu_demo.signingActivity.models.Account;
+import ru.calloop.pikabu_demo.ui.signing.models.Account;
 
 @Entity(tableName = "posts",
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "id",

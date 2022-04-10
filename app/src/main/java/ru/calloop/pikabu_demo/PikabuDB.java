@@ -9,7 +9,7 @@ import androidx.room.Database;
 import ru.calloop.pikabu_demo.ui.createPost.models.Post;
 import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
 import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
-import ru.calloop.pikabu_demo.signingActivity.models.Account;
+import ru.calloop.pikabu_demo.ui.signing.models.Account;
 import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountDao;
 
 @Database(entities = {Post.class, PostItem.class, Account.class}, version = PikabuDB.VERSION)

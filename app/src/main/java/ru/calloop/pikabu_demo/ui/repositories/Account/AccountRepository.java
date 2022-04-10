@@ -5,7 +5,7 @@ import android.app.Application;
 import javax.inject.Inject;
 
 import ru.calloop.pikabu_demo.PikabuDB;
-import ru.calloop.pikabu_demo.signingActivity.models.Account;
+import ru.calloop.pikabu_demo.ui.signing.models.Account;
 
 public class AccountRepository implements IAccountRepository{
     private final IAccountDao AccountDao;

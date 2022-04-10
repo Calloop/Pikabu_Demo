@@ -1,13 +1,12 @@
 package ru.calloop.pikabu_demo.ui.repositories.Account;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import ru.calloop.pikabu_demo.signingActivity.models.Account;
+import ru.calloop.pikabu_demo.ui.signing.models.Account;
 
 @Dao
 public interface IAccountDao {
