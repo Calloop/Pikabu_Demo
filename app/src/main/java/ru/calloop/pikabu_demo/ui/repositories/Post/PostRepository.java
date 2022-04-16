@@ -1,5 +1,8 @@
 package ru.calloop.pikabu_demo.ui.repositories.Post;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,6 +41,7 @@ public class PostRepository implements IPostRepository {
 
     @Override
     public void insert(Post post, List<PostItem> postItemList) {
+
         long postId = insertPost(post);
 
         for (PostItem postItem : postItemList) {

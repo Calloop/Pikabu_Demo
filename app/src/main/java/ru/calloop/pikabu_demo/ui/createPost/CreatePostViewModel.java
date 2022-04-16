@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.TypeConverter;
 
@@ -17,10 +18,12 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.PikabuDB;
+import ru.calloop.pikabu_demo.ui.createPost.models.Post;
 import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
 import ru.calloop.pikabu_demo.ui.repositories.Post.IPostRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
+import ru.calloop.pikabu_demo.ui.signing.models.SessionManager;
 
 public class CreatePostViewModel extends AndroidViewModel {
 
@@ -37,12 +40,16 @@ public class CreatePostViewModel extends AndroidViewModel {
         //postItemList = repository.getPostItems(0, 5);
     }
 
-    MutableLiveData<List<PostItem>> getPostItems() {
-        if (postItems == null) {
-            postItems = new MutableLiveData<>();
-            //loadArrayList();
-        }
-        return postItems;
+//    LiveData<List<PostItem>> getPostItems() {
+//        if (postItems == null) {
+//            postItems = new MutableLiveData<>();
+//            //loadArrayList();
+//        }
+//        return postItems;
+//    }
+
+    public void setPostItems(Post post, List<PostItem> postItems) {
+        postRepository.insert(post, postItems);
     }
 
     @TypeConverter
@@ -61,6 +68,12 @@ public class CreatePostViewModel extends AndroidViewModel {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         editor.putString("POST", json);
+        editor.apply();
+    }
+
+    public void clearArrayList() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
         editor.apply();
     }
 

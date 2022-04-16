@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.mainActivity;
+package ru.calloop.pikabu_demo.ui.main.mainActivity;
 
 import android.content.Context;
 

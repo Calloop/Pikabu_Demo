@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.mainActivity.adapters;
+package ru.calloop.pikabu_demo.ui.main.mainActivity.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

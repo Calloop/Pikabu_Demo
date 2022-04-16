@@ -1,5 +1,7 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,8 +25,10 @@ import java.util.List;
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.BlocksListCreatePostAdapter;
+import ru.calloop.pikabu_demo.ui.createPost.models.Post;
 import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
 import ru.calloop.pikabu_demo.ui.main.home.HomeViewModel;
+import ru.calloop.pikabu_demo.ui.signing.models.SessionManager;
 
 public class CreatePostFragment extends BaseFragment implements CreatePostContract.IView {
 
@@ -62,11 +66,11 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         recyclerView = view.findViewById(R.id.list_create_post);
         textViewDescriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
 
-        //homeViewModel.getState().observe(activity, this::createPostItem);
         adapter = new BlocksListCreatePostAdapter();
         createPostViewModel = new ViewModelProvider(activity).get(CreatePostViewModel.class);
         createPostViewModel.loadArrayList().observe(activity,
                 postItems -> adapter.updateList(postItems));
+        //adapter = new BlocksListCreatePostAdapter(createPostViewModel.getPostItems().getValue());
 
         setToolbar();
         setAdapter();
@@ -135,8 +139,14 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         }
 
         if (itemId == R.id.add_post_create_post) {
-            createPostViewModel.setArrayList(adapter.getAdapterList());
+            createPostViewModel.clearArrayList();
+            SharedPreferences userSharedPreferences = activity
+                    .getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
+            int userId = userSharedPreferences.getInt(SessionManager.ID, 0);
+            Post post = new Post(userId);
+            createPostViewModel.setPostItems(post, adapter.getAdapterList());
 
+            //createPostViewModel.setArrayList(adapter.getAdapterList());
             //adapter.savePostItems();
             //presenter.insert(new Post(1), adapter.postItemList);
             //startActivity(new Intent(CreatePostFragment.this, MainActivity.class));
@@ -168,6 +178,7 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.apply_edit_contextual_create_post) {
                 adapter.clearPreparedToDeleteItemList();
+                createPostViewModel.setArrayList(adapter.getAdapterList());
                 showToast("EDITING APPLIED");
                 mode.finish();
                 return true;

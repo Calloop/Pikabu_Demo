@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pikabu_Demo">
         <activity
-            android:name=".ui.mainActivity.MainActivity"
+            android:name=".ui.main.mainActivity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

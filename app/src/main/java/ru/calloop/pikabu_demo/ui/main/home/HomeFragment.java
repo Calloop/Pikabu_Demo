@@ -23,7 +23,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import ru.calloop.pikabu_demo.ui.signing.models.SessionManager;
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.mainActivity.adapters.HomeAdapter;
+import ru.calloop.pikabu_demo.ui.main.mainActivity.adapters.HomeAdapter;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
 

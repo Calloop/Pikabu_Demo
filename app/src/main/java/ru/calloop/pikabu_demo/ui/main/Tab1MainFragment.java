@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ru.calloop.pikabu_demo.ui.base.BaseFragment;
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.mainActivity.MainContract;
-import ru.calloop.pikabu_demo.ui.mainActivity.MainPresenter;
-import ru.calloop.pikabu_demo.ui.mainActivity.adapters.BlocksListMainAdapter;
+import ru.calloop.pikabu_demo.ui.main.mainActivity.MainContract;
+import ru.calloop.pikabu_demo.ui.main.mainActivity.MainPresenter;
+import ru.calloop.pikabu_demo.ui.main.mainActivity.adapters.BlocksListMainAdapter;
 
 public class Tab1MainFragment extends BaseFragment implements MainContract.IView {
     private MainPresenter presenter;
