@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.signing.signUp;
+package ru.calloop.pikabu_demo.ui.signing;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,7 +13,6 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -21,12 +20,14 @@ import java.text.MessageFormat;
 import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.base.BaseFragment;
+import ru.calloop.pikabu_demo.ui.BaseFragment;
+import ru.calloop.pikabu_demo.ui.repositories.Account.AccountRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountDao;
+import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountRepository;
 
 public class SignUpFragment extends BaseFragment implements View.OnClickListener {
 
-    private SignUpViewModel signUpViewModel;
+    private IAccountRepository accountRepository;
     private NavController navController;
     private EditText editTextLogin, editTextEmail, editTextPassword1, editTextPassword2;
 
@@ -58,6 +59,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
         buttonSignUpCreateAccount.setOnClickListener(this);
 
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        accountRepository = new AccountRepository(activity);
         Toolbar toolbar = activity.findViewById(R.id.toolbar_activity);
         activity.setSupportActionBar(toolbar);
         toolbar.setTitle("Регистрация");
@@ -66,8 +68,6 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.activity_navigation_controller);
         navController = Objects.requireNonNull(navHostFragment).getNavController();
-
-        signUpViewModel = new ViewModelProvider(requireActivity()).get(SignUpViewModel.class);
 
         return view;
     }
@@ -93,7 +93,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                 String email = editTextEmail.getText().toString();
                 String password1 = editTextPassword1.getText().toString();
 
-                signUpViewModel.createAccount(login, email, password1);
+                accountRepository.createAccount(login, email, password1);
                 navController.navigate(R.id.action_signUpFragment_to_homeFragment);
             }
         }
@@ -142,7 +142,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     private boolean IsNewAccount() {
         String login = editTextLogin.getText().toString();
         String email = editTextEmail.getText().toString();
-        String result = signUpViewModel.checkAccountExists(login, email);
+        String result = accountRepository.checkAccountExists(login, email);
 
         if (result != null) {
             if (result.equals(IAccountDao.LOGIN)) {

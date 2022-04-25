@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/post_button_like"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="TODO"
+        android:src="@drawable/ic_like" />
+
+    <TextView
+        android:id="@+id/rating_score"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="[+249]" />
+
+    <ImageButton
+        android:id="@+id/post_button_dislike"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="TODO"
+        android:src="@drawable/ic_dislike" />
+
+    <Button
+        android:id="@+id/post_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="30dp"
+        android:text="[67]"
+        app:icon="@drawable/ic_message"
+        app:iconGravity="textEnd" />
+
+    <Button
+        android:id="@+id/post_views"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:text="[125]"
+        app:icon="@drawable/ic_create_post_preview"
+        app:iconGravity="textEnd" />
+</LinearLayout>

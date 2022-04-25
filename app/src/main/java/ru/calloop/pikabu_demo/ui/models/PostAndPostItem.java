@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.createPost.models;
+package ru.calloop.pikabu_demo.ui.models;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;

@@ -9,9 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-import ru.calloop.pikabu_demo.PikabuDB;
-import ru.calloop.pikabu_demo.ui.createPost.models.Post;
-import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
+import ru.calloop.pikabu_demo.ui.models.Post;
 import ru.calloop.pikabu_demo.ui.repositories.Post.IPostRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
@@ -21,8 +19,7 @@ public class HomeViewModel extends AndroidViewModel {
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
-        IPostDao postDao = PikabuDB.getDatabase(application).getPostDao();
-        postRepository = new PostRepository(postDao);
+        postRepository = new PostRepository(application);
         // items = postRepository.getAllPosts(0, 5);
     }
 

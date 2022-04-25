@@ -1,7 +1,5 @@
 package ru.calloop.pikabu_demo.ui.main.home;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,17 +18,19 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import ru.calloop.pikabu_demo.ui.signing.models.SessionManager;
-import ru.calloop.pikabu_demo.ui.base.BaseFragment;
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.main.mainActivity.adapters.HomeAdapter;
+import ru.calloop.pikabu_demo.ui.BaseFragment;
+import ru.calloop.pikabu_demo.ui.main.adapters.HomeAdapter;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
-    private Toolbar toolbar;
     private AppCompatActivity activity;
     private NavController navController;
+    private Toolbar toolbar;
 
+    private ISessionPreferenceRepository sessionPreferenceRepository;
     private HomeAdapter homeAdapter;
     private ViewPager2 viewPager;
 
@@ -61,6 +61,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         viewPager = view.findViewById(R.id.pager);
         viewPager.setAdapter(homeAdapter);
 
+        sessionPreferenceRepository = new SessionPreferenceRepository(activity);
+
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
                 tab.setText(tabTitles[position])).attach();
@@ -89,14 +91,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         int id = view.getId();
 
         if (id == R.id.fab_home_to_create_post) {
-            SharedPreferences sharedPreferences = requireContext()
-                    .getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
-            if (sharedPreferences.contains(SessionManager.AUTHORIZED)){
+            if (sessionPreferenceRepository.sessionStarted()) {
                 navController.navigate(R.id.action_homeFragment_to_createPostFragment);
-            } else {
-                navController.navigate(R.id.action_homeFragment_to_signInFragment);
-            }
-
+            } else navController.navigate(R.id.action_homeFragment_to_signInFragment);
         }
     }
 }

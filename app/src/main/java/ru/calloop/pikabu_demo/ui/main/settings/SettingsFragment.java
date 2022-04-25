@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import androidx.navigation.fragment.NavHostFragment;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.base.BaseFragment;
+import ru.calloop.pikabu_demo.ui.BaseFragment;
 
 public class SettingsFragment extends BaseFragment {
 

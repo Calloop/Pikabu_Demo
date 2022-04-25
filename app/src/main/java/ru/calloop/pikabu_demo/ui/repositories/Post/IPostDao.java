@@ -10,9 +10,9 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import ru.calloop.pikabu_demo.ui.createPost.models.Post;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostAndPostItem;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
+import ru.calloop.pikabu_demo.ui.models.Post;
+import ru.calloop.pikabu_demo.ui.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 @Dao
 public interface IPostDao {

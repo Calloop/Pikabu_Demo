@@ -2,15 +2,15 @@ package ru.calloop.pikabu_demo;
 
 import android.content.Context;
 
+import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.Database;
 
-import ru.calloop.pikabu_demo.ui.createPost.models.Post;
-import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
-import ru.calloop.pikabu_demo.ui.signing.models.Account;
+import ru.calloop.pikabu_demo.ui.models.Post;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountDao;
+import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
+import ru.calloop.pikabu_demo.ui.models.Account;
 
 @Database(entities = {Post.class, PostItem.class, Account.class}, version = PikabuDB.VERSION)
 public abstract class PikabuDB extends RoomDatabase {

@@ -46,9 +46,15 @@
         <entry key="..\:/Android Studio Projects/Pikabu_Demo/app/src/main/res/menu/toolbar_main.xml" value="0.1685185185185185" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_block_list_create_post.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_block_list_create_post_list.xml" value="0.19010416666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_main_post.xml" value="0.25" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_main_post_item.xml" value="0.22" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_sign_in.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_sign_up.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/header_navigation_drawer_guest.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/post_appbar.xml" value="0.25" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/post_comment.xml" value="0.33" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/post_rating.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/post_tags.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/menu/toolbar_authorization.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/activity_create_post.xml" value="0.22" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/appbar_create_post.xml" value="0.20092592592592592" />
@@ -78,7 +84,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

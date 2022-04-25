@@ -1,7 +1,6 @@
 package ru.calloop.pikabu_demo.ui.createPost.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.Button;
 import androidx.lifecycle.ViewModelProvider;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.base.BaseFragment;
+import ru.calloop.pikabu_demo.ui.BaseFragment;
 import ru.calloop.pikabu_demo.ui.main.home.HomeViewModel;
 
 public class MenuCreatePostFragment extends BaseFragment implements View.OnClickListener {

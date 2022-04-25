@@ -5,18 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import ru.calloop.pikabu_demo.ui.base.BaseFragment;
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.main.mainActivity.MainContract;
-import ru.calloop.pikabu_demo.ui.main.mainActivity.MainPresenter;
-import ru.calloop.pikabu_demo.ui.main.mainActivity.adapters.BlocksListMainAdapter;
+import ru.calloop.pikabu_demo.ui.BaseFragment;
+import ru.calloop.pikabu_demo.ui.main.adapters.BlocksListMainAdapter;
+import ru.calloop.pikabu_demo.ui.repositories.Post.IPostRepository;
+import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
-public class Tab1MainFragment extends BaseFragment implements MainContract.IView {
-    private MainPresenter presenter;
-    private BlocksListMainAdapter adapter;
+public class Tab1MainFragment extends BaseFragment {
 
     @Override
     public BaseFragment providerFragment() {
@@ -27,9 +26,9 @@ public class Tab1MainFragment extends BaseFragment implements MainContract.IView
     public View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab1_main, container, false);
 
-        presenter = new MainPresenter();
-        presenter.attachView(this);
-        adapter = new BlocksListMainAdapter(presenter.getPostItems(0, 5));
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        IPostRepository postRepository = new PostRepository(activity);
+        BlocksListMainAdapter adapter = new BlocksListMainAdapter(postRepository.getPostItems(0, 5));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 

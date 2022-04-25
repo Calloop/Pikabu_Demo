@@ -4,9 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 import ru.calloop.pikabu_demo.di.components.AppComponent;
-import ru.calloop.pikabu_demo.di.components.DaggerAppComponent;
-import ru.calloop.pikabu_demo.di.module.AppModule;
-import ru.calloop.pikabu_demo.di.module.RoomModule;
 
 public class App extends Application {
     private static AppComponent appComponent;

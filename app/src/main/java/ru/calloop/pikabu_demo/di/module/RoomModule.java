@@ -9,15 +9,14 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ru.calloop.pikabu_demo.PikabuDB;
-import ru.calloop.pikabu_demo.ui.repositories.Post.IPostDao;
 import ru.calloop.pikabu_demo.ui.repositories.Post.IPostRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 @Module
 public class RoomModule {
 
-    private Context context;
-    private PikabuDB database;
+    private final Context context;
+    private final PikabuDB database;
 
     public RoomModule(Context context) {
         this.context = context;
@@ -32,13 +31,13 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    IPostDao providesPostDao(PikabuDB database) {
-        return database.getPostDao();
+    Context providesPostDao(Context context) {
+        return context;
     }
 
     @Singleton
     @Provides
     IPostRepository providesPostRepository() {
-        return new PostRepository(database.getPostDao());
+        return new PostRepository(context);
     }
 }

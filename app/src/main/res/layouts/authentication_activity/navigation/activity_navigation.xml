@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="ru.calloop.pikabu_demo.ui.signing.signIn.SignInFragment"
+        android:name="ru.calloop.pikabu_demo.ui.signing.SignInFragment"
         android:label="Авторизация"
         tools:layout="@layout/fragment_sign_in">
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="ru.calloop.pikabu_demo.ui.signing.signUp.SignUpFragment"
+        android:name="ru.calloop.pikabu_demo.ui.signing.SignUpFragment"
         android:label="Регистрация"
         tools:layout="@layout/fragment_sign_up">
         <action

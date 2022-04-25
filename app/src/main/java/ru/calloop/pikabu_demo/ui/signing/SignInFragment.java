@@ -1,7 +1,5 @@
-package ru.calloop.pikabu_demo.ui.signing.signIn;
+package ru.calloop.pikabu_demo.ui.signing;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,21 +13,24 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.signing.models.SessionManager;
-import ru.calloop.pikabu_demo.ui.base.BaseFragment;
+import ru.calloop.pikabu_demo.ui.BaseFragment;
+import ru.calloop.pikabu_demo.ui.repositories.Account.AccountRepository;
+import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
 
 public class SignInFragment extends BaseFragment implements View.OnClickListener {
 
-    private SignInViewModel signInViewModel;
+    private IAccountRepository accountRepository;
     private NavController navController;
     private EditText editTextLoginSignIn, editTextPasswordSignIn;
+    private ISessionPreferenceRepository sessionPreferenceRepository;
 
     @Override
     public BaseFragment providerFragment() {
@@ -49,10 +50,8 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
 
         editTextLoginSignIn = view.findViewById(R.id.editTextLogin_signIn);
         editTextPasswordSignIn = view.findViewById(R.id.editTextPassword_signIn);
-
         Button buttonSignUp = view.findViewById(R.id.buttonSignUp);
         Button buttonSendLoginData = view.findViewById(R.id.buttonSendLoginData);
-
         buttonSignUp.setOnClickListener(this);
         buttonSendLoginData.setOnClickListener(this);
 
@@ -61,12 +60,13 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
         activity.setSupportActionBar(toolbar);
         toolbar.setTitle("Авторизация");
 
+        sessionPreferenceRepository = new SessionPreferenceRepository(activity);
+        accountRepository = new AccountRepository(activity);
+
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.activity_navigation_controller);
         navController = Objects.requireNonNull(navHostFragment).getNavController();
-
-        signInViewModel = new ViewModelProvider(requireActivity()).get(SignInViewModel.class);
 
         return view;
     }
@@ -87,16 +87,12 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
             String password = editTextPasswordSignIn.getText().toString();
 
             if (FieldsAreFilled()) {
-                boolean accountIsExists = signInViewModel.checkLoginOrEmailExists(loginOrEmail);
-                SharedPreferences sharedPreferences = requireContext()
-                        .getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
-
-                if (accountIsExists && !sharedPreferences.contains(SessionManager.KEY)) {
-                    int accountId = signInViewModel.checkPasswordIsCorrect(password);
+                if (accountRepository.checkLoginOrEmailExists(loginOrEmail)
+                        && !sessionPreferenceRepository.sessionStarted()) {
+                    int accountId = accountRepository.checkPasswordIsCorrect(password);
 
                     if (accountId != 0) {
-                        SessionManager sessionManager = new SessionManager(requireContext());
-                        sessionManager.startUserSession(accountId);
+                        sessionPreferenceRepository.startUserSession(accountId);
                         navController.navigate(R.id.action_signInFragment_to_homeFragment);
                     } else {
                         editTextPasswordSignIn.setError("Неверный пароль");

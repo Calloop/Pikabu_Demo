@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.List;
 
-import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class CreatePostDiffUtilCallback extends DiffUtil.Callback {
     private final List<PostItem> oldList;
@@ -37,6 +37,6 @@ public class CreatePostDiffUtilCallback extends DiffUtil.Callback {
         PostItem oldProduct = oldList.get(oldItemPosition);
         PostItem newProduct = newList.get(newItemPosition);
         return oldProduct.equals(newProduct)
-                && oldProduct.getDataPosition() == newProduct.getDataPosition();
+                && oldProduct.getPosition() == newProduct.getPosition();
     }
 }

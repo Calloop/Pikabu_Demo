@@ -1,25 +1,22 @@
-package ru.calloop.pikabu_demo.ui.base;
+package ru.calloop.pikabu_demo.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public abstract class BaseFragment extends Fragment {
 
     public BaseFragment newInstance() {
-        BaseFragment fragment = providerFragment();
-        return fragment;
+        return providerFragment();
 
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanseState) {
-        View view = providerFragmentView(inflater, container, savedInstanseState);
-        return view;
+        return providerFragmentView(inflater, container, savedInstanseState);
     }
 
     public abstract BaseFragment providerFragment();

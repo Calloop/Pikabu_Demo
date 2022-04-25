@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.main.mainActivity.adapters;
+package ru.calloop.pikabu_demo.ui.main.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -43,16 +43,16 @@ public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder.getItemViewType() == TYPE_TEXT_BLOCK) {
             TextViewHolder textHolder = (TextViewHolder) viewHolder;
-            textHolder.getTextView(postItemList.get(position).getDataValue());
+            textHolder.getTextView(postItemList.get(position).getValue());
         } else if (viewHolder.getItemViewType() == TYPE_IMAGE_BLOCK) {
             ImageViewHolder imageHolder = (ImageViewHolder) viewHolder;
-            imageHolder.getTextView(postItemList.get(position).getDataValue());
+            imageHolder.getTextView(postItemList.get(position).getValue());
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (postItemList.get(position).getDataType() == 1) {
+        if (postItemList.get(position).getType() == 1) {
             return TYPE_TEXT_BLOCK;
         } else {
             return TYPE_IMAGE_BLOCK;
@@ -70,7 +70,7 @@ public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         public TextViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.textViewPostItem);
+            textView = view.findViewById(R.id.post_item_body);
             //editText = view.findViewById(R.id.editText_textBlock_main);
         }
 
@@ -86,7 +86,7 @@ public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         public ImageViewHolder(View view) {
             super(view);
-            textView = view.findViewById(R.id.textViewPostItem);
+            textView = view.findViewById(R.id.post_item_body);
             //editText = view.findViewById(R.id.editText_textBlock_main);
         }
 

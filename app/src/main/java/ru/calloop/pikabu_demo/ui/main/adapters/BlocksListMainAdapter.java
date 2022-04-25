@@ -1,9 +1,10 @@
-package ru.calloop.pikabu_demo.ui.main.mainActivity.adapters;
+package ru.calloop.pikabu_demo.ui.main.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostAndPostItem;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
+import ru.calloop.pikabu_demo.ui.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class BlocksListMainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -43,6 +44,7 @@ public class BlocksListMainAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         LinearLayoutManager layoutManager = new LinearLayoutManager(holder.recyclerView.getContext());
         holder.recyclerView.setLayoutManager(layoutManager);
         holder.recyclerView.setAdapter(adapter);
+        holder.postHeadline.setText(postList.get(position).post.getHeadline());
     }
 
     @Override
@@ -52,10 +54,12 @@ public class BlocksListMainAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final RecyclerView recyclerView;
+        private final TextView postHeadline;
 
         public ViewHolder(View view) {
             super(view);
             recyclerView = view.findViewById(R.id.list_main_post_item);
+            postHeadline = view.findViewById(R.id.post_headline);
         }
 
         public RecyclerView getRecyclerView() {

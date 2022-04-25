@@ -19,7 +19,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -69,7 +69,7 @@ public class BlocksListCreatePostAdapter extends
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
 
                 textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
-                textViewHolder.textView.setText(localPostItemList.get(textViewHolder.getAdapterPosition()).getDataValue());
+                textViewHolder.textView.setText(localPostItemList.get(textViewHolder.getAdapterPosition()).getValue());
 //            textViewHolder.textView.addTextChangedListener(new TextWatcher() {
 //                @Override
 //                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -172,7 +172,7 @@ public class BlocksListCreatePostAdapter extends
 //            return TYPE_IMAGE_BLOCK;
 //        }
 //
-        return localPostItemList.get(position).getDataType();
+        return localPostItemList.get(position).getType();
     }
 
     @Override
@@ -258,7 +258,8 @@ public class BlocksListCreatePostAdapter extends
 
     public class CreatePostListener implements TextWatcher {
         private int position;
-        private Timer timer;
+        private Timer timer = new Timer();
+        private final long DELAY = 200;
 
         public void updatePosition(int position) {
             this.position = position;
@@ -270,18 +271,18 @@ public class BlocksListCreatePostAdapter extends
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            localPostItemList.get(position).setDataValue(charSequence.toString());
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
+            timer.cancel();
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    // do your actual work here
+                    localPostItemList.get(position).setValue(editable.toString());
                 }
-            }, 200);
+            }, DELAY);
         }
     }
 }

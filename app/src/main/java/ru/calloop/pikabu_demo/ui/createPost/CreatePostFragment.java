@@ -1,8 +1,8 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,34 +16,40 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.base.BaseFragment;
+import ru.calloop.pikabu_demo.ui.BaseFragment;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.BlocksListCreatePostAdapter;
-import ru.calloop.pikabu_demo.ui.createPost.models.Post;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
-import ru.calloop.pikabu_demo.ui.main.home.HomeViewModel;
-import ru.calloop.pikabu_demo.ui.signing.models.SessionManager;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.IPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.PreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
 
-public class CreatePostFragment extends BaseFragment implements CreatePostContract.IView {
+public class CreatePostFragment extends BaseFragment {
+
+    private IPreferenceRepository preferenceRepository;
+    private ISessionPreferenceRepository sessionPreferenceRepository;
+    private CreatePostViewModel createPostViewModel;
+    private BlocksListCreatePostAdapter adapter;
 
     private AppCompatActivity activity;
-    private Toolbar toolbar;
-
+    private NavController navController;
     private RecyclerView recyclerView;
-    private HomeViewModel homeViewModel;
-    private CreatePostViewModel createPostViewModel;
-
-    //private CreatePostPresenter presenter;
-    private BlocksListCreatePostAdapter adapter;
-    //private BlocksListCreatePostAdapter.OnItemClickListener listener;
-
     private TextView textViewDescriptionCreatePost;
+    private TextInputEditText createPostHeadline;
     private ActionMode actionMode;
 
     @Override
@@ -65,13 +71,19 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         activity = (AppCompatActivity) requireActivity();
         recyclerView = view.findViewById(R.id.list_create_post);
         textViewDescriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
+        createPostHeadline = view.findViewById(R.id.create_post_headline_text);
 
+        preferenceRepository = new PreferenceRepository(activity);
+        sessionPreferenceRepository = new SessionPreferenceRepository(activity);
+        createPostViewModel = new ViewModelProvider(this).get(CreatePostViewModel.class);
         adapter = new BlocksListCreatePostAdapter();
-        createPostViewModel = new ViewModelProvider(activity).get(CreatePostViewModel.class);
-        createPostViewModel.loadArrayList().observe(activity,
-                postItems -> adapter.updateList(postItems));
-        //adapter = new BlocksListCreatePostAdapter(createPostViewModel.getPostItems().getValue());
 
+        NavHostFragment navHostFragment = (NavHostFragment) activity
+                .getSupportFragmentManager().findFragmentById(R.id.activity_navigation_controller);
+        assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
+
+        loadPreference();
         setToolbar();
         setAdapter();
 
@@ -92,9 +104,40 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         return view;
     }
 
+    private void loadPreference() {
+        adapter.updateList(preferenceRepository.getPostItems());
+        createPostHeadline.setText(preferenceRepository.getPostHealdine());
+        createPostHeadline.addTextChangedListener(new TextWatcher() {
+            private Timer timer = new Timer();
+            private final long DELAY = 200;
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        preferenceRepository.setPostHeadline(editable.toString());
+                    }
+                }, DELAY);
+            }
+        });
+    }
+
     //region [SET: TOOLBAR, FRAGMENT MANAGER, RECYCLER VIEW]
     private void setToolbar() {
-        toolbar = activity.findViewById(R.id.toolbar_activity);
+        Toolbar toolbar = activity.findViewById(R.id.toolbar_activity);
         activity.setSupportActionBar(toolbar);
     }
 
@@ -139,23 +182,16 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         }
 
         if (itemId == R.id.add_post_create_post) {
-            createPostViewModel.clearArrayList();
-            SharedPreferences userSharedPreferences = activity
-                    .getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
-            int userId = userSharedPreferences.getInt(SessionManager.ID, 0);
-            Post post = new Post(userId);
-            createPostViewModel.setPostItems(post, adapter.getAdapterList());
-
-            //createPostViewModel.setArrayList(adapter.getAdapterList());
-            //adapter.savePostItems();
-            //presenter.insert(new Post(1), adapter.postItemList);
-            //startActivity(new Intent(CreatePostFragment.this, MainActivity.class));
+            long userId = sessionPreferenceRepository.getAccountId();
+            String postHeadline = Objects.requireNonNull(createPostHeadline.getText()).toString();
+            createPostViewModel.setPostItems(adapter.getAdapterList());
+            createPostViewModel.insertPostToDB(userId, postHeadline);
+            preferenceRepository.clearPreference();
+            navController.navigate(R.id.action_createPostFragment_to_homeFragment);
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-
     //endregion
 
     //region [ACTION MODE]
@@ -178,7 +214,7 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.apply_edit_contextual_create_post) {
                 adapter.clearPreparedToDeleteItemList();
-                createPostViewModel.setArrayList(adapter.getAdapterList());
+                preferenceRepository.setPostItems(adapter.getAdapterList());
                 showToast("EDITING APPLIED");
                 mode.finish();
                 return true;
@@ -193,7 +229,7 @@ public class CreatePostFragment extends BaseFragment implements CreatePostContra
             adapter.editModeIsActive(false);
             if (adapter.getPrepareToDeleteItemsList().size() > 0) {
                 adapter.getAdapterList().addAll(adapter.getPrepareToDeleteItemsList());
-                adapter.getAdapterList().sort(Comparator.comparing(PostItem::getDataPosition));
+                adapter.getAdapterList().sort(Comparator.comparing(PostItem::getPosition));
             }
             adapter.clearPreparedToDeleteItemList();
             adapter.notifyItemRangeChanged(0, adapter.getItemCount());

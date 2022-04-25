@@ -1,7 +1,5 @@
-package ru.calloop.pikabu_demo.ui.main.mainActivity;
+package ru.calloop.pikabu_demo.ui;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,29 +17,32 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.signing.models.SessionManager;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener {
 
-    private Toolbar toolbar;
+    private ISessionPreferenceRepository sessionPreferenceRepository;
     private NavController navController;
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
     private AppBarConfiguration appBarConfiguration;
     private Button buttonDrawerSignIn, buttonDrawerSignOut;
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity);
 
-        toolbar = findViewById(R.id.toolbar_activity);
+        sessionPreferenceRepository = new SessionPreferenceRepository(this);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        View headerLayout = navigationView.getHeaderView(0);
+        buttonDrawerSignIn = headerLayout.findViewById(R.id.buttonDrawerSignIn);
+        buttonDrawerSignOut = headerLayout.findViewById(R.id.buttonDrawerSignOut);
+        buttonDrawerSignIn.setOnClickListener(this);
+        buttonDrawerSignOut.setOnClickListener(this);
+        Toolbar toolbar = findViewById(R.id.toolbar_activity);
         setSupportActionBar(toolbar);
-
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.navigationView);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.activity_navigation_controller);
@@ -57,13 +58,6 @@ public class MainActivity extends AppCompatActivity
         NavigationUI.setupActionBarWithNavController(MainActivity.this,
                 navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        View headerLayout = navigationView.getHeaderView(0);
-        buttonDrawerSignIn = headerLayout.findViewById(R.id.buttonDrawerSignIn);
-        buttonDrawerSignOut = headerLayout.findViewById(R.id.buttonDrawerSignOut);
-
-        buttonDrawerSignIn.setOnClickListener(this);
-        buttonDrawerSignOut.setOnClickListener(this);
 
         setPresenter();
         onUpdate();
@@ -82,16 +76,13 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.buttonDrawerSignIn) {
             navController.navigate(R.id.action_homeFragment_to_signInFragment);
         } else if (id == R.id.buttonDrawerSignOut) {
-            SessionManager sessionManager = new SessionManager(this);
-            sessionManager.endUserSession();
+            sessionPreferenceRepository.endUserSession();
             onUpdate();
         }
     }
 
     private void onUpdate() {
-        sharedPreferences = getSharedPreferences(SessionManager.KEY, Context.MODE_PRIVATE);
-
-        if (sharedPreferences.contains(SessionManager.AUTHORIZED)) {
+        if (sessionPreferenceRepository.sessionStarted()) {
             buttonDrawerSignIn.setVisibility(View.GONE);
             buttonDrawerSignOut.setVisibility(View.VISIBLE);
         } else {
@@ -118,7 +109,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         if (item.getItemId() == R.id.homeFragment) {
-
             return true;
         }
 
@@ -126,7 +116,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setPresenter() {
-
 //        adapter = new BlocksListMainAdapter(postItems);
 //        postItemModel = new ViewModelProvider(this).get(PostItemModel.class);
 //        postItemModel.getAll().observe(this, posts -> adapter.setData(posts));

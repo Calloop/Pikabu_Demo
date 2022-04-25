@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.createPost.models;
+package ru.calloop.pikabu_demo.ui.models;
 
 import static androidx.room.ForeignKey.CASCADE;
 
@@ -6,8 +6,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-
-import ru.calloop.pikabu_demo.ui.signing.models.Account;
 
 @Entity(tableName = "posts",
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "id",
@@ -18,9 +16,12 @@ public class Post {
     private long id;
     @ColumnInfo(name = "user_id")
     private long userId;
+    @ColumnInfo(name = "headline")
+    private String headline;
 
-    public Post(long userId) {
+    public Post(long userId, String headline) {
         this.userId = userId;
+        this.headline = headline;
     }
 
     public long getId() {
@@ -37,5 +38,13 @@ public class Post {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getHeadline() {
+        return headline;
+    }
+
+    public void setHeadline(String headline) {
+        this.headline = headline;
     }
 }

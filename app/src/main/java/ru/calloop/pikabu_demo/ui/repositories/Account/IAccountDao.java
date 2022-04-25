@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import ru.calloop.pikabu_demo.ui.signing.models.Account;
+import ru.calloop.pikabu_demo.ui.models.Account;
 
 @Dao
 public interface IAccountDao {

@@ -1,22 +1,34 @@
 package ru.calloop.pikabu_demo.ui.repositories.Post;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import ru.calloop.pikabu_demo.ui.createPost.models.Post;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostAndPostItem;
-import ru.calloop.pikabu_demo.ui.createPost.models.PostItem;
+import ru.calloop.pikabu_demo.PikabuDB;
+import ru.calloop.pikabu_demo.ui.models.Post;
+import ru.calloop.pikabu_demo.ui.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class PostRepository implements IPostRepository {
     private final IPostDao postDao;
 
     @Inject
-    public PostRepository(IPostDao postDao) {
-        this.postDao = postDao;
+    public PostRepository(Context context) {
+        PikabuDB database = PikabuDB.getDatabase(context);
+        postDao = database.getPostDao();
+    }
+
+    @Override
+    public void insertPost(long accountId, String postHeadline) {
+        Post post = new Post(accountId, postHeadline);
+        postDao.insertPost(post);
+    }
+
+    @Override
+    public void insertPostItemList(List<PostItem> postItemList) {
+        postDao.insertPostItemList(postItemList);
     }
 
     @Override
@@ -35,11 +47,6 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public void insertPostItemList(List<PostItem> postItemList) {
-        postDao.insertPostItemList(postItemList);
-    }
-
-    @Override
     public void insert(Post post, List<PostItem> postItemList) {
 
         long postId = insertPost(post);
@@ -49,5 +56,11 @@ public class PostRepository implements IPostRepository {
         }
 
         insertPostItemList(postItemList);
+    }
+
+    @Override
+    public List<PostItem> loadCachePost() {
+
+        return null;
     }
 }

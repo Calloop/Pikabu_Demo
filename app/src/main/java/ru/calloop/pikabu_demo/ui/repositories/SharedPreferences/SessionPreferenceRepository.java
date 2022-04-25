@@ -1,24 +1,27 @@
-package ru.calloop.pikabu_demo.ui.signing.models;
+package ru.calloop.pikabu_demo.ui.repositories.SharedPreferences;
+
+import static android.content.SharedPreferences.Editor;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class SessionManager {
+public class SessionPreferenceRepository implements ISessionPreferenceRepository {
     public static final String KEY = "SESSION_PREFERENCES";
     public static final String ID = "ID";
     public static final String AUTHORIZED = "AUTHORIZED";
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-    Context context;
+    private final SharedPreferences sharedPreferences;
+    private final Editor editor;
+    private final Context context;
 
-    public SessionManager(Context context) {
+    public SessionPreferenceRepository(Context context) {
         this.context = context;
         sharedPreferences = context
                 .getSharedPreferences(KEY, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
 
+    @Override
     public void startUserSession(int accountId) {
         editor.putBoolean(AUTHORIZED, true);
         editor.putInt(ID, accountId);
@@ -27,10 +30,17 @@ public class SessionManager {
         editor.commit();
     }
 
-//    public boolean isSessionActive() {
-//        return sharedPreferences.getBoolean(AUTHORIZED, true);
-//    }
+    @Override
+    public long getAccountId() {
+        return sharedPreferences.getLong(ID, 0);
+    }
 
+    @Override
+    public boolean sessionStarted() {
+        return sharedPreferences.getBoolean(AUTHORIZED, false);
+    }
+
+    @Override
     public void endUserSession() {
         editor.clear();
         editor.apply();
