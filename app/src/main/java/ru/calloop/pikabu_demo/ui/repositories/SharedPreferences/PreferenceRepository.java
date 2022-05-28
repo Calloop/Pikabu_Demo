@@ -14,10 +14,10 @@ import java.util.List;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class PreferenceRepository implements IPreferenceRepository {
-    Context context;
-    SharedPreferences sharedPreferences;
-    Editor editor;
-    Gson gson;
+    private final Context context;
+    private final SharedPreferences sharedPreferences;
+    private final Editor editor;
+    private final Gson gson;
 
     public PreferenceRepository(Context context) {
         this.context = context;

@@ -30,7 +30,7 @@ public interface IPostDao {
     List<Post> getAllPosts(int startPosition, int limitCount);
 
     @Query("SELECT id FROM posts LIMIT :startPosition, :limitCount")
-    Integer getPostsId(int startPosition, int limitCount);
+    long getPostsId(int startPosition, int limitCount);
 
 
 //    @Transaction

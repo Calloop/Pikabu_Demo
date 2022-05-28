@@ -37,7 +37,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private String[] tabTitles = {"ГОРЯЧЕЕ", "ЛУЧШЕЕ", "СВЕЖЕЕ", "МОЯ ЛЕНТА"};
 
     @Override
-    public BaseFragment providerFragment() {
+    public BaseFragment fragment() {
         return new HomeFragment();
     }
 
@@ -48,7 +48,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     @Override
-    public View providerFragmentView(LayoutInflater inflater,
+    public View fragmentView(LayoutInflater inflater,
                                      ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 

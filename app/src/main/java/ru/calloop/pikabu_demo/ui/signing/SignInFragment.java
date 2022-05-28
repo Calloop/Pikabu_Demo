@@ -33,8 +33,8 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
     private ISessionPreferenceRepository sessionPreferenceRepository;
 
     @Override
-    public BaseFragment providerFragment() {
-        return new SignInFragment();
+    public BaseFragment fragment() {
+        return newInstance();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public View providerFragmentView(LayoutInflater inflater,
+    public View fragmentView(LayoutInflater inflater,
                                      ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
@@ -93,7 +93,7 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
 
                     if (accountId != 0) {
                         sessionPreferenceRepository.startUserSession(accountId);
-                        navController.navigate(R.id.action_signInFragment_to_homeFragment);
+                        navController.popBackStack(R.id.homeFragment, false);
                     } else {
                         editTextPasswordSignIn.setError("Неверный пароль");
                     }

@@ -4,6 +4,7 @@ import static android.content.SharedPreferences.Editor;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class SessionPreferenceRepository implements ISessionPreferenceRepository {
     public static final String KEY = "SESSION_PREFERENCES";
@@ -31,8 +32,8 @@ public class SessionPreferenceRepository implements ISessionPreferenceRepository
     }
 
     @Override
-    public long getAccountId() {
-        return sharedPreferences.getLong(ID, 0);
+    public int getAccountId() {
+        return sharedPreferences.getInt(ID, 0);
     }
 
     @Override

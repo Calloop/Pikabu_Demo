@@ -18,12 +18,12 @@ import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 public class Tab1MainFragment extends BaseFragment {
 
     @Override
-    public BaseFragment providerFragment() {
-        return new Tab1MainFragment();
+    public BaseFragment fragment() {
+        return newInstance();
     }
 
     @Override
-    public View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View fragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab1_main, container, false);
 
         AppCompatActivity activity = (AppCompatActivity) requireActivity();

@@ -11,15 +11,18 @@ import androidx.fragment.app.Fragment;
 public abstract class BaseFragment extends Fragment {
 
     public BaseFragment newInstance() {
-        return providerFragment();
-
+        Bundle args = new Bundle();
+        // args.putInt(ARG_PAGE, page);
+        BaseFragment fragment = fragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanseState) {
-        return providerFragmentView(inflater, container, savedInstanseState);
+        return fragmentView(inflater, container, savedInstanseState);
     }
 
-    public abstract BaseFragment providerFragment();
+    public abstract BaseFragment fragment();
 
-    public abstract View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+    public abstract View fragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 }

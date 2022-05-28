@@ -1,6 +1,7 @@
 package ru.calloop.pikabu_demo.ui.repositories.Post;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -18,12 +19,6 @@ public class PostRepository implements IPostRepository {
     public PostRepository(Context context) {
         PikabuDB database = PikabuDB.getDatabase(context);
         postDao = database.getPostDao();
-    }
-
-    @Override
-    public void insertPost(long accountId, String postHeadline) {
-        Post post = new Post(accountId, postHeadline);
-        postDao.insertPost(post);
     }
 
     @Override
@@ -47,9 +42,11 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public void insert(Post post, List<PostItem> postItemList) {
+    public void insert(int accountId, String postHeadline, List<PostItem> postItemList) {
+        Log.d("TEST", "ins");
+        Post post = new Post(accountId, postHeadline);
 
-        long postId = insertPost(post);
+        int postId = (int) insertPost(post);
 
         for (PostItem postItem : postItemList) {
             postItem.setPostId(postId);
@@ -60,7 +57,6 @@ public class PostRepository implements IPostRepository {
 
     @Override
     public List<PostItem> loadCachePost() {
-
         return null;
     }
 }

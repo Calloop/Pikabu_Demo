@@ -32,8 +32,8 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     private EditText editTextLogin, editTextEmail, editTextPassword1, editTextPassword2;
 
     @Override
-    public BaseFragment providerFragment() {
-        return new SignUpFragment();
+    public BaseFragment fragment() {
+        return newInstance();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public View providerFragmentView
+    public View fragmentView
             (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
@@ -83,7 +83,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.buttonGoToSignIn) {
-            navController.navigate(R.id.action_signUpFragment_to_signInFragment);
+            navController.popBackStack(R.id.signInFragment, false);
         } else if (id == R.id.buttonTryToRegister) {
             int passwordMinLength = 5;
 
@@ -94,7 +94,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
                 String password1 = editTextPassword1.getText().toString();
 
                 accountRepository.createAccount(login, email, password1);
-                navController.navigate(R.id.action_signUpFragment_to_homeFragment);
+                navController.popBackStack(R.id.homeFragment, false);
             }
         }
     }

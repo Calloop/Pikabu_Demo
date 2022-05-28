@@ -15,11 +15,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.savedstate.SavedStateRegistryOwner;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -53,19 +55,18 @@ public class CreatePostFragment extends BaseFragment {
     private ActionMode actionMode;
 
     @Override
-    public BaseFragment providerFragment() {
-        return new CreatePostFragment();
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View providerFragmentView
-            (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public BaseFragment fragment() {
+        return newInstance();
+    }
+
+    @Override
+    public View fragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_post, container, false);
 
         activity = (AppCompatActivity) requireActivity();
@@ -87,25 +88,27 @@ public class CreatePostFragment extends BaseFragment {
         setToolbar();
         setAdapter();
 
-//        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
-//            @Override
-//            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-//                int result = bundle.getInt("bundleKey");
-//                CreatePostFragment.this.createPostItem(result);
-//            }
-//        });
-
         getChildFragmentManager()
                 .setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
                     int result = bundle.getInt("bundleKey");
                     createPostItem(result);
                 });
 
+        listIsEmpty();
+
         return view;
     }
 
     private void loadPreference() {
-        adapter.updateList(preferenceRepository.getPostItems());
+//        adapter.updateList(preferenceRepository.getPostItems());
+
+        createPostViewModel.getPostItems().observe(getViewLifecycleOwner(), postItems -> adapter.updateList(postItems));
+
+//        createPostViewModel
+//        if (createPostViewModel.getPostItems().size() != 0)
+//        {
+//            adapter.updateList(createPostViewModel.getPostItems());
+//        }
         createPostHeadline.setText(preferenceRepository.getPostHealdine());
         createPostHeadline.addTextChangedListener(new TextWatcher() {
             private Timer timer = new Timer();
@@ -182,12 +185,12 @@ public class CreatePostFragment extends BaseFragment {
         }
 
         if (itemId == R.id.add_post_create_post) {
-            long userId = sessionPreferenceRepository.getAccountId();
+            int userId = sessionPreferenceRepository.getAccountId();
             String postHeadline = Objects.requireNonNull(createPostHeadline.getText()).toString();
             createPostViewModel.setPostItems(adapter.getAdapterList());
             createPostViewModel.insertPostToDB(userId, postHeadline);
             preferenceRepository.clearPreference();
-            navController.navigate(R.id.action_createPostFragment_to_homeFragment);
+            navController.popBackStack(R.id.homeFragment, false);
         }
 
         return super.onOptionsItemSelected(item);
@@ -265,6 +268,7 @@ public class CreatePostFragment extends BaseFragment {
 //            listIsEmpty();
 
             adapter.createPostItem(type);
+            //createPostViewModel.setPostItems(adapter.getAdapterList());
             listIsEmpty();
 
         }
@@ -281,6 +285,14 @@ public class CreatePostFragment extends BaseFragment {
 
     public void checkEditMode() {
         // скрыть кнопки редактирования
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        if (adapter.getItemCount() != 0) {
+//            adapter.updateList(createPostViewModel.getPostItes());
+//        }
     }
 
     @Override

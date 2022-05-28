@@ -13,18 +13,18 @@ import androidx.room.PrimaryKey;
 public class Post {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private long id;
+    private int id;
     @ColumnInfo(name = "user_id")
-    private long userId;
+    private int userId;
     @ColumnInfo(name = "headline")
     private String headline;
 
-    public Post(long userId, String headline) {
+    public Post(int userId, String headline) {
         this.userId = userId;
         this.headline = headline;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -32,7 +32,7 @@ public class Post {
         this.id = id;
     }
 
-    public long getUserId() {
+    public int getUserId() {
         return userId;
     }
 

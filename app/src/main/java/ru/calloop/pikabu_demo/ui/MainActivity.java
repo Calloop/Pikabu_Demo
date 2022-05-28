@@ -48,7 +48,10 @@ public class MainActivity extends AppCompatActivity
                 .findFragmentById(R.id.activity_navigation_controller);
         assert navHostFragment != null;
         navController = navHostFragment.getNavController();
-        navController.setGraph(R.navigation.activity_navigation);
+
+        if (savedInstanceState == null) {
+            navController.setGraph(R.navigation.activity_navigation);
+        }
 
         appBarConfiguration = new AppBarConfiguration
                 .Builder(navController.getGraph())

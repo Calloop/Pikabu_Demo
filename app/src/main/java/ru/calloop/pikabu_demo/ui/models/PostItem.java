@@ -15,9 +15,9 @@ public class PostItem {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    private long id;
+    private int id;
     @ColumnInfo(name = "post_id")
-    private long postId;
+    private int postId;
     @ColumnInfo(name = "position")
     private int position;
     @ColumnInfo(name = "type")
@@ -31,7 +31,7 @@ public class PostItem {
         this.value = value;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -39,11 +39,11 @@ public class PostItem {
         this.id = id;
     }
 
-    public long getPostId() {
+    public int getPostId() {
         return postId;
     }
 
-    public void setPostId(long postId) {
+    public void setPostId(int postId) {
         this.postId = postId;
     }
 

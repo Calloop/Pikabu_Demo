@@ -17,12 +17,12 @@ public class MenuCreatePostFragment extends BaseFragment implements View.OnClick
     private HomeViewModel homeViewModel;
 
     @Override
-    public BaseFragment providerFragment() {
-        return new MenuCreatePostFragment();
+    public BaseFragment fragment() {
+        return newInstance();
     }
 
     @Override
-    public View providerFragmentView(LayoutInflater inflater,
+    public View fragmentView(LayoutInflater inflater,
                                      ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_content_buttons_create_post,
                 container, false);

@@ -14,12 +14,12 @@ import ru.calloop.pikabu_demo.ui.BaseFragment;
 public class SettingsFragment extends BaseFragment {
 
     @Override
-    public BaseFragment providerFragment() {
+    public BaseFragment fragment() {
         return new SettingsFragment();
     }
 
     @Override
-    public View providerFragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View fragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.activity_navigation_controller);
