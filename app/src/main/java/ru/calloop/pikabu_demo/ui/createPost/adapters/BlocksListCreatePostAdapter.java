@@ -233,7 +233,6 @@ public class BlocksListCreatePostAdapter extends
     }
 
     public void updateList(List<PostItem> postItems) {
-        localPostItemList.clear();
         localPostItemList = postItems;
         notifyItemRangeChanged(0, localPostItemList.size());
     }

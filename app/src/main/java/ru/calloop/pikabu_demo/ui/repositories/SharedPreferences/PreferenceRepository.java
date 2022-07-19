@@ -21,7 +21,8 @@ public class PreferenceRepository implements IPreferenceRepository {
 
     public PreferenceRepository(Context context) {
         this.context = context;
-        sharedPreferences = context.getSharedPreferences("POST_PREFERENCE", Context.MODE_PRIVATE);
+        sharedPreferences = this.context.
+                getSharedPreferences("POST_PREFERENCE", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         gson = new Gson();
     }

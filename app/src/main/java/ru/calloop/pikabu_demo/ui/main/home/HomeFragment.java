@@ -20,7 +20,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.BaseFragment;
-import ru.calloop.pikabu_demo.ui.main.adapters.HomeAdapter;
+import ru.calloop.pikabu_demo.ui.main.adapters.PostTabsAdapter;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
 
@@ -31,7 +31,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private Toolbar toolbar;
 
     private ISessionPreferenceRepository sessionPreferenceRepository;
-    private HomeAdapter homeAdapter;
+    private PostTabsAdapter postTabsAdapter;
     private ViewPager2 viewPager;
 
     private String[] tabTitles = {"ГОРЯЧЕЕ", "ЛУЧШЕЕ", "СВЕЖЕЕ", "МОЯ ЛЕНТА"};
@@ -53,13 +53,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         activity = (AppCompatActivity) getActivity();
-        assert activity != null;
-        toolbar = activity.findViewById(R.id.toolbar_activity);
-        activity.setSupportActionBar(toolbar);
+        if (activity != null) {
+            toolbar = activity.findViewById(R.id.toolbar_activity);
+            activity.setSupportActionBar(toolbar);
+        }
 
-        homeAdapter = new HomeAdapter(this);
+        postTabsAdapter = new PostTabsAdapter(this);
         viewPager = view.findViewById(R.id.pager);
-        viewPager.setAdapter(homeAdapter);
+        viewPager.setAdapter(postTabsAdapter);
 
         sessionPreferenceRepository = new SessionPreferenceRepository(activity);
 

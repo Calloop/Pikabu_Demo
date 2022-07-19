@@ -1,8 +1,6 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,26 +8,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.SavedStateViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.savedstate.SavedStateRegistryOwner;
-
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.BaseFragment;
@@ -46,12 +37,9 @@ public class CreatePostFragment extends BaseFragment {
     private ISessionPreferenceRepository sessionPreferenceRepository;
     private CreatePostViewModel createPostViewModel;
     private BlocksListCreatePostAdapter adapter;
-
     private AppCompatActivity activity;
     private NavController navController;
-    private RecyclerView recyclerView;
-    private TextView textViewDescriptionCreatePost;
-    private TextInputEditText createPostHeadline;
+    private TextView descriptionCreatePost, postHeadline;
     private ActionMode actionMode;
 
     @Override
@@ -66,13 +54,16 @@ public class CreatePostFragment extends BaseFragment {
     }
 
     @Override
-    public View fragmentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View fragmentView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_post, container, false);
 
         activity = (AppCompatActivity) requireActivity();
-        recyclerView = view.findViewById(R.id.list_create_post);
-        textViewDescriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
-        createPostHeadline = view.findViewById(R.id.create_post_headline_text);
+        descriptionCreatePost = view.findViewById(R.id.textView_description_create_post);
+        postHeadline = view.findViewById(R.id.create_post_headline_text);
+        RecyclerView recyclerView = view.findViewById(R.id.list_create_post);
+        Toolbar toolbar = activity.findViewById(R.id.toolbar_activity);
+        activity.setSupportActionBar(toolbar);
 
         preferenceRepository = new PreferenceRepository(activity);
         sessionPreferenceRepository = new SessionPreferenceRepository(activity);
@@ -81,86 +72,35 @@ public class CreatePostFragment extends BaseFragment {
 
         NavHostFragment navHostFragment = (NavHostFragment) activity
                 .getSupportFragmentManager().findFragmentById(R.id.activity_navigation_controller);
-        assert navHostFragment != null;
-        navController = navHostFragment.getNavController();
+        if (navHostFragment != null) {
+            navController = navHostFragment.getNavController();
+        }
 
-        loadPreference();
-        setToolbar();
-        setAdapter();
+        postHeadline.setText(preferenceRepository.getPostHealdine());
+        adapter.updateList(preferenceRepository.getPostItems());
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
 
         getChildFragmentManager()
-                .setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-                    int result = bundle.getInt("bundleKey");
-                    createPostItem(result);
-                });
+                .setFragmentResultListener("requestKey", this,
+                        (requestKey, bundle) -> {
+                            int result = bundle.getInt("bundleKey");
+                            createPostItem(result);
+                        });
 
         listIsEmpty();
 
         return view;
     }
 
-    private void loadPreference() {
-//        adapter.updateList(preferenceRepository.getPostItems());
-
-        createPostViewModel.getPostItems().observe(getViewLifecycleOwner(), postItems -> adapter.updateList(postItems));
-
-//        createPostViewModel
-//        if (createPostViewModel.getPostItems().size() != 0)
-//        {
-//            adapter.updateList(createPostViewModel.getPostItems());
-//        }
-        createPostHeadline.setText(preferenceRepository.getPostHealdine());
-        createPostHeadline.addTextChangedListener(new TextWatcher() {
-            private Timer timer = new Timer();
-            private final long DELAY = 200;
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                timer.cancel();
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        preferenceRepository.setPostHeadline(editable.toString());
-                    }
-                }, DELAY);
-            }
-        });
+    @Override
+    public void onPause() {
+        preferenceRepository.setPostHeadline(postHeadline.getText().toString());
+        preferenceRepository.setPostItems(adapter.getAdapterList());
+        super.onPause();
     }
-
-    //region [SET: TOOLBAR, FRAGMENT MANAGER, RECYCLER VIEW]
-    private void setToolbar() {
-        Toolbar toolbar = activity.findViewById(R.id.toolbar_activity);
-        activity.setSupportActionBar(toolbar);
-    }
-
-    private void setAdapter() {
-//        presenter = new CreatePostPresenter();
-//        presenter.attachView(this);
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
-//        createPostViewModel.getLocalPostItemList()
-//                .observe(activity,
-//                        postItems -> {
-//                            adapter = new BlocksListCreatePostAdapter(postItems);
-//                            recyclerView.setAdapter(adapter);
-//                        });
-
-        //Log.d("TEST", "" + adapter.getItemCount());
-    }
-    //endregion
 
     //region [TOOLBAR OPTION MENU]
     @Override
@@ -180,15 +120,13 @@ public class CreatePostFragment extends BaseFragment {
             }
 
             activity.startSupportActionMode(actionModeCallback);
-            //Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
             return true;
         }
 
         if (itemId == R.id.add_post_create_post) {
             int userId = sessionPreferenceRepository.getAccountId();
-            String postHeadline = Objects.requireNonNull(createPostHeadline.getText()).toString();
-            createPostViewModel.setPostItems(adapter.getAdapterList());
-            createPostViewModel.insertPostToDB(userId, postHeadline);
+            createPostViewModel.insertPostToDB(userId, postHeadline.getText().toString(),
+                    adapter.getAdapterList());
             preferenceRepository.clearPreference();
             navController.popBackStack(R.id.homeFragment, false);
         }
@@ -218,7 +156,7 @@ public class CreatePostFragment extends BaseFragment {
             if (item.getItemId() == R.id.apply_edit_contextual_create_post) {
                 adapter.clearPreparedToDeleteItemList();
                 preferenceRepository.setPostItems(adapter.getAdapterList());
-                showToast("EDITING APPLIED");
+                Toast.makeText(activity, "EDITING APPLIED", Toast.LENGTH_SHORT).show();
                 mode.finish();
                 return true;
             } else {
@@ -240,35 +178,10 @@ public class CreatePostFragment extends BaseFragment {
     };
     //endregion
 
-    //region [SHOW EVENTS]
-    public void showPostItems(List<PostItem> postItems) {
-        //adapter.loadPostItems(postItems);
-    }
-
-    private void showToast(String message) {
-//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-    //endregion
-
     //region [CLICK EVENTS]
     private void createPostItem(int type) {
         if (type != 0) {
-//            List<PostItem> test = new ArrayList<>(1);
-//            PostItem postItem = new PostItem(0, type, null);
-//            test.add(postItem);
-//     //       Log.d("TEST", "" + adapter.getItemCount());
-//            CreatePostDiffUtilCallback createPostDiffUtilCallback =
-//                    new CreatePostDiffUtilCallback(adapter.getAdapterList(),
-//                            test);
-//            DiffUtil.DiffResult diffResult =
-//                    DiffUtil.calculateDiff(createPostDiffUtilCallback);
-//
-//            adapter.createPostItem(type);
-//            diffResult.dispatchUpdatesTo(adapter);
-//            listIsEmpty();
-
             adapter.createPostItem(type);
-            //createPostViewModel.setPostItems(adapter.getAdapterList());
             listIsEmpty();
 
         }
@@ -278,27 +191,9 @@ public class CreatePostFragment extends BaseFragment {
     //region [OPERATIONS]
     public void listIsEmpty() {
         if (adapter.getItemCount() == 0) {
-            textViewDescriptionCreatePost.setVisibility(View.VISIBLE);
+            descriptionCreatePost.setVisibility(View.VISIBLE);
         } else
-            textViewDescriptionCreatePost.setVisibility(View.GONE);
-    }
-
-    public void checkEditMode() {
-        // скрыть кнопки редактирования
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        if (adapter.getItemCount() != 0) {
-//            adapter.updateList(createPostViewModel.getPostItes());
-//        }
-    }
-
-    @Override
-    public void onDestroy() {
-        //presenter.detachView();
-        super.onDestroy();
+            descriptionCreatePost.setVisibility(View.GONE);
     }
     //endregion
 }

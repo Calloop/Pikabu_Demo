@@ -4,15 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import ru.calloop.pikabu_demo.ui.main.Tab1MainFragment;
+import ru.calloop.pikabu_demo.ui.main.home.tabs.Tab1MainFragment;
 
-public class HomeAdapter extends FragmentStateAdapter {
+public class PostTabsAdapter extends FragmentStateAdapter {
 
 //    PikabuDB database = Room.databaseBuilder(getApplicationContext(), PikabuDB.class, "Pikabu").allowMainThreadQueries().build();
 //    postItems = new ArrayList<>(1);
 //        postItems.add(new PostItem(1, 1, 1, 1, "lolo"));
 
-    public HomeAdapter(Fragment fragment) {
+    public PostTabsAdapter(Fragment fragment) {
         super(fragment);
     }
 

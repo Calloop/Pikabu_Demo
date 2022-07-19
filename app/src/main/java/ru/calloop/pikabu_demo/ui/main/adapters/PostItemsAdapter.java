@@ -1,6 +1,5 @@
 package ru.calloop.pikabu_demo.ui.main.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +8,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
-public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PostItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public List<PostItem> postItemList;
-    private Context context;
+    private List<PostItem> postItems;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
-    public MainPostFragmentAdapter(List<PostItem> postItemList) {
-        this.postItemList = postItemList;
+    public PostItemsAdapter() {
+        postItems = new ArrayList<>(1);
     }
 
     @NonNull
@@ -43,16 +42,16 @@ public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder.getItemViewType() == TYPE_TEXT_BLOCK) {
             TextViewHolder textHolder = (TextViewHolder) viewHolder;
-            textHolder.getTextView(postItemList.get(position).getValue());
+            textHolder.getTextView(postItems.get(position).getValue());
         } else if (viewHolder.getItemViewType() == TYPE_IMAGE_BLOCK) {
             ImageViewHolder imageHolder = (ImageViewHolder) viewHolder;
-            imageHolder.getTextView(postItemList.get(position).getValue());
+            imageHolder.getTextView(postItems.get(position).getValue());
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (postItemList.get(position).getType() == 1) {
+        if (postItems.get(position).getType() == 1) {
             return TYPE_TEXT_BLOCK;
         } else {
             return TYPE_IMAGE_BLOCK;
@@ -61,7 +60,7 @@ public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
-        return postItemList.size();
+        return postItems.size();
     }
 
     public static class TextViewHolder extends RecyclerView.ViewHolder {
@@ -94,6 +93,11 @@ public class MainPostFragmentAdapter extends RecyclerView.Adapter<RecyclerView.V
             textView.setText(text);
             //editText.setText(text);
         }
+    }
+
+    public void updateList(List<PostItem> postItems) {
+            this.postItems = postItems;
+            notifyItemRangeChanged(0, this.postItems.size());
     }
 }
 
