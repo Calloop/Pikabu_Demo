@@ -1,5 +1,6 @@
 package ru.calloop.pikabu_demo.ui.main.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +14,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.databinding.FragmentMainPostBinding;
 import ru.calloop.pikabu_demo.ui.models.Post;
 import ru.calloop.pikabu_demo.ui.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     private List<PostAndPostItem> posts;
+    private final Timer postWasViewed;
+    private SessionPreferenceRepository sessionPref;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
     public PostsAdapter() {
         posts = new ArrayList<>(1);
+        postWasViewed = new Timer();
+        sessionPref = new SessionPreferenceRepository();
     }
 
     @NonNull
@@ -45,17 +53,29 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         PostItemsAdapter adapter = new PostItemsAdapter();
         adapter.updateList(posts.get(position).postItemList);
         LinearLayoutManager layoutManager =
-                new LinearLayoutManager(((ViewHolder) viewHolder).recyclerView.getContext());
-        ((ViewHolder) viewHolder).recyclerView.setLayoutManager(layoutManager);
-        ((ViewHolder) viewHolder).recyclerView.setAdapter(adapter);
+                new LinearLayoutManager(viewHolder.recyclerView.getContext());
+        viewHolder.recyclerView.setLayoutManager(layoutManager);
+        viewHolder.recyclerView.setAdapter(adapter);
         if (viewHolder.binding != null) {
             viewHolder.postHeadline.setText(posts.get(position).post.getHeadline());
         }
+
         //Post post = posts.get(position).post;
 
 //        ((ViewHolder) viewHolder).binding.postHeadline.
 //                setText(post);
     }
+
+//    @Override
+//    public int getItemViewType(int position) {
+//        switch (posts.get(position).post.){
+//            case 1:
+//                return 1;
+//            case 2:
+//                return 2;
+//            default:
+//                return position;
+//    }
 
     @Override
     public int getItemCount() {
@@ -93,5 +113,32 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     public List<PostAndPostItem> getAdapterList() {
         return posts;
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+
+
+        postWasViewed.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Log.d("TAG", "Viewed");
+            }
+        }, 2000);
+
+        Log.d("TAG", "onViewAttachedToWindow: " + holder.itemView.getWindowId());
+
+//        if (holder.getItemViewType() == 1) {
+//
+//        }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+
+        Log.d("TAG", "onViewDetachedFromWindow: " + holder.itemView.getWindowId());
+
+        super.onViewDetachedFromWindow(holder);
     }
 }

@@ -15,7 +15,7 @@ import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 public class HomeViewModel extends AndroidViewModel {
     private final IPostRepository postRepository;
-    private MutableLiveData<List<PostAndPostItem>> posts;
+    private final MutableLiveData<List<PostAndPostItem>> posts;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);

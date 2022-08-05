@@ -38,11 +38,10 @@ public class PostsDiffUtil extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        PostAndPostItem newProduct = newList.get(newItemPosition);
         PostAndPostItem oldProduct = oldList.get(oldItemPosition);
+        PostAndPostItem newProduct = newList.get(newItemPosition);
 
-        return newProduct.post.getId() == oldProduct.post.getId()
-                && TextUtils.equals(newProduct.post.getHeadline(), oldProduct.post.getHeadline())
-                && newProduct.post.getUserId() == oldProduct.post.getUserId();
+        return oldProduct.post.getHeadline().equals(newProduct.post.getHeadline())
+                && oldProduct.post.getUserId() == newProduct.post.getUserId();
     }
 }

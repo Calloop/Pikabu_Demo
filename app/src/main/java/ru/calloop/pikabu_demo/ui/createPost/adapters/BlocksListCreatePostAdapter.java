@@ -13,10 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.IntStream;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
@@ -24,16 +26,14 @@ import ru.calloop.pikabu_demo.ui.models.PostItem;
 public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<PostItem> localPostItemList;
-    private final List<PostItem> prepareToDeleteItemsList;
+    private List<PostItem> postItems;
     private boolean editModeIsActive;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
     public BlocksListCreatePostAdapter() {
-        localPostItemList = new ArrayList<>(1);
-        prepareToDeleteItemsList = new ArrayList<>(1);
+        postItems = new ArrayList<>(1);
     }
 
     @NonNull
@@ -69,7 +69,7 @@ public class BlocksListCreatePostAdapter extends
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
 
                 textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
-                textViewHolder.textView.setText(localPostItemList.get(textViewHolder.getAdapterPosition()).getValue());
+                textViewHolder.textView.setText(postItems.get(textViewHolder.getAdapterPosition()).getValue());
 //            textViewHolder.textView.addTextChangedListener(new TextWatcher() {
 //                @Override
 //                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -136,7 +136,7 @@ public class BlocksListCreatePostAdapter extends
                     textViewHolder.menu.setVisibility(View.VISIBLE);
 
                     textViewHolder.deleteButton.setOnClickListener(view -> {
-                        addPreparedToDeleteItem(textViewHolder.getAdapterPosition());
+                        removePostItem(textViewHolder.getAdapterPosition());
 //                        Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.GONE);
 //
 //                        layoutParams.width = 0;
@@ -172,17 +172,18 @@ public class BlocksListCreatePostAdapter extends
 //            return TYPE_IMAGE_BLOCK;
 //        }
 //
-        return localPostItemList.get(position).getType();
+
+        return postItems.get(position).getType();
     }
 
     @Override
     public int getItemCount() {
-        return localPostItemList == null ? 0 : localPostItemList.size();
+        return postItems == null ? 0 : postItems.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return super.getItemId(position);
+        return postItems.get(position).getId();
     }
 
     public static class TextViewHolder extends RecyclerView.ViewHolder {
@@ -223,42 +224,38 @@ public class BlocksListCreatePostAdapter extends
     }
 
     public void createPostItem(int type) {
-        PostItem postItem = new PostItem(localPostItemList.size(), type, null);
-        localPostItemList.add(postItem);
-        notifyItemInserted(localPostItemList.size() - 1);
+        PostItem postItem = new PostItem(postItems.size(), type, null);
+        postItems.add(postItem);
+        notifyItemInserted(postItems.size() - 1);
     }
 
     public List<PostItem> getAdapterList() {
-        return localPostItemList;
+        return postItems;
     }
 
-    public void updateList(List<PostItem> postItems) {
-        localPostItemList = postItems;
-        notifyItemRangeChanged(0, localPostItemList.size());
+    public void updateAdapterList(List<PostItem> postItems) {
+        this.postItems = postItems;
+        notifyItemRangeChanged(0, this.postItems.size());
     }
 
-    public List<PostItem> getPrepareToDeleteItemsList() {
-        return prepareToDeleteItemsList;
-    }
-
-    public void addPreparedToDeleteItem(int position) {
-        prepareToDeleteItemsList.add(localPostItemList.get(position));
-        localPostItemList.remove(position);
+    public void removePostItem(int position) {
+        postItems.remove(position);
         notifyItemRemoved(position);
-    }
-
-    public void clearPreparedToDeleteItemList() {
-        prepareToDeleteItemsList.clear();
     }
 
     public void editModeIsActive(boolean state) {
         editModeIsActive = state;
+
+        if (!editModeIsActive) {
+            IntStream.range(0, postItems.size()).forEach(i -> postItems.get(i).setPosition(i + 1));
+        }
+        notifyItemRangeChanged(0, postItems.size());
     }
 
     public class CreatePostListener implements TextWatcher {
         private int position;
         private Timer timer = new Timer();
-        private final long DELAY = 200;
+        private final long DELAY = 1000;
 
         public void updatePosition(int position) {
             this.position = position;
@@ -279,7 +276,7 @@ public class BlocksListCreatePostAdapter extends
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    localPostItemList.get(position).setValue(editable.toString());
+                    postItems.get(position).setValue(editable.toString());
                 }
             }, DELAY);
         }

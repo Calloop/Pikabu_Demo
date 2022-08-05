@@ -3,6 +3,7 @@ package ru.calloop.pikabu_demo.ui.repositories.SharedPreferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -19,26 +20,26 @@ public class PreferenceRepository implements IPreferenceRepository {
     private final Editor editor;
     private final Gson gson;
 
+    private final String KEY_POST_PREFERENCE = "postPreference";
+    private final String KEY_POST_HEADLINE = "postHeadline";
+    private final String KEY_POST_ITEMS = "postItems";
+
     public PreferenceRepository(Context context) {
         this.context = context;
         sharedPreferences = this.context.
-                getSharedPreferences("POST_PREFERENCE", Context.MODE_PRIVATE);
+                getSharedPreferences(KEY_POST_PREFERENCE, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         gson = new Gson();
     }
 
     @Override
-    public String getPostHealdine() {
-        String json = sharedPreferences.getString("POST_HEADLINE", null);
-
-        if (json != null) {
-            return json;
-        } else return "";
+    public String getPostHeadline() {
+        return sharedPreferences.getString(KEY_POST_HEADLINE, null);
     }
 
     @Override
     public List<PostItem> getPostItems() {
-        String json = sharedPreferences.getString("POST_ITEMS", null);
+        String json = sharedPreferences.getString(KEY_POST_ITEMS, null);
 
         if (json != null) {
             Type type = new TypeToken<List<PostItem>>() {
@@ -49,20 +50,20 @@ public class PreferenceRepository implements IPreferenceRepository {
 
     @Override
     public void setPostHeadline(String postHeadline) {
-        editor.putString("POST_HEADLINE", postHeadline);
+        editor.putString(KEY_POST_HEADLINE, postHeadline);
         editor.apply();
     }
 
     @Override
     public void setPostItems(List<PostItem> postItems) {
         String json = gson.toJson(postItems);
-        editor.putString("POST_ITEMS", json);
+        editor.putString(KEY_POST_ITEMS, json);
         editor.apply();
     }
 
     @Override
     public void clearPreference() {
-        editor.clear();
-        editor.apply();
+        Log.d("TAG", "clearPreference: ");
+        editor.clear().apply();
     }
 }

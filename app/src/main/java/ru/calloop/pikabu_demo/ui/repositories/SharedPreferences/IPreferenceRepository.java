@@ -5,7 +5,7 @@ import java.util.List;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public interface IPreferenceRepository {
-    String getPostHealdine();
+    String getPostHeadline();
 
     List<PostItem> getPostItems();
 

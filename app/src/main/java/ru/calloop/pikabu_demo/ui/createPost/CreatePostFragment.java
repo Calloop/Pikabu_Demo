@@ -20,12 +20,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Comparator;
-
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.BaseFragment;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.BlocksListCreatePostAdapter;
-import ru.calloop.pikabu_demo.ui.models.PostItem;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.IPreferenceRepository;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.PreferenceRepository;
@@ -76,8 +73,7 @@ public class CreatePostFragment extends BaseFragment {
             navController = navHostFragment.getNavController();
         }
 
-        postHeadline.setText(preferenceRepository.getPostHealdine());
-        adapter.updateList(preferenceRepository.getPostItems());
+        setPostDataFromRepository();
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -97,9 +93,18 @@ public class CreatePostFragment extends BaseFragment {
 
     @Override
     public void onPause() {
+        saveToPostRepository();
+        super.onPause();
+    }
+
+    private void setPostDataFromRepository() {
+        postHeadline.setText(preferenceRepository.getPostHeadline());
+        adapter.updateAdapterList(preferenceRepository.getPostItems());
+    }
+
+    private void saveToPostRepository() {
         preferenceRepository.setPostHeadline(postHeadline.getText().toString());
         preferenceRepository.setPostItems(adapter.getAdapterList());
-        super.onPause();
     }
 
     //region [TOOLBAR OPTION MENU]
@@ -128,6 +133,7 @@ public class CreatePostFragment extends BaseFragment {
             createPostViewModel.insertPostToDB(userId, postHeadline.getText().toString(),
                     adapter.getAdapterList());
             preferenceRepository.clearPreference();
+            setPostDataFromRepository();
             navController.popBackStack(R.id.homeFragment, false);
         }
 
@@ -142,7 +148,7 @@ public class CreatePostFragment extends BaseFragment {
             mode.getMenuInflater().inflate(R.menu.toolbar_contextual_create_post, menu);
             mode.setTitle("Редактирование");
             adapter.editModeIsActive(true);
-            adapter.notifyItemRangeChanged(0, adapter.getItemCount());
+            saveToPostRepository();
             return true;
         }
 
@@ -154,8 +160,7 @@ public class CreatePostFragment extends BaseFragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.apply_edit_contextual_create_post) {
-                adapter.clearPreparedToDeleteItemList();
-                preferenceRepository.setPostItems(adapter.getAdapterList());
+                saveToPostRepository();
                 Toast.makeText(activity, "EDITING APPLIED", Toast.LENGTH_SHORT).show();
                 mode.finish();
                 return true;
@@ -168,12 +173,7 @@ public class CreatePostFragment extends BaseFragment {
         public void onDestroyActionMode(ActionMode mode) {
             actionMode = null;
             adapter.editModeIsActive(false);
-            if (adapter.getPrepareToDeleteItemsList().size() > 0) {
-                adapter.getAdapterList().addAll(adapter.getPrepareToDeleteItemsList());
-                adapter.getAdapterList().sort(Comparator.comparing(PostItem::getPosition));
-            }
-            adapter.clearPreparedToDeleteItemList();
-            adapter.notifyItemRangeChanged(0, adapter.getItemCount());
+            setPostDataFromRepository();
         }
     };
     //endregion
@@ -183,17 +183,14 @@ public class CreatePostFragment extends BaseFragment {
         if (type != 0) {
             adapter.createPostItem(type);
             listIsEmpty();
-
         }
     }
     //endregion
 
     //region [OPERATIONS]
     public void listIsEmpty() {
-        if (adapter.getItemCount() == 0) {
-            descriptionCreatePost.setVisibility(View.VISIBLE);
-        } else
-            descriptionCreatePost.setVisibility(View.GONE);
+        descriptionCreatePost
+                .setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
     //endregion
 }
