@@ -5,14 +5,14 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-public class PostAndPostItem {
+public class AccountWithPosts {
     @Embedded
-    public Post post;
+    public Account account;
 
     @Relation(
             parentColumn = "id",
-            entity = PostItem.class,
-            entityColumn = "post_id"
+            entity = Post.class,
+            entityColumn = "user_id"
     )
-    public List<PostItem> postItemList;
+    public List<Post> postsList;
 }

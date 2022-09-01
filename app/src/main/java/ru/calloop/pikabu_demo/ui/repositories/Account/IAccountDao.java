@@ -51,4 +51,8 @@ public interface IAccountDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void createAccount(Account account);
+
+    // передать список просмотренных постов
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    void checkPostAsViewed();
 }

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import ru.calloop.pikabu_demo.PikabuDB;
 import ru.calloop.pikabu_demo.ui.models.Post;
-import ru.calloop.pikabu_demo.ui.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.models.PostWithPostItems;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class PostRepository implements IPostRepository {
@@ -27,7 +27,7 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public List<PostAndPostItem> getPostItems(int startPosition, int limitCount) {
+    public List<PostWithPostItems> getPostItems(int startPosition, int limitCount) {
         return postDao.getPostItems(startPosition, limitCount);
     }
 

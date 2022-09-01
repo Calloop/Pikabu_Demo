@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
@@ -48,7 +47,7 @@ public class BlocksListCreatePostAdapter extends
                 view = layoutInflater
                         .inflate(R.layout
                                 .fragment_text_block_create_post, parent, false);
-                holder = new TextViewHolder(view, new CreatePostListener());
+                holder = new TextViewHolder(view);
                 break;
             case TYPE_IMAGE_BLOCK:
                 view = layoutInflater
@@ -67,97 +66,10 @@ public class BlocksListCreatePostAdapter extends
         switch (holder.getItemViewType()) {
             case TYPE_TEXT_BLOCK:
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
-
-                textViewHolder.createPostListener.updatePosition(textViewHolder.getAdapterPosition());
-                textViewHolder.textView.setText(postItems.get(textViewHolder.getAdapterPosition()).getValue());
-//            textViewHolder.textView.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable editable) {
-//                    postItemList.get(textViewHolder.getAdapterPosition()).setDataValue(editable.toString());
-//                }
-//            });
-
-//            if (setDataModeIsActive) {
-//                for (PostItem postItem :
-//                        postItemList) {
-//                    if (position == postItem.getDataPosition() - 1) {
-//                        postItem.setDataValue(textViewHolder.getTextViewValue());
-//                        Log.d("LISTING", "holder: " + position + "; pos :" + postItem.getDataPosition() + "; value: " + postItem.getDataValue());
-//
-//                    }
-//                }
-//            } else {
-//                for (PostItem postItem :
-//                        postItemList) {
-//                    if (position == postItem.getDataPosition() - 1) {
-//                        textViewHolder.setTextViewValue(postItem.getDataValue());
-//                        Log.d("LISTING", "holder: " + position + "; pos :" + postItem.getDataPosition() + "; value: " + postItem.getDataValue());
-//
-//                    }
-//                }
-//            }
-
-
-//            Log.d("VALUE", "BEFORE " + textViewHolder.getAdapterPosition() + ": "  + postItemList.get(position).getDataValue());
-//            postItemList.get(textViewHolder.getAdapterPosition()).setDataValue(textViewHolder.getTextViewValue());
-//            Log.d("VALUE", "AFTER : " + textViewHolder.getAdapterPosition() + ": "  + postItemList.get(position).getDataValue());
-//            if (editModeIsActive) {
-//                textViewHolder.menu.setVisibility(View.VISIBLE);
-//
-////                for (int itemPreparedToDelete :
-////                        prepareToDeleteItemsList) {
-////                    if (itemPreparedToDelete == textViewHolder.getAdapterPosition()) {
-////                        textViewHolder.itemView.setVisibility(View.GONE);
-////                    }
-////                }
-//            } else {
-//                textViewHolder.menu.setVisibility(View.GONE);
-//
-////                for (int itemPreparedToDelete :
-////                        prepareToDeleteItemsList) {
-////                    if (itemPreparedToDelete == textViewHolder.getAdapterPosition()) {
-////                        textViewHolder.itemView.setVisibility(View.VISIBLE);
-////                    }
-////                }
-//            }
-
-                //ViewGroup.LayoutParams layoutParams = textViewHolder.itemView.getLayoutParams();
-
-                if (editModeIsActive) {
-                    textViewHolder.menu.setVisibility(View.VISIBLE);
-
-                    textViewHolder.deleteButton.setOnClickListener(view -> {
-                        removePostItem(textViewHolder.getAdapterPosition());
-//                        Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.GONE);
-//
-//                        layoutParams.width = 0;
-//                        layoutParams.height = 0;
-//                        Objects.requireNonNull(textViewHolder.itemView)
-//                                .setLayoutParams(layoutParams);
-                    });
-                } else {
-                    textViewHolder.menu.setVisibility(View.GONE);
-//
-//                    if (textViewHolder.itemView.getVisibility() == View.GONE) {
-//                        Objects.requireNonNull(textViewHolder.itemView).setVisibility(View.VISIBLE);
-//
-//                        layoutParams.width = 0;
-//                        layoutParams.height = 0;
-//                        Objects.requireNonNull(textViewHolder.itemView)
-//                                .setLayoutParams(layoutParams);
-//                    }
-                }
-//        } else {
-//
+                textViewHolder.getListener()
+                        .updatePosition(textViewHolder.getAdapterPosition());
+                textViewHolder.getTextView()
+                        .setText(postItems.get(textViewHolder.getAdapterPosition()).getValue());
                 break;
             case TYPE_IMAGE_BLOCK:
                 break;
@@ -186,27 +98,28 @@ public class BlocksListCreatePostAdapter extends
         return postItems.get(position).getId();
     }
 
-    public static class TextViewHolder extends RecyclerView.ViewHolder {
+    public class TextViewHolder extends RecyclerView.ViewHolder {
         private final EditText textView;
-        private final View menu;
-        private final Button deleteButton;
-        private final CreatePostListener createPostListener;
+        private final CreatePostListener listener = new CreatePostListener();
 
-        public TextViewHolder(View view, CreatePostListener createPostListener) {
+        public TextViewHolder(View view) {
             super(view);
             textView = view.findViewById(R.id.editText_textBlock_createPost);
-            menu = view.findViewById(R.id.editing_menu);
-            this.createPostListener = createPostListener;
-            deleteButton = menu.findViewById(R.id.button_delete_text_block_create_post2);
-            textView.addTextChangedListener(createPostListener);
+            textView.addTextChangedListener(listener);
+            View menu = view.findViewById(R.id.editing_menu);
+            menu.setVisibility(editModeIsActive ? View.VISIBLE : View.GONE);
+            Button deleteButton = menu.findViewById(R.id.button_delete_text_block_create_post2);
+            deleteButton.setOnClickListener(v -> {
+                removePostItem(getAdapterPosition());
+            });
         }
 
-        public String getTextViewValue() {
-            return textView.getText().toString();
+        public EditText getTextView() {
+            return textView;
         }
 
-        public void setTextViewValue(String value) {
-            textView.setText(value);
+        public CreatePostListener getListener() {
+            return listener;
         }
     }
 
@@ -241,6 +154,7 @@ public class BlocksListCreatePostAdapter extends
     public void removePostItem(int position) {
         postItems.remove(position);
         notifyItemRemoved(position);
+        notifyItemRangeChanged(position, postItems.size());
     }
 
     public void editModeIsActive(boolean state) {
@@ -255,7 +169,7 @@ public class BlocksListCreatePostAdapter extends
     public class CreatePostListener implements TextWatcher {
         private int position;
         private Timer timer = new Timer();
-        private final long DELAY = 1000;
+        private final int DELAY = 1000;
 
         public void updatePosition(int position) {
             this.position = position;
@@ -273,10 +187,13 @@ public class BlocksListCreatePostAdapter extends
         public void afterTextChanged(Editable editable) {
             timer.cancel();
             timer = new Timer();
+
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    postItems.get(position).setValue(editable.toString());
+                    if (postItems.size() != 0) {
+                        postItems.get(position).setValue(editable.toString());
+                    }
                 }
             }, DELAY);
         }

@@ -19,15 +19,18 @@ import java.util.TimerTask;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.databinding.FragmentMainPostBinding;
-import ru.calloop.pikabu_demo.ui.models.Post;
-import ru.calloop.pikabu_demo.ui.models.PostAndPostItem;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.models.PostWithPostItems;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
-    private List<PostAndPostItem> posts;
+    public interface PostsAdapterCallback {
+        void getViewedPostId(int id);
+        void detached(int id);
+    }
+
+    private PostsAdapterCallback postsAdapterCallback;
+    private List<PostWithPostItems> posts;
     private final Timer postWasViewed;
-    private SessionPreferenceRepository sessionPref;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
@@ -35,7 +38,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public PostsAdapter() {
         posts = new ArrayList<>(1);
         postWasViewed = new Timer();
-        sessionPref = new SessionPreferenceRepository();
+    }
+
+    public void registerCallBack(PostsAdapterCallback postsAdapterCallback){
+        this.postsAdapterCallback = postsAdapterCallback;
     }
 
     @NonNull
@@ -99,7 +105,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
     }
 
-    public void updateList(List<PostAndPostItem> posts) {
+    public void updateList(List<PostWithPostItems> posts) {
         if (this.posts == null) {
             this.posts = posts;
             notifyItemRangeInserted(0, posts.size());
@@ -111,23 +117,21 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
     }
 
-    public List<PostAndPostItem> getAdapterList() {
+    public List<PostWithPostItems> getAdapterList() {
         return posts;
     }
 
     @Override
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-
 
         postWasViewed.schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.d("TAG", "Viewed");
+                postsAdapterCallback.getViewedPostId(holder.getAdapterPosition());
             }
         }, 2000);
 
-        Log.d("TAG", "onViewAttachedToWindow: " + holder.itemView.getWindowId());
+        Log.d("TAG", "onViewAttachedToWindow: " + holder.getAdapterPosition());
 
 //        if (holder.getItemViewType() == 1) {
 //
@@ -137,8 +141,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
 
-        Log.d("TAG", "onViewDetachedFromWindow: " + holder.itemView.getWindowId());
-
-        super.onViewDetachedFromWindow(holder);
+        Log.d("TAG", "onViewDetachedFromWindow: " + holder.getAdapterPosition());
+        postsAdapterCallback.detached(holder.getAdapterPosition());
     }
 }

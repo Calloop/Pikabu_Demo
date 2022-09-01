@@ -9,13 +9,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-import ru.calloop.pikabu_demo.ui.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.models.PostWithPostItems;
 import ru.calloop.pikabu_demo.ui.repositories.Post.IPostRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Post.PostRepository;
 
 public class HomeViewModel extends AndroidViewModel {
     private final IPostRepository postRepository;
-    private final MutableLiveData<List<PostAndPostItem>> posts;
+    private final MutableLiveData<List<PostWithPostItems>> posts;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -24,7 +24,7 @@ public class HomeViewModel extends AndroidViewModel {
         posts.postValue(postRepository.getPostItems(0, 100));
     }
 
-    public LiveData<List<PostAndPostItem>> getPosts() {
+    public LiveData<List<PostWithPostItems>> getPosts() {
         return posts;
     }
 }

@@ -11,7 +11,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.ui.models.Post;
-import ru.calloop.pikabu_demo.ui.models.PostAndPostItem;
+import ru.calloop.pikabu_demo.ui.models.PostWithPostItems;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 @Dao
@@ -24,7 +24,7 @@ public interface IPostDao {
 
     @Transaction
     @Query("SELECT * FROM posts LIMIT :startPosition, :limitCount")
-    List<PostAndPostItem> getPostItems(int startPosition, int limitCount);
+    List<PostWithPostItems> getPostItems(int startPosition, int limitCount);
 
     @Query("SELECT * FROM posts LIMIT :startPosition, :limitCount")
     List<Post> getAllPosts(int startPosition, int limitCount);

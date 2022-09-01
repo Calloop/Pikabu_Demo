@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +16,7 @@ import ru.calloop.pikabu_demo.ui.BaseFragment;
 import ru.calloop.pikabu_demo.ui.main.adapters.PostsAdapter;
 import ru.calloop.pikabu_demo.ui.main.home.HomeViewModel;
 
-public class Tab1MainFragment extends BaseFragment {
+public class Tab1MainFragment extends BaseFragment implements PostsAdapter.PostsAdapterCallback {
 
     private HomeViewModel homeViewModel;
     private PostsAdapter adapter;
@@ -35,6 +34,7 @@ public class Tab1MainFragment extends BaseFragment {
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         adapter = new PostsAdapter();
+        adapter.registerCallBack(this);
         homeViewModel.getPosts().observe(getViewLifecycleOwner(), adapter::updateList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(root.getContext());
@@ -44,5 +44,15 @@ public class Tab1MainFragment extends BaseFragment {
         recyclerView.setAdapter(adapter);
 
         return root;
+    }
+
+    @Override
+    public void getViewedPostId(int id) {
+        Log.d("TAG", "Viewed: " + id);
+    }
+
+    @Override
+    public void detached(int id) {
+        Log.d("TAG", "Detached: " + id);
     }
 }
