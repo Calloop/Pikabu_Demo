@@ -1,10 +1,10 @@
-package ru.calloop.pikabu_demo.ui.repositories.SharedPreferences;
+package ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.createPost;
 
 import java.util.List;
 
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
-public interface IPreferenceRepository {
+public interface ICreatePostPreferences {
     String getPostHeadline();
 
     List<PostItem> getPostItems();

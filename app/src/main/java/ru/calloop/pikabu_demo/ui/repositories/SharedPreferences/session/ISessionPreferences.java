@@ -1,6 +1,6 @@
-package ru.calloop.pikabu_demo.ui.repositories.SharedPreferences;
+package ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session;
 
-public interface ISessionPreferenceRepository {
+public interface ISessionPreferences {
     void startUserSession(int accountId);
 
     int getAccountId();

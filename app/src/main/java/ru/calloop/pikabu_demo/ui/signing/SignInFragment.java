@@ -22,15 +22,15 @@ import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.BaseFragment;
 import ru.calloop.pikabu_demo.ui.repositories.Account.AccountRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountRepository;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.ISessionPreferences;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionPreferences;
 
 public class SignInFragment extends BaseFragment implements View.OnClickListener {
 
     private IAccountRepository accountRepository;
     private NavController navController;
     private EditText editTextLoginSignIn, editTextPasswordSignIn;
-    private ISessionPreferenceRepository sessionPreferenceRepository;
+    private ISessionPreferences sessionPreferenceRepository;
 
     @Override
     public BaseFragment fragment() {
@@ -60,7 +60,7 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
         activity.setSupportActionBar(toolbar);
         toolbar.setTitle("Авторизация");
 
-        sessionPreferenceRepository = new SessionPreferenceRepository(activity);
+        sessionPreferenceRepository = new SessionPreferences(activity);
         accountRepository = new AccountRepository(activity);
 
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity()

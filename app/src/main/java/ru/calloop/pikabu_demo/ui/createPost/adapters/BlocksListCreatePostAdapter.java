@@ -26,7 +26,7 @@ public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<PostItem> postItems;
-    private boolean editModeIsActive;
+    public boolean editModeIsActive;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
@@ -66,10 +66,14 @@ public class BlocksListCreatePostAdapter extends
         switch (holder.getItemViewType()) {
             case TYPE_TEXT_BLOCK:
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
+                int adapterPosition = textViewHolder.getAdapterPosition();
+
                 textViewHolder.getListener()
-                        .updatePosition(textViewHolder.getAdapterPosition());
+                        .updatePosition(adapterPosition);
                 textViewHolder.getTextView()
-                        .setText(postItems.get(textViewHolder.getAdapterPosition()).getValue());
+                        .setText(postItems.get(adapterPosition).getValue());
+
+                textViewHolder.getMenu().setVisibility(editModeIsActive ? View.VISIBLE : View.GONE);
                 break;
             case TYPE_IMAGE_BLOCK:
                 break;
@@ -101,13 +105,13 @@ public class BlocksListCreatePostAdapter extends
     public class TextViewHolder extends RecyclerView.ViewHolder {
         private final EditText textView;
         private final CreatePostListener listener = new CreatePostListener();
+        private final View menu;
 
         public TextViewHolder(View view) {
             super(view);
             textView = view.findViewById(R.id.editText_textBlock_createPost);
             textView.addTextChangedListener(listener);
-            View menu = view.findViewById(R.id.editing_menu);
-            menu.setVisibility(editModeIsActive ? View.VISIBLE : View.GONE);
+            menu = view.findViewById(R.id.editing_menu);
             Button deleteButton = menu.findViewById(R.id.button_delete_text_block_create_post2);
             deleteButton.setOnClickListener(v -> {
                 removePostItem(getAdapterPosition());
@@ -120,6 +124,10 @@ public class BlocksListCreatePostAdapter extends
 
         public CreatePostListener getListener() {
             return listener;
+        }
+
+        public View getMenu() {
+            return menu;
         }
     }
 
@@ -147,14 +155,14 @@ public class BlocksListCreatePostAdapter extends
     }
 
     public void updateAdapterList(List<PostItem> postItems) {
-        this.postItems = postItems;
+        this.postItems.clear();
+        this.postItems.addAll(postItems);
         notifyItemRangeChanged(0, this.postItems.size());
     }
 
     public void removePostItem(int position) {
         postItems.remove(position);
         notifyItemRemoved(position);
-        notifyItemRangeChanged(position, postItems.size());
     }
 
     public void editModeIsActive(boolean state) {
@@ -168,7 +176,7 @@ public class BlocksListCreatePostAdapter extends
 
     public class CreatePostListener implements TextWatcher {
         private int position;
-        private Timer timer = new Timer();
+        private Timer timer;
         private final int DELAY = 1000;
 
         public void updatePosition(int position) {
@@ -185,17 +193,13 @@ public class BlocksListCreatePostAdapter extends
 
         @Override
         public void afterTextChanged(Editable editable) {
-            timer.cancel();
-            timer = new Timer();
-
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (postItems.size() != 0) {
-                        postItems.get(position).setValue(editable.toString());
-                    }
-                }
-            }, DELAY);
+//            timer = new Timer();
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                        postItems.get(position).setValue(editable.toString());
+//                }
+//            }, DELAY);
         }
     }
 }

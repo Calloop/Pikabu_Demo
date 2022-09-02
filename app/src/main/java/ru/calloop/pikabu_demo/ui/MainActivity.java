@@ -17,13 +17,13 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.ISessionPreferences;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionPreferences;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener {
 
-    private ISessionPreferenceRepository sessionPreferenceRepository;
+    private ISessionPreferences sessionPreferenceRepository;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
     private Button buttonDrawerSignIn, buttonDrawerSignOut;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity);
 
-        sessionPreferenceRepository = new SessionPreferenceRepository(this);
+        sessionPreferenceRepository = new SessionPreferences(this);
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.navigationView);
         View headerLayout = navigationView.getHeaderView(0);

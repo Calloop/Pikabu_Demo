@@ -1,6 +1,7 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuProvider;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -23,15 +27,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.BaseFragment;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.BlocksListCreatePostAdapter;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.IPreferenceRepository;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.PreferenceRepository;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.createPost.ICreatePostPreferences;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.ISessionPreferences;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.createPost.createPostPreferences;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionPreferences;
 
 public class CreatePostFragment extends BaseFragment {
 
-    private IPreferenceRepository preferenceRepository;
-    private ISessionPreferenceRepository sessionPreferenceRepository;
+    private ICreatePostPreferences createPostPreferences;
+    private ISessionPreferences sessionPreferences;
     private CreatePostViewModel createPostViewModel;
     private BlocksListCreatePostAdapter adapter;
     private AppCompatActivity activity;
@@ -42,7 +46,6 @@ public class CreatePostFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -62,8 +65,8 @@ public class CreatePostFragment extends BaseFragment {
         Toolbar toolbar = activity.findViewById(R.id.toolbar_activity);
         activity.setSupportActionBar(toolbar);
 
-        preferenceRepository = new PreferenceRepository(activity);
-        sessionPreferenceRepository = new SessionPreferenceRepository(activity);
+        createPostPreferences = new createPostPreferences(activity);
+        sessionPreferences = new SessionPreferences(activity);
         createPostViewModel = new ViewModelProvider(this).get(CreatePostViewModel.class);
         adapter = new BlocksListCreatePostAdapter();
 
@@ -73,7 +76,43 @@ public class CreatePostFragment extends BaseFragment {
             navController = navHostFragment.getNavController();
         }
 
-        setPostDataFromRepository();
+        requireActivity().addMenuProvider(new MenuProvider() {
+                                              @Override
+                                              public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                                                  menuInflater.inflate(R.menu.toolbar_create_post, menu);
+
+                                                  // Add option Menu Here
+
+                                              }
+
+                                              @Override
+                                              public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                                                  int itemId = menuItem.getItemId();
+
+                                                  if (itemId == R.id.edit_create_post) {
+                                                      if (actionMode != null) {
+                                                          return false;
+                                                      }
+
+                                                      activity.startSupportActionMode(actionModeCallback);
+                                                      return true;
+                                                  }
+
+                                                  if (itemId == R.id.add_post_create_post) {
+                                                      int userId = sessionPreferences.getAccountId();
+                                                      createPostViewModel.insertPostToDB(userId, postHeadline.getText().toString(),
+                                                              adapter.getAdapterList());
+                                                      createPostPreferences.clearPreference();
+                                                      getPreferences();
+                                                      navController.popBackStack(R.id.homeFragment, false);
+                                                  }
+
+                                                  return false;
+                                              }
+                                          },
+                getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
+        getPreferences();
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -91,55 +130,15 @@ public class CreatePostFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    public void onPause() {
-        saveToPostRepository();
-        super.onPause();
+    private void getPreferences() {
+        postHeadline.setText(createPostPreferences.getPostHeadline());
+        adapter.updateAdapterList(createPostPreferences.getPostItems());
     }
 
-    private void setPostDataFromRepository() {
-        postHeadline.setText(preferenceRepository.getPostHeadline());
-        adapter.updateAdapterList(preferenceRepository.getPostItems());
+    private void setPreferences() {
+        createPostPreferences.setPostHeadline(postHeadline.getText().toString());
+        createPostPreferences.setPostItems(adapter.getAdapterList());
     }
-
-    private void saveToPostRepository() {
-        preferenceRepository.setPostHeadline(postHeadline.getText().toString());
-        preferenceRepository.setPostItems(adapter.getAdapterList());
-    }
-
-    //region [TOOLBAR OPTION MENU]
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.toolbar_create_post, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-
-        if (itemId == R.id.edit_create_post) {
-            if (actionMode != null) {
-                return false;
-            }
-
-            activity.startSupportActionMode(actionModeCallback);
-            return true;
-        }
-
-        if (itemId == R.id.add_post_create_post) {
-            int userId = sessionPreferenceRepository.getAccountId();
-            createPostViewModel.insertPostToDB(userId, postHeadline.getText().toString(),
-                    adapter.getAdapterList());
-            preferenceRepository.clearPreference();
-            setPostDataFromRepository();
-            navController.popBackStack(R.id.homeFragment, false);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    //endregion
 
     //region [ACTION MODE]
     private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -148,7 +147,7 @@ public class CreatePostFragment extends BaseFragment {
             mode.getMenuInflater().inflate(R.menu.toolbar_contextual_create_post, menu);
             mode.setTitle("Редактирование");
             adapter.editModeIsActive(true);
-            saveToPostRepository();
+            setPreferences();
             return true;
         }
 
@@ -160,7 +159,8 @@ public class CreatePostFragment extends BaseFragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.apply_edit_contextual_create_post) {
-                saveToPostRepository();
+                adapter.editModeIsActive(false);
+                setPreferences();
                 Toast.makeText(activity, "EDITING APPLIED", Toast.LENGTH_SHORT).show();
                 mode.finish();
                 return true;
@@ -173,7 +173,9 @@ public class CreatePostFragment extends BaseFragment {
         public void onDestroyActionMode(ActionMode mode) {
             actionMode = null;
             adapter.editModeIsActive(false);
-            setPostDataFromRepository();
+            getPreferences();
+            //Log.d("TAG", "onDestroyActionMode: " + createPostPreferences.getPostItems().size());
+            //Log.d("TAG", "listSize: " + adapter.getAdapterList().size());
         }
     };
     //endregion

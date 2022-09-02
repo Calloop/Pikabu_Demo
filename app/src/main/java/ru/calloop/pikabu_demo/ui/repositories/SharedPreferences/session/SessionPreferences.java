@@ -1,12 +1,11 @@
-package ru.calloop.pikabu_demo.ui.repositories.SharedPreferences;
+package ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session;
 
 import static android.content.SharedPreferences.Editor;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-public class SessionPreferenceRepository implements ISessionPreferenceRepository {
+public class SessionPreferences implements ISessionPreferences {
     public static final String KEY = "SESSION_PREFERENCES";
     public static final String ID = "ID";
     public static final String AUTHORIZED = "AUTHORIZED";
@@ -15,7 +14,7 @@ public class SessionPreferenceRepository implements ISessionPreferenceRepository
     private final Editor editor;
     private final Context context;
 
-    public SessionPreferenceRepository(Context context) {
+    public SessionPreferences(Context context) {
         this.context = context;
         sharedPreferences = context
                 .getSharedPreferences(KEY, Context.MODE_PRIVATE);

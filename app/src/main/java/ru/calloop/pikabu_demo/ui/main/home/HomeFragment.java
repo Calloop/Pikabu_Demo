@@ -21,8 +21,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.ui.BaseFragment;
 import ru.calloop.pikabu_demo.ui.main.adapters.PostTabsAdapter;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.ISessionPreferenceRepository;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.SessionPreferenceRepository;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.ISessionPreferences;
+import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionPreferences;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
@@ -30,7 +30,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     private NavController navController;
     private Toolbar toolbar;
 
-    private ISessionPreferenceRepository sessionPreferenceRepository;
+    private ISessionPreferences sessionPreferenceRepository;
     private PostTabsAdapter postTabsAdapter;
     private ViewPager2 viewPager;
 
@@ -62,7 +62,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         viewPager = view.findViewById(R.id.pager);
         viewPager.setAdapter(postTabsAdapter);
 
-        sessionPreferenceRepository = new SessionPreferenceRepository(activity);
+        sessionPreferenceRepository = new SessionPreferences(activity);
 
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
