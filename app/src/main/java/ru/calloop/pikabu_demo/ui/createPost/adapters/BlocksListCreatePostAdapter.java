@@ -5,7 +5,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -14,19 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.IntStream;
 
 import ru.calloop.pikabu_demo.R;
+import ru.calloop.pikabu_demo.databinding.CreatePostImageTypePostBinding;
+import ru.calloop.pikabu_demo.databinding.CreatePostTextTypePostBinding;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class BlocksListCreatePostAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<PostItem> postItems;
-    public boolean editModeIsActive;
+    private final List<PostItem> postItems;
+    private boolean editModeIsActive;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
@@ -38,44 +38,48 @@ public class BlocksListCreatePostAdapter extends
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        RecyclerView.ViewHolder holder = null;
-
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case TYPE_TEXT_BLOCK:
-                view = layoutInflater
-                        .inflate(R.layout
-                                .fragment_text_block_create_post, parent, false);
-                holder = new TextViewHolder(view);
-                break;
+                CreatePostTextTypePostBinding textBinding =
+                        CreatePostTextTypePostBinding
+                                .inflate(inflater, parent, false);
+                return new TextViewHolder(textBinding);
             case TYPE_IMAGE_BLOCK:
-                view = layoutInflater
-                        .inflate(R.layout
-                                .fragment_image_block_create_post, parent, false);
-                holder = new ImageViewHolder(view);
-                break;
+                CreatePostImageTypePostBinding imageBinding =
+                        CreatePostImageTypePostBinding
+                                .inflate(inflater, parent, false);
+                return new ImageViewHolder(imageBinding);
+            default:
+                throw new RuntimeException();
         }
-
-        return Objects.requireNonNull(holder);
         // ДОБАВИТЬ ОКНО С ОШИБКОЙ ЗАГРУЗКИ ДАННЫХ
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        int adapterPosition = holder.getAdapterPosition();
+
         switch (holder.getItemViewType()) {
             case TYPE_TEXT_BLOCK:
                 TextViewHolder textViewHolder = (TextViewHolder) holder;
-                int adapterPosition = textViewHolder.getAdapterPosition();
-
-                textViewHolder.getListener()
-                        .updatePosition(adapterPosition);
-                textViewHolder.getTextView()
+                textViewHolder.binding.createPostTextTypeContent
                         .setText(postItems.get(adapterPosition).getValue());
 
-                textViewHolder.getMenu().setVisibility(editModeIsActive ? View.VISIBLE : View.GONE);
+                textViewHolder.binding.includeCreatePostAddPostItem.buttonAddBlockCreatePost
+                        .setVisibility(editModeIsActive ? View.GONE : View.VISIBLE);
+                textViewHolder.binding.includeCreatePostEditingMenu.editingMenuCreatePost
+                        .setVisibility(editModeIsActive ? View.VISIBLE : View.GONE);
                 break;
             case TYPE_IMAGE_BLOCK:
+                ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
+                imageViewHolder.binding.createPostImageTypeContent
+                        .setImageResource(R.drawable.ic_launcher_background);
+
+                imageViewHolder.binding.includeCreatePostAddPostItem.buttonAddBlockCreatePost
+                        .setVisibility(editModeIsActive ? View.GONE : View.VISIBLE);
+                imageViewHolder.binding.includeCreatePostEditingMenu.editingMenuCreatePost
+                        .setVisibility(editModeIsActive ? View.VISIBLE : View.GONE);
                 break;
         }
     }
@@ -88,13 +92,12 @@ public class BlocksListCreatePostAdapter extends
 //            return TYPE_IMAGE_BLOCK;
 //        }
 //
-
         return postItems.get(position).getType();
     }
 
     @Override
     public int getItemCount() {
-        return postItems == null ? 0 : postItems.size();
+        return postItems.size();
     }
 
     @Override
@@ -103,44 +106,46 @@ public class BlocksListCreatePostAdapter extends
     }
 
     public class TextViewHolder extends RecyclerView.ViewHolder {
-        private final EditText textView;
+        private final CreatePostTextTypePostBinding binding;
+        private final EditText createPostTextTypeContent;
         private final CreatePostListener listener = new CreatePostListener();
-        private final View menu;
 
-        public TextViewHolder(View view) {
-            super(view);
-            textView = view.findViewById(R.id.editText_textBlock_createPost);
-            textView.addTextChangedListener(listener);
-            menu = view.findViewById(R.id.editing_menu);
-            Button deleteButton = menu.findViewById(R.id.button_delete_text_block_create_post2);
-            deleteButton.setOnClickListener(v -> {
-                removePostItem(getAdapterPosition());
+        public TextViewHolder(@NonNull CreatePostTextTypePostBinding textBinding) {
+            super(textBinding.getRoot());
+            binding = textBinding;
+            createPostTextTypeContent = textBinding.createPostTextTypeContent;
+            setListeners();
+        }
+
+        private void setListeners() {
+            binding.includeCreatePostEditingMenu.buttonDeleteTextBlockCreatePost2
+                    .setOnClickListener(v -> removePostItem(getAdapterPosition()));
+
+            createPostTextTypeContent.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    createPostTextTypeContent.addTextChangedListener(listener);
+                    listener.updatePosition(getAdapterPosition());
+                } else {
+                    createPostTextTypeContent.removeTextChangedListener(listener);
+                }
             });
-        }
-
-        public EditText getTextView() {
-            return textView;
-        }
-
-        public CreatePostListener getListener() {
-            return listener;
-        }
-
-        public View getMenu() {
-            return menu;
         }
     }
 
-    public static class ImageViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView imageView;
+    public class ImageViewHolder extends RecyclerView.ViewHolder {
+        private final CreatePostImageTypePostBinding binding;
+        private ImageView createPostImageTypeContent;
 
-        public ImageViewHolder(View view) {
-            super(view);
-            imageView = view.findViewById(R.id.imageView_imageBlock_createPost);
+        public ImageViewHolder(@NonNull CreatePostImageTypePostBinding imageBinding) {
+            super(imageBinding.getRoot());
+            binding = imageBinding;
+            createPostImageTypeContent = binding.createPostImageTypeContent;
+            setListeners();
         }
 
-        public ImageView getImageView() {
-            return imageView;
+        private void setListeners() {
+            binding.includeCreatePostEditingMenu.buttonDeleteTextBlockCreatePost2
+                    .setOnClickListener(v -> removePostItem(getAdapterPosition()));
         }
     }
 
@@ -157,7 +162,7 @@ public class BlocksListCreatePostAdapter extends
     public void updateAdapterList(List<PostItem> postItems) {
         this.postItems.clear();
         this.postItems.addAll(postItems);
-        notifyItemRangeChanged(0, this.postItems.size());
+        notifyItemRangeInserted(0, postItems.size());
     }
 
     public void removePostItem(int position) {
@@ -177,7 +182,6 @@ public class BlocksListCreatePostAdapter extends
     public class CreatePostListener implements TextWatcher {
         private int position;
         private Timer timer;
-        private final int DELAY = 1000;
 
         public void updatePosition(int position) {
             this.position = position;
@@ -189,17 +193,21 @@ public class BlocksListCreatePostAdapter extends
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            if (timer != null) {
+                timer.cancel();
+            }
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
-//            timer = new Timer();
-//            timer.schedule(new TimerTask() {
-//                @Override
-//                public void run() {
-//                        postItems.get(position).setValue(editable.toString());
-//                }
-//            }, DELAY);
+            timer = new Timer();
+            int DELAY = 250;
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    postItems.get(position).setValue(editable.toString());
+                }
+            }, DELAY);
         }
     }
 }

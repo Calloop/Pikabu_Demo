@@ -3,9 +3,10 @@ package ru.calloop.pikabu_demo.ui.models;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PostWithPostItems {
+public class PostWithPostItems implements Serializable {
     @Embedded
     public Post post;
 

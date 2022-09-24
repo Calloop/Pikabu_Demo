@@ -53,5 +53,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout="@layout/fragment_content_buttons_create_post" />
+        tools:layout="@layout/create_post_content_buttons" />
 </androidx.constraintlayout.widget.ConstraintLayout>

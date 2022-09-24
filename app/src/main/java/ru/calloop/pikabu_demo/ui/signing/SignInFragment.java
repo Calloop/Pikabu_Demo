@@ -5,86 +5,80 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.BaseFragment;
+import ru.calloop.pikabu_demo.databinding.SignInBinding;
 import ru.calloop.pikabu_demo.ui.repositories.Account.AccountRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountRepository;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.ISessionPreferences;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionPreferences;
 
-public class SignInFragment extends BaseFragment implements View.OnClickListener {
+public class SignInFragment extends Fragment implements View.OnClickListener {
 
+    private SignInBinding binding;
     private IAccountRepository accountRepository;
     private NavController navController;
-    private EditText editTextLoginSignIn, editTextPasswordSignIn;
     private ISessionPreferences sessionPreferenceRepository;
 
+    @Nullable
     @Override
-    public BaseFragment fragment() {
-        return newInstance();
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = SignInBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public View fragmentView(LayoutInflater inflater,
-                                     ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
-
-        editTextLoginSignIn = view.findViewById(R.id.editTextLogin_signIn);
-        editTextPasswordSignIn = view.findViewById(R.id.editTextPassword_signIn);
-        Button buttonSignUp = view.findViewById(R.id.buttonSignUp);
-        Button buttonSendLoginData = view.findViewById(R.id.buttonSendLoginData);
-        buttonSignUp.setOnClickListener(this);
-        buttonSendLoginData.setOnClickListener(this);
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
-        Toolbar toolbar = activity.findViewById(R.id.toolbar_activity);
-        activity.setSupportActionBar(toolbar);
-        toolbar.setTitle("Авторизация");
+        Objects.requireNonNull(activity.getSupportActionBar()).setTitle("Авторизация");
 
         sessionPreferenceRepository = new SessionPreferences(activity);
         accountRepository = new AccountRepository(activity);
+        activity.addMenuProvider(
+                new menuProvider(), getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        navController = NavHostFragment.findNavController(this);
 
-        NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
-                .getSupportFragmentManager()
-                .findFragmentById(R.id.activity_navigation_controller);
-        navController = Objects.requireNonNull(navHostFragment).getNavController();
+        binding.buttonSignUp.setOnClickListener(this);
+        binding.buttonSendLoginData.setOnClickListener(this);
+    }
 
-        return view;
+    private static class menuProvider implements MenuProvider {
+        @Override
+        public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+            menuInflater.inflate(R.menu.toolbar_authorization, menu);
+        }
+
+        @Override
+        public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+            int itemId = menuItem.getItemId();
+
+            return false;
+        }
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.toolbar_authorization, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int id = view.getId();
 
-        if (id == R.id.buttonSendLoginData) {
-            String loginOrEmail = editTextLoginSignIn.getText().toString();
-            String password = editTextPasswordSignIn.getText().toString();
+        if (id == binding.buttonSendLoginData.getId()) {
+            String loginOrEmail = String.valueOf(binding.editTextLoginSignIn.getText());
+            String password = String.valueOf(binding.editTextPasswordSignIn.getText());
 
             if (FieldsAreFilled()) {
                 if (accountRepository.checkLoginOrEmailExists(loginOrEmail)
@@ -95,19 +89,19 @@ public class SignInFragment extends BaseFragment implements View.OnClickListener
                         sessionPreferenceRepository.startUserSession(accountId);
                         navController.popBackStack(R.id.homeFragment, false);
                     } else {
-                        editTextPasswordSignIn.setError("Неверный пароль");
+                        binding.editTextPasswordSignIn.setError("Неверный пароль");
                     }
                 } else {
-                    editTextLoginSignIn.setError("Пользователь не существует");
+                    binding.editTextLoginSignIn.setError("Пользователь не существует");
                 }
             }
-        } else if (id == R.id.buttonSignUp) {
+        } else if (id == binding.buttonSignUp.getId()) {
             navController.navigate(R.id.action_signInFragment_to_signUpFragment);
         }
     }
 
     private boolean FieldsAreFilled() {
-        EditText[] fields = {editTextLoginSignIn, editTextPasswordSignIn};
+        EditText[] fields = {binding.editTextLoginSignIn, binding.editTextPasswordSignIn};
         int errorCounter = 0;
 
         for (EditText field :

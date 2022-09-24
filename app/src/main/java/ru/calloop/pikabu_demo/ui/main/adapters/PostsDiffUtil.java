@@ -39,7 +39,6 @@ public class PostsDiffUtil extends DiffUtil.Callback {
         PostWithPostItems oldProduct = oldList.get(oldItemPosition);
         PostWithPostItems newProduct = newList.get(newItemPosition);
 
-        return oldProduct.post.getHeadline().equals(newProduct.post.getHeadline())
-                && oldProduct.post.getUserId() == newProduct.post.getUserId();
+        return oldProduct.postItemList.equals(newProduct.postItemList);
     }
 }

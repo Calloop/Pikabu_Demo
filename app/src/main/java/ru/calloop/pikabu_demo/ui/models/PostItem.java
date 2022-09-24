@@ -7,16 +7,18 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 
 @Entity(tableName = "postItems",
         foreignKeys = @ForeignKey(entity = Post.class, parentColumns = "id",
                 childColumns = "post_id", onDelete = CASCADE))
-public class PostItem {
+public class PostItem implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
-    @ColumnInfo(name = "post_id")
+    @ColumnInfo(name = "post_id", index = true)
     private int postId;
     @ColumnInfo(name = "position")
     private int position;

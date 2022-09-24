@@ -1,228 +1,85 @@
 package ru.calloop.pikabu_demo.ui;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.navigation.NavigationView;
+import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
+import ru.calloop.pikabu_demo.databinding.ActivityBinding;
+import ru.calloop.pikabu_demo.databinding.ActivityHeaderDrawer2Binding;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.ISessionPreferences;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionPreferences;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener {
 
+    private ActivityBinding activityBinding;
+    private ActivityHeaderDrawer2Binding headerBinding;
     private ISessionPreferences sessionPreferenceRepository;
     private NavController navController;
-    private AppBarConfiguration appBarConfiguration;
-    private Button buttonDrawerSignIn, buttonDrawerSignOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity);
-
         sessionPreferenceRepository = new SessionPreferences(this);
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.navigationView);
-        View headerLayout = navigationView.getHeaderView(0);
-        buttonDrawerSignIn = headerLayout.findViewById(R.id.buttonDrawerSignIn);
-        buttonDrawerSignOut = headerLayout.findViewById(R.id.buttonDrawerSignOut);
-        buttonDrawerSignIn.setOnClickListener(this);
-        buttonDrawerSignOut.setOnClickListener(this);
-        Toolbar toolbar = findViewById(R.id.toolbar_activity);
-        setSupportActionBar(toolbar);
+        activityBinding = ActivityBinding.inflate(getLayoutInflater());
+        setContentView(activityBinding.getRoot());
+        setSupportActionBar(activityBinding.toolbarActivity);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.activity_navigation_controller);
-        assert navHostFragment != null;
-        navController = navHostFragment.getNavController();
+                .findFragmentById(activityBinding.activityNavHostFragment.getId());
+        navController = Objects.requireNonNull(navHostFragment).getNavController();
+        NavigationUI.setupActionBarWithNavController(
+                this, navController, activityBinding.drawerLayout);
+        NavigationUI.setupWithNavController(activityBinding.navigationView, navController);
 
-        if (savedInstanceState == null) {
-            navController.setGraph(R.navigation.activity_navigation);
-        }
+        View headerView = activityBinding.navigationView.getHeaderView(0);
+        headerBinding = ActivityHeaderDrawer2Binding.bind(headerView);
+        headerBinding.buttonDrawerSignIn.setOnClickListener(this);
+        headerBinding.buttonDrawerSignOut.setOnClickListener(this);
 
-        appBarConfiguration = new AppBarConfiguration
-                .Builder(navController.getGraph())
-                .setOpenableLayout(drawerLayout)
-                .build();
-
-        NavigationUI.setupActionBarWithNavController(MainActivity.this,
-                navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-
-        setPresenter();
-        onUpdate();
+        setSigningButtonVisibility();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        onUpdate();
+        setSigningButtonVisibility();
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int id = view.getId();
 
-        if (id == R.id.buttonDrawerSignIn) {
+        if (id == headerBinding.buttonDrawerSignIn.getId()
+                && Objects.requireNonNull(
+                navController.getCurrentDestination()).getId() != R.id.signInFragment) {
             navController.navigate(R.id.action_homeFragment_to_signInFragment);
-        } else if (id == R.id.buttonDrawerSignOut) {
+        } else if (id == headerBinding.buttonDrawerSignOut.getId()) {
             sessionPreferenceRepository.endUserSession();
-            onUpdate();
         }
+        setSigningButtonVisibility();
     }
 
-    private void onUpdate() {
+    private void setSigningButtonVisibility() {
         if (sessionPreferenceRepository.sessionStarted()) {
-            buttonDrawerSignIn.setVisibility(View.GONE);
-            buttonDrawerSignOut.setVisibility(View.VISIBLE);
+            headerBinding.buttonDrawerSignIn.setVisibility(View.GONE);
+            headerBinding.buttonDrawerSignOut.setVisibility(View.VISIBLE);
         } else {
-            buttonDrawerSignIn.setVisibility(View.VISIBLE);
-            buttonDrawerSignOut.setVisibility(View.GONE);
+            headerBinding.buttonDrawerSignIn.setVisibility(View.VISIBLE);
+            headerBinding.buttonDrawerSignOut.setVisibility(View.GONE);
         }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation
-                .findNavController(this, R.id.activity_navigation_controller);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.activity_navigation_controller);
-//        assert navHostFragment != null;
-//        NavController navController = navHostFragment.getNavController();
-//        return NavigationUI.navigateUp(navController, appBarConfiguration)
-//                || super.onSupportNavigateUp();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        if (item.getItemId() == R.id.homeFragment) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setPresenter() {
-//        adapter = new BlocksListMainAdapter(postItems);
-//        postItemModel = new ViewModelProvider(this).get(PostItemModel.class);
-//        postItemModel.getAll().observe(this, posts -> adapter.setData(posts));
-
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//
-//        RecyclerView recyclerView = findViewById(R.id.list_main);
-//        //recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(adapter);
-
-        //PostItemDbHelper postItemDbHelper = new PostItemDbHelper(this);
-        //PostItemModel model = new PostItemModel(postItemDbHelper);
-        //mainPresenter = new MainPresenter(model);
-        //mainPresenter.attachView(this);
-        //mainPresenter.viewIsReady();
+        return NavigationUI.navigateUp(navController, activityBinding.drawerLayout);
     }
 }
-
-//region [OLD]
-//public class MainActivity extends AppCompatActivity {
-//
-//    Button buttonSignIn;
-//    SessionManager sessionManager;
-//
-//    private AppBarConfiguration mAppBarConfiguration;
-//
-//    TabLayout tabLayout;
-//    ViewPager2 viewPager;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//        ru.calloop.pikabu_demo.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
-//
-//        setSupportActionBar(binding.appBarMain.toolbarMain);
-//        binding.appBarMain.fab.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, CreatePostFragment.class);
-//            startActivity(intent);
-//        });
-//
-//        DrawerLayout drawer = binding.drawerLayout;
-//        NavigationView navigationView = binding.navView;
-//
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_settings).setOpenableLayout(drawer).build();
-//
-//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.fragment_container_view_content_main);
-//        assert navHostFragment != null;
-//        NavController navController = navHostFragment.getNavController();
-//        NavigationUI.setupActionBarWithNavController(MainActivity.this, navController, mAppBarConfiguration);
-//        NavigationUI.setupWithNavController(navigationView, navController);
-//
-//        //
-//        viewPager = findViewById(R.id.pager);
-//        tabLayout = findViewById(R.id.tabLayout);
-//
-//        viewPager.setAdapter(createViewAdapter());
-//        new TabLayoutMediator(tabLayout, viewPager,
-//                (tab, position) -> tab.setText("Tab " + (position + 1))).attach();
-//
-//        sessionManager = new SessionManager(getApplicationContext());
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.toolbar_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.fragment_container_view_content_main);
-//        assert navHostFragment != null;
-//        NavController navController = navHostFragment.getNavController();
-//        //NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
-//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-//                || super.onSupportNavigateUp();
-//
-//    }
-//
-//    private ViewPagerAdapter createViewAdapter() {
-//        return new ViewPagerAdapter(this);
-//    }
-//
-////        if (sessionManager.getLogin() == true)
-////        {
-////            buttonSignIn.setText(sessionManager.getUsername());
-////            imageButtonCreatePost.setVisibility(View.VISIBLE);
-////            Toast.makeText(MainActivity.this, "Пользователь " + sessionManager.getUsername(), Toast.LENGTH_SHORT).show();
-////        } else
-////        {
-////            imageButtonCreatePost.setVisibility(View.GONE);
-////            Toast.makeText(MainActivity.this, "Пользователь не авторизован", Toast.LENGTH_SHORT).show();
-////        }
-//
-////        buttonSignIn.setOnClickListener(v -> {
-////            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-////            startActivity(intent);
-////        });
-//}
-//endregion

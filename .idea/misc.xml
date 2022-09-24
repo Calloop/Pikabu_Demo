@@ -83,6 +83,40 @@
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/menu/drawer_activity.xml" value="0.1" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/menu/drawer_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Github/Pikabu_Demo/app/src/main/res/menu/toolbar_home.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_main_post.xml" value="0.18" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_main_post_item.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/fragment_text_block_main.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/header_navigation_drawer_guest.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/list_item_main.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/main_list_item_header.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/main_list_item_tags_list.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/main_post.xml" value="0.22" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/main_post_header.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/main_post_item.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/authentication_activity/layout/post_item.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/create_post.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/create_post_add_post_item.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/create_post_content_buttons.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/create_post_editing_menu.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/create_post_image_block.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/create_post_image_type_post.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/create_post_post.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/create_post_text_type_post.xml" value="0.25" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/editing_menu_create_post.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_create_post.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_image_block_create_post.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/fragment_text_block_create_post.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/create_post_activity/layout/list_item_create_post.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/activity.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/fragment_home.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/fragment_tab1_main.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/header_navigation_drawer.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/home.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/layouts/main_activity/layout/main_tab1.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/menu/drawer_activity.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/menu/toolbar_contextual_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/menu/toolbar_create_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/user/StudioProjects/Pikabu_Demo/app/src/main/res/menu/toolbar_home.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

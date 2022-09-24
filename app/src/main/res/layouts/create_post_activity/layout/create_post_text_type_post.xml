@@ -5,31 +5,29 @@
     android:layout_height="wrap_content">
 
     <include
-        android:id="@+id/include_add_block_create_post"
-        layout="@layout/fragment_add_block_create_post"
+        android:id="@+id/include_create_post_add_post_item"
+        layout="@layout/create_post_add_post_item"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText_textBlock_createPost"
+        android:id="@+id/create_post_text_type_content"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:autofillHints="text"
         android:ems="10"
         android:hint="Введите текст"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_add_block_create_post" />
+        app:layout_constraintTop_toBottomOf="@+id/include_create_post_add_post_item" />
 
     <include
-        android:id="@+id/editing_menu"
-        layout="@layout/editing_menu_create_post"
+        android:id="@+id/include_create_post_editing_menu"
+        layout="@layout/create_post_editing_menu"
         android:layout_width="75dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/editText_textBlock_createPost"
-        app:layout_constraintEnd_toEndOf="@+id/editText_textBlock_createPost"
-        app:layout_constraintTop_toTopOf="@+id/editText_textBlock_createPost" />
+        app:layout_constraintEnd_toEndOf="@+id/create_post_text_type_content"
+        app:layout_constraintTop_toBottomOf="@+id/include_create_post_add_post_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

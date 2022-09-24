@@ -40,7 +40,7 @@ public class createPostPreferences implements ICreatePostPreferences {
     @Override
     public List<PostItem> getPostItems() {
         String json = sharedPreferences.getString(KEY_POST_ITEMS, null);
-        Log.d("TAG", "getPostItems: JSON NOT NULL");
+
         if (json != null) {
             Type type = new TypeToken<List<PostItem>>() {
             }.getType();
@@ -63,7 +63,6 @@ public class createPostPreferences implements ICreatePostPreferences {
 
     @Override
     public void clearPreference() {
-        Log.d("TAG", "clearPreference: ");
         editor.clear().apply();
     }
 }

@@ -43,7 +43,6 @@ public class PostRepository implements IPostRepository {
 
     @Override
     public void insert(int accountId, String postHeadline, List<PostItem> postItemList) {
-        Log.d("TEST", "ins");
         Post post = new Post(accountId, postHeadline);
 
         int postId = (int) insertPost(post);

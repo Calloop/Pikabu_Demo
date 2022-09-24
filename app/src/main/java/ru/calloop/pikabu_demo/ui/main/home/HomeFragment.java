@@ -4,91 +4,72 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.BaseFragment;
+import ru.calloop.pikabu_demo.databinding.HomeBinding;
 import ru.calloop.pikabu_demo.ui.main.adapters.PostTabsAdapter;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.ISessionPreferences;
 import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionPreferences;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private AppCompatActivity activity;
+    private HomeBinding homeBinding;
     private NavController navController;
-    private Toolbar toolbar;
-
     private ISessionPreferences sessionPreferenceRepository;
-    private PostTabsAdapter postTabsAdapter;
-    private ViewPager2 viewPager;
 
-    private String[] tabTitles = {"ГОРЯЧЕЕ", "ЛУЧШЕЕ", "СВЕЖЕЕ", "МОЯ ЛЕНТА"};
+    private final String[] tabTitles = {"ГОРЯЧЕЕ", "ЛУЧШЕЕ", "СВЕЖЕЕ", "МОЯ ЛЕНТА"};
 
     @Override
-    public BaseFragment fragment() {
-        return new HomeFragment();
+    public View onCreateView
+            (@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        homeBinding = HomeBinding.inflate(inflater, container, false);
+        return homeBinding.getRoot();
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        activity.addMenuProvider(
+                new menuProvider(), getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        sessionPreferenceRepository = new SessionPreferences(activity);
+        navController = NavHostFragment.findNavController(this);
+        PostTabsAdapter postTabsAdapter = new PostTabsAdapter(this);
+        homeBinding.pager.setAdapter(postTabsAdapter);
+        homeBinding.fabHomeToCreatePost.setOnClickListener(this);
+        new TabLayoutMediator(homeBinding.tabLayout, homeBinding.pager, (tab, position) ->
+                tab.setText(tabTitles[position])).attach();
     }
 
-    @Override
-    public View fragmentView(LayoutInflater inflater,
-                                     ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        activity = (AppCompatActivity) getActivity();
-        if (activity != null) {
-            toolbar = activity.findViewById(R.id.toolbar_activity);
-            activity.setSupportActionBar(toolbar);
+    private static class menuProvider implements MenuProvider {
+        @Override
+        public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+            menuInflater.inflate(R.menu.toolbar_home, menu);
         }
 
-        postTabsAdapter = new PostTabsAdapter(this);
-        viewPager = view.findViewById(R.id.pager);
-        viewPager.setAdapter(postTabsAdapter);
+        @Override
+        public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+            int itemId = menuItem.getItemId();
 
-        sessionPreferenceRepository = new SessionPreferences(activity);
-
-        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
-                tab.setText(tabTitles[position])).attach();
-
-        FloatingActionButton fab = view.findViewById(R.id.fab_home_to_create_post);
-
-        NavHostFragment navHostFragment = (NavHostFragment) activity
-                .getSupportFragmentManager().findFragmentById(R.id.activity_navigation_controller);
-        assert navHostFragment != null;
-        navController = navHostFragment.getNavController();
-
-        fab.setOnClickListener(this);
-
-        return view;
+            return false;
+        }
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.toolbar_home, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int id = view.getId();
 
         if (id == R.id.fab_home_to_create_post) {

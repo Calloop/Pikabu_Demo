@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
+import ru.calloop.pikabu_demo.databinding.MainPostItemBinding;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class PostItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,25 +29,34 @@ public class PostItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == TYPE_TEXT_BLOCK) {
-            return new TextViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_main_post_item, parent, false));
-        } else {
-            return new ImageViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_main_post_item, parent, false));
-        }
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        MainPostItemBinding binding =
+                MainPostItemBinding.inflate(inflater, parent, false);
+        return new TextViewHolder(binding);
+
+//        if (viewType == TYPE_TEXT_BLOCK) {
+//            FragmentMainPostItemBinding binding =
+//                    FragmentMainPostItemBinding.inflate(inflater, parent, false);
+//            return new TextViewHolder(binding);
+//        } else {
+//            return new ImageViewHolder(LayoutInflater.from(parent.getContext())
+//                    .inflate(R.layout.fragment_main_post_item, parent, false));
+//        }
         // ДОБАВИТЬ ОКНО С ОШИБКОЙ ЗАГРУЗКИ ДАННЫХ
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        if (viewHolder.getItemViewType() == TYPE_TEXT_BLOCK) {
-            TextViewHolder textHolder = (TextViewHolder) viewHolder;
-            textHolder.getTextView(postItems.get(position).getValue());
-        } else if (viewHolder.getItemViewType() == TYPE_IMAGE_BLOCK) {
-            ImageViewHolder imageHolder = (ImageViewHolder) viewHolder;
-            imageHolder.getTextView(postItems.get(position).getValue());
-        }
+        TextViewHolder textHolder = (TextViewHolder) viewHolder;
+        textHolder.binding.postItemBody.setText(postItems.get(position).getValue());
+
+//        if (viewHolder.getItemViewType() == TYPE_TEXT_BLOCK) {
+//            TextViewHolder textHolder = (TextViewHolder) viewHolder;
+//            textHolder.getTextView(postItems.get(position).getValue());
+//        } else if (viewHolder.getItemViewType() == TYPE_IMAGE_BLOCK) {
+//            ImageViewHolder imageHolder = (ImageViewHolder) viewHolder;
+//            imageHolder.getTextView(postItems.get(position).getValue());
+//        }
     }
 
     @Override
@@ -64,18 +74,11 @@ public class PostItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public static class TextViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-        //private final EditText editText;
+        private final MainPostItemBinding binding;
 
-        public TextViewHolder(View view) {
-            super(view);
-            textView = view.findViewById(R.id.post_item_body);
-            //editText = view.findViewById(R.id.editText_textBlock_main);
-        }
-
-        void getTextView(String text) {
-            textView.setText(text);
-            //editText.setText(text);
+        public TextViewHolder(@NonNull MainPostItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
@@ -96,8 +99,8 @@ public class PostItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void updateList(List<PostItem> postItems) {
-            this.postItems = postItems;
-            notifyItemRangeChanged(0, this.postItems.size());
+        this.postItems = postItems;
+        notifyItemRangeChanged(0, this.postItems.size());
     }
 }
 

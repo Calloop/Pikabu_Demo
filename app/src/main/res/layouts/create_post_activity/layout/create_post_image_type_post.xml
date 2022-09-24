@@ -5,28 +5,26 @@
     android:layout_height="wrap_content">
 
     <include
-        android:id="@+id/include_add_block_create_post"
-        layout="@layout/fragment_add_block_create_post"
-        app:layout_constraintBottom_toTopOf="@+id/imageView_imageBlock_createPost"
+        android:id="@+id/include_create_post_add_post_item"
+        layout="@layout/create_post_add_post_item"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView_imageBlock_createPost"
+        android:id="@+id/create_post_image_type_content"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="TODO"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_add_block_create_post"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:layout_constraintTop_toBottomOf="@+id/include_create_post_add_post_item" />
 
     <include
-        layout="@layout/editing_menu_create_post"
+        android:id="@+id/include_create_post_editing_menu"
+        layout="@layout/create_post_editing_menu"
         android:layout_width="75dp"
-        android:layout_height="150dp"
-        app:layout_constraintBottom_toBottomOf="@id/imageView_imageBlock_createPost"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageView_imageBlock_createPost" />
+        app:layout_constraintTop_toTopOf="@id/create_post_image_type_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

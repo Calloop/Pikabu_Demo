@@ -5,14 +5,18 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -20,78 +24,66 @@ import java.text.MessageFormat;
 import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.ui.BaseFragment;
+import ru.calloop.pikabu_demo.databinding.SignUpBinding;
 import ru.calloop.pikabu_demo.ui.repositories.Account.AccountRepository;
 import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountDao;
 import ru.calloop.pikabu_demo.ui.repositories.Account.IAccountRepository;
 
-public class SignUpFragment extends BaseFragment implements View.OnClickListener {
+public class SignUpFragment extends Fragment implements View.OnClickListener {
 
+    private SignUpBinding binding;
     private IAccountRepository accountRepository;
     private NavController navController;
-    private EditText editTextLogin, editTextEmail, editTextPassword1, editTextPassword2;
 
+    @Nullable
     @Override
-    public BaseFragment fragment() {
-        return newInstance();
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = SignUpBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public View fragmentView
-            (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
-
-        editTextLogin = view.findViewById(R.id.editTextLogin);
-        editTextEmail = view.findViewById(R.id.editTextEmail);
-        editTextPassword1 = view.findViewById(R.id.editTextPassword1);
-        editTextPassword2 = view.findViewById(R.id.editTextPassword2);
-
-        Button buttonGoToSignIn = view.findViewById(R.id.buttonGoToSignIn);
-        Button buttonSignUpCreateAccount = view.findViewById(R.id.buttonTryToRegister);
-
-        buttonGoToSignIn.setOnClickListener(this);
-        buttonSignUpCreateAccount.setOnClickListener(this);
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
         accountRepository = new AccountRepository(activity);
-        Toolbar toolbar = activity.findViewById(R.id.toolbar_activity);
-        activity.setSupportActionBar(toolbar);
-        toolbar.setTitle("Регистрация");
+        Objects.requireNonNull(activity.getSupportActionBar()).setTitle("Регистрация");
 
-        NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
-                .getSupportFragmentManager()
-                .findFragmentById(R.id.activity_navigation_controller);
-        navController = Objects.requireNonNull(navHostFragment).getNavController();
+        activity.addMenuProvider(
+                new menuProvider(), getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        navController = NavHostFragment.findNavController(this);
 
-        return view;
+        binding.buttonGoToSignIn.setOnClickListener(this);
+        binding.buttonTryToRegister.setOnClickListener(this);
+    }
+
+    private static class menuProvider implements MenuProvider {
+        @Override
+        public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+            menuInflater.inflate(R.menu.toolbar_authorization, menu);
+        }
+
+        @Override
+        public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+            int itemId = menuItem.getItemId();
+
+            return false;
+        }
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.toolbar_authorization, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         int id = view.getId();
-        if (id == R.id.buttonGoToSignIn) {
+        if (id == binding.buttonGoToSignIn.getId()) {
             navController.popBackStack(R.id.signInFragment, false);
-        } else if (id == R.id.buttonTryToRegister) {
+        } else if (id == binding.buttonTryToRegister.getId()) {
             int passwordMinLength = 5;
 
             if (FieldsAreFilled() && IsPasswordMinLength(passwordMinLength)
                     && IsIdenticalPasswords() && IsNewAccount()) {
-                String login = editTextLogin.getText().toString();
-                String email = editTextEmail.getText().toString();
-                String password1 = editTextPassword1.getText().toString();
+                String login = String.valueOf(binding.editTextLogin.getText());
+                String email = String.valueOf(binding.editTextEmail.getText());
+                String password1 = String.valueOf(binding.editTextPassword1.getText());
 
                 accountRepository.createAccount(login, email, password1);
                 navController.popBackStack(R.id.homeFragment, false);
@@ -100,7 +92,8 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean FieldsAreFilled() {
-        EditText[] fields = {editTextLogin, editTextEmail, editTextPassword1, editTextPassword2};
+        EditText[] fields = {binding.editTextLogin, binding.editTextEmail,
+                binding.editTextPassword1, binding.editTextPassword2};
         int errorCounter = 0;
 
         for (EditText field :
@@ -115,7 +108,7 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean IsPasswordMinLength(int passwordMinLength) {
-        String password1 = editTextPassword1.getText().toString();
+        String password1 = String.valueOf(binding.editTextPassword1.getText());
 
         if (password1.length() >= passwordMinLength) {
             return true;
@@ -123,33 +116,33 @@ public class SignUpFragment extends BaseFragment implements View.OnClickListener
             String errorMessage = MessageFormat
                     .format("Длина пароля должна быть минимум {0} символов",
                             passwordMinLength);
-            editTextPassword1.setError(errorMessage);
+            binding.editTextPassword1.setError(errorMessage);
             return false;
         }
     }
 
     private boolean IsIdenticalPasswords() {
-        String password1 = editTextPassword1.getText().toString();
-        String password2 = editTextPassword2.getText().toString();
+        String password1 = String.valueOf(binding.editTextPassword1.getText());
+        String password2 = String.valueOf(binding.editTextPassword2.getText());
 
         if (!password1.equals(password2)) {
-            editTextPassword1.setError("Пароли не совпадают");
+            binding.editTextPassword1.setError("Пароли не совпадают");
             return false;
         } else
             return true;
     }
 
     private boolean IsNewAccount() {
-        String login = editTextLogin.getText().toString();
-        String email = editTextEmail.getText().toString();
+        String login = String.valueOf(binding.editTextLogin.getText());
+        String email = String.valueOf(binding.editTextEmail.getText());
         String result = accountRepository.checkAccountExists(login, email);
 
         if (result != null) {
             if (result.equals(IAccountDao.LOGIN)) {
-                editTextLogin.setError("Логин уже существует");
+                binding.editTextLogin.setError("Логин уже существует");
                 return false;
             } else if (result.equals(IAccountDao.EMAIL)) {
-                editTextEmail.setError("Email уже существует");
+                binding.editTextEmail.setError("Email уже существует");
                 return false;
             } else return true;
         } else {

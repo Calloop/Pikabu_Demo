@@ -1,13 +1,9 @@
 package ru.calloop.pikabu_demo.ui.main.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,104 +13,77 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ru.calloop.pikabu_demo.R;
-import ru.calloop.pikabu_demo.databinding.FragmentMainPostBinding;
+import ru.calloop.pikabu_demo.databinding.MainPostBinding;
 import ru.calloop.pikabu_demo.ui.models.PostWithPostItems;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     public interface PostsAdapterCallback {
         void getViewedPostId(int id);
+
         void detached(int id);
     }
 
     private PostsAdapterCallback postsAdapterCallback;
     private List<PostWithPostItems> posts;
-    private final Timer postWasViewed;
 
     private static final int TYPE_TEXT_BLOCK = 1;
     private static final int TYPE_IMAGE_BLOCK = 2;
 
     public PostsAdapter() {
         posts = new ArrayList<>(1);
-        postWasViewed = new Timer();
     }
 
-    public void registerCallBack(PostsAdapterCallback postsAdapterCallback){
+    public void registerCallBack(PostsAdapterCallback postsAdapterCallback) {
         this.postsAdapterCallback = postsAdapterCallback;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final MainPostBinding binding;
+        private PostItemsAdapter adapter;
+
+        public ViewHolder(@NonNull MainPostBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            setPostItemsRecycler();
+        }
+
+        private void setPostItemsRecycler() {
+            RecyclerView recyclerView = binding.mainPostContent;
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+            adapter = new PostItemsAdapter();
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        FragmentMainPostBinding binding = FragmentMainPostBinding
+        MainPostBinding binding = MainPostBinding
                 .inflate(inflater, parent, false);
 
-        return new ViewHolder(binding.getRoot());
+        return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        PostItemsAdapter adapter = new PostItemsAdapter();
-        adapter.updateList(posts.get(position).postItemList);
-        LinearLayoutManager layoutManager =
-                new LinearLayoutManager(viewHolder.recyclerView.getContext());
-        viewHolder.recyclerView.setLayoutManager(layoutManager);
-        viewHolder.recyclerView.setAdapter(adapter);
-        if (viewHolder.binding != null) {
-            viewHolder.postHeadline.setText(posts.get(position).post.getHeadline());
-        }
-
-        //Post post = posts.get(position).post;
-
-//        ((ViewHolder) viewHolder).binding.postHeadline.
-//                setText(post);
+        PostWithPostItems postWithPostItems = posts.get(position);
+        viewHolder.adapter.updateList(postWithPostItems.postItemList);
+        viewHolder.binding.mainPostHeadline.setText(postWithPostItems.post.getHeadline());
     }
-
-//    @Override
-//    public int getItemViewType(int position) {
-//        switch (posts.get(position).post.){
-//            case 1:
-//                return 1;
-//            case 2:
-//                return 2;
-//            default:
-//                return position;
-//    }
 
     @Override
     public int getItemCount() {
         return posts.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final RecyclerView recyclerView;
-        private final TextView postHeadline;
-        private final FragmentMainPostBinding binding;
-
-        public ViewHolder(View view) {
-            super(view.getRootView());
-            binding = DataBindingUtil.bind(view.getRootView());
-            recyclerView = view.findViewById(R.id.list_main_post_item);
-            postHeadline = view.findViewById(R.id.post_headline);
-        }
-
-        public RecyclerView getRecyclerView() {
-            return recyclerView;
-        }
-    }
-
     public void updateList(List<PostWithPostItems> posts) {
-        if (this.posts == null) {
-            this.posts = posts;
-            notifyItemRangeInserted(0, posts.size());
-        } else {
-            PostsDiffUtil diffUtilCallback = new PostsDiffUtil(this.posts, posts);
-            DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffUtilCallback);
-            this.posts = posts;
-            result.dispatchUpdatesTo(this);
-        }
+        PostsDiffUtil diffUtilCallback = new PostsDiffUtil(this.posts, posts);
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffUtilCallback);
+        this.posts = posts;
+        result.dispatchUpdatesTo(this);
     }
 
     public List<PostWithPostItems> getAdapterList() {
@@ -123,25 +92,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     @Override
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-
+        Timer postWasViewed = new Timer();
         postWasViewed.schedule(new TimerTask() {
             @Override
             public void run() {
                 postsAdapterCallback.getViewedPostId(holder.getAdapterPosition());
             }
         }, 2000);
-
-        Log.d("TAG", "onViewAttachedToWindow: " + holder.getAdapterPosition());
-
-//        if (holder.getItemViewType() == 1) {
-//
-//        }
     }
 
     @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-
-        Log.d("TAG", "onViewDetachedFromWindow: " + holder.getAdapterPosition());
         postsAdapterCallback.detached(holder.getAdapterPosition());
     }
 }
