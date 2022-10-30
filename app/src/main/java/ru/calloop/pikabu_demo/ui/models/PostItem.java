@@ -9,11 +9,10 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-
 @Entity(tableName = "postItems",
         foreignKeys = @ForeignKey(entity = Post.class, parentColumns = "id",
                 childColumns = "post_id", onDelete = CASCADE))
-public class PostItem implements Serializable{
+public class PostItem implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -27,9 +26,9 @@ public class PostItem implements Serializable{
     @ColumnInfo(name = "value")
     private String value;
 
-    public PostItem(int position, int type, String value) {
-        this.position = position;
+    public PostItem(int type, int position, String value) {
         this.type = type;
+        this.position = position;
         this.value = value;
     }
 

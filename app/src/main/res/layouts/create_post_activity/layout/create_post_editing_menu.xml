@@ -2,22 +2,36 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/editing_menu_create_post"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/button_replace_text_block_create_post2"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:text="R"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        android:minWidth="75dp"
+        android:minHeight="75dp"
+        app:icon="@drawable/ic_baseline_drag_handle_24"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_delete_text_block_create_post2"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:text="D"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        android:minWidth="75dp"
+        android:minHeight="75dp"
+        app:icon="@drawable/ic_baseline_delete_outline_24"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_replace_text_block_create_post2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

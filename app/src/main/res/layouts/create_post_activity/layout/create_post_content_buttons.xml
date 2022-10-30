@@ -1,35 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="75dp"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.createPost.CreatePostFragment">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.createPost.fragments.CreatePostFragment">
 
     <Button
         android:id="@+id/button_add_text_create_post"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:contentDescription="TODO" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        app:icon="@drawable/ic_baseline_short_text_24"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="50dp"
+        app:layout_constraintEnd_toStartOf="@+id/button_use_camera_create_post"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_use_camera_create_post"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        app:icon="@drawable/ic_outline_camera_alt_24"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="50dp"
+        app:layout_constraintEnd_toStartOf="@+id/button_add_image_create_post"
+        app:layout_constraintStart_toEndOf="@+id/button_add_text_create_post"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_add_image_create_post"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:contentDescription="TODO" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        app:icon="@drawable/ic_outline_image_24"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="50dp"
+        app:layout_constraintEnd_toStartOf="@+id/button_add_video_create_post"
+        app:layout_constraintStart_toEndOf="@+id/button_use_camera_create_post"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_delete_block_create_post"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:contentDescription="TODO" />
-
-    <ImageButton
-        android:id="@+id/imageButton_add_video_create_post"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:contentDescription="TODO" />
-</LinearLayout>
+        android:id="@+id/button_add_video_create_post"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        app:icon="@drawable/ic_outline_smart_display_24"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_add_image_create_post"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

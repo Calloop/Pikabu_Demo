@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/button_add_block_create_post"
-        style="@style/Widget.AppCompat.Button.Borderless"
+    <TextView
+        android:id="@+id/main_text_type_content"
+        style="@style/Roboto.Body1"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Добавить блок"
-        android:textAlignment="textStart"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:drawableLeftCompat="@android:drawable/ic_menu_add"
+        android:layout_height="wrap_content"
+        android:minHeight="30dp"
+        android:text="Hello! I'm using Android Studio."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
