@@ -24,7 +24,7 @@
         tools:layout="@layout/settings" />
     <fragment
         android:id="@+id/createPostFragment"
-        android:name="ru.calloop.pikabu_demo.ui.createPost.CreatePostFragment"
+        android:name="ru.calloop.pikabu_demo.ui.createPost.fragments.CreatePostFragment"
         android:label="Создать пост"
         tools:layout="@layout/create_post" />
     <fragment

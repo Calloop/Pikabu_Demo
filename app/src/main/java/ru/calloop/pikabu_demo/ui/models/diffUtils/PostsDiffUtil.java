@@ -1,4 +1,4 @@
-package ru.calloop.pikabu_demo.ui.main.adapters;
+package ru.calloop.pikabu_demo.ui.models.diffUtils;
 
 import androidx.recyclerview.widget.DiffUtil;
 

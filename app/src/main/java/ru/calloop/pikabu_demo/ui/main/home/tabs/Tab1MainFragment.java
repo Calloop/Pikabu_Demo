@@ -16,10 +16,9 @@ import ru.calloop.pikabu_demo.databinding.MainTab1Binding;
 import ru.calloop.pikabu_demo.ui.main.adapters.PostsAdapter;
 import ru.calloop.pikabu_demo.ui.main.home.HomeViewModel;
 
-public class Tab1MainFragment extends Fragment implements PostsAdapter.PostsAdapterCallback {
+public class Tab1MainFragment extends Fragment {
 
     private MainTab1Binding binding;
-    private HomeViewModel homeViewModel;
     private PostsAdapter adapter;
 
     @Nullable
@@ -27,16 +26,16 @@ public class Tab1MainFragment extends Fragment implements PostsAdapter.PostsAdap
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = MainTab1Binding.inflate(inflater, container, false);
+        adapter = new PostsAdapter();
+        //adapter.registerCallBack(this);
+        setPostRecycler();
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        adapter = new PostsAdapter();
-        adapter.registerCallBack(this);
+        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.getPosts().observe(getViewLifecycleOwner(), adapter::updateList);
-        setPostRecycler();
     }
 
     private void setPostRecycler() {
@@ -49,16 +48,6 @@ public class Tab1MainFragment extends Fragment implements PostsAdapter.PostsAdap
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        homeViewModel.setCachedPosts(adapter.getAdapterList());
-    }
-
-    @Override
-    public void getViewedPostId(int id) {
-
-    }
-
-    @Override
-    public void detached(int id) {
-
+        //homeViewModel.setCachedPosts(adapter.getAdapterList());
     }
 }

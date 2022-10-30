@@ -27,7 +27,7 @@ import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionP
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private HomeBinding homeBinding;
+    private AppCompatActivity activity;
     private NavController navController;
     private ISessionPreferences sessionPreferenceRepository;
 
@@ -36,22 +36,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView
             (@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeBinding = HomeBinding.inflate(inflater, container, false);
+        HomeBinding homeBinding = HomeBinding.inflate(inflater, container, false);
+
+        activity = (AppCompatActivity) requireActivity();
+        activity.addMenuProvider(
+                new menuProvider(), getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+        navController = NavHostFragment.findNavController(this);
+
+        PostTabsAdapter postTabsAdapter = new PostTabsAdapter(this);
+        homeBinding.pager.setAdapter(postTabsAdapter);
+        homeBinding.fabHomeToCreatePost.setOnClickListener(this);
+
+        new TabLayoutMediator(homeBinding.tabLayout, homeBinding.pager, (tab, position) ->
+                tab.setText(tabTitles[position])).attach();
         return homeBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
-        activity.addMenuProvider(
-                new menuProvider(), getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         sessionPreferenceRepository = new SessionPreferences(activity);
-        navController = NavHostFragment.findNavController(this);
-        PostTabsAdapter postTabsAdapter = new PostTabsAdapter(this);
-        homeBinding.pager.setAdapter(postTabsAdapter);
-        homeBinding.fabHomeToCreatePost.setOnClickListener(this);
-        new TabLayoutMediator(homeBinding.tabLayout, homeBinding.pager, (tab, position) ->
-                tab.setText(tabTitles[position])).attach();
     }
 
     private static class menuProvider implements MenuProvider {

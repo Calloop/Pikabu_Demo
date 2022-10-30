@@ -57,7 +57,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.5.2'
     implementation 'androidx.navigation:navigation-ui:2.5.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.fragment:fragment:1.5.2'
+    implementation 'androidx.fragment:fragment:1.5.3'
 
     // Testing
     testImplementation 'junit:junit:4.13.2'
@@ -74,9 +74,9 @@ dependencies {
     implementation 'androidx.room:room-rxjava3:2.4.3'
 
     // Dagger2
-    implementation 'com.google.dagger:dagger-android:2.43.2'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.43.2'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.43.2'
+    implementation 'com.google.dagger:dagger-android:2.44'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.44'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.44'
 
     // RxJava
     implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
@@ -88,4 +88,7 @@ dependencies {
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Adapter Delegates
+    implementation 'com.hannesdorfmann:adapterdelegates4:4.3.2'
 }

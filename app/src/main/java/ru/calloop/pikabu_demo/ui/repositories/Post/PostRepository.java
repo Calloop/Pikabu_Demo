@@ -1,16 +1,18 @@
 package ru.calloop.pikabu_demo.ui.repositories.Post;
 
 import android.content.Context;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
 import ru.calloop.pikabu_demo.PikabuDB;
 import ru.calloop.pikabu_demo.ui.models.Post;
-import ru.calloop.pikabu_demo.ui.models.PostWithPostItems;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
+import ru.calloop.pikabu_demo.ui.models.PostWithPostItems;
 
 public class PostRepository implements IPostRepository {
     private final IPostDao postDao;
@@ -42,16 +44,14 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public void insert(int accountId, String postHeadline, List<PostItem> postItemList) {
+    public void insert(int accountId, String postHeadline, @NonNull List<PostItem> postItems) {
         Post post = new Post(accountId, postHeadline);
-
         int postId = (int) insertPost(post);
-
-        for (PostItem postItem : postItemList) {
-            postItem.setPostId(postId);
-        }
-
-        insertPostItemList(postItemList);
+        IntStream.range(0, postItems.size()).forEach(i -> {
+            postItems.get(i).setPosition(i + 1);
+            postItems.get(i).setPostId(postId);
+        });
+        insertPostItemList(postItems);
     }
 
     @Override
