@@ -14,11 +14,12 @@ import com.squareup.picasso.Picasso;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.databinding.CreatePostImagePostItemBinding;
-import ru.calloop.pikabu_demo.ui.createPost.ICreatePostListener;
+import ru.calloop.pikabu_demo.ui.createPost.adapters.listeners.ICreatePostListener;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class ImageViewHolder extends BaseViewHolder {
 
+    private final ICreatePostListener createPostListener;
     private final ImageView content;
     private final Button addContent;
     private final Button moveContent;
@@ -27,7 +28,8 @@ public class ImageViewHolder extends BaseViewHolder {
     private final ConstraintLayout addItemMenu;
     private final Button addImageContent;
 
-    public ImageViewHolder(@NonNull CreatePostImagePostItemBinding binding) {
+    public ImageViewHolder(@NonNull CreatePostImagePostItemBinding binding,
+                           ICreatePostListener createPostListener) {
         super(binding);
         content = binding.createPostImageTypeContent;
         addContent = binding.includeCreatePostAddPostItem.buttonAddBlockCreatePost;
@@ -38,10 +40,11 @@ public class ImageViewHolder extends BaseViewHolder {
 
         addImageContent = binding.includeCreatePostAddPostItem.createPostContentButtons.
                 buttonAddImageCreatePost;
+
+        this.createPostListener = createPostListener;
     }
 
-    public void bind(@NonNull PostItem data, ICreatePostListener listener,
-                     boolean actionModeState) {
+    public void bind(@NonNull PostItem data, boolean actionModeState) {
         if (actionModeState) {
             Picasso.get()
                     .load("file://" + data.getValue())
@@ -61,14 +64,14 @@ public class ImageViewHolder extends BaseViewHolder {
 
         addContent.setVisibility(actionModeState ? View.GONE : View.VISIBLE);
         editingMenu.setVisibility(actionModeState ? View.VISIBLE : View.GONE);
-        setListeners(listener, data.getType());
+        setListeners(data.getType());
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public void setListeners(ICreatePostListener listener, int itemType) {
+    public void setListeners(int itemType) {
         moveContent.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                listener.requestDrag(ImageViewHolder.this);
+                createPostListener.requestDrag(ImageViewHolder.this);
                 return true;
             }
             return false;
@@ -80,12 +83,12 @@ public class ImageViewHolder extends BaseViewHolder {
         });
 
         addImageContent.setOnClickListener(v -> {
-            listener.onClickAddItem(itemType, getLayoutPosition());
+            createPostListener.onClickAddItem(itemType, getBindingAdapterPosition());
             addContent.setVisibility(View.VISIBLE);
             addItemMenu.setVisibility(View.GONE);
         });
 
         deleteContent.setOnClickListener(v ->
-                listener.onClickRemoveItem(getBindingAdapterPosition()));
+                createPostListener.onClickRemoveItem(getBindingAdapterPosition()));
     }
 }

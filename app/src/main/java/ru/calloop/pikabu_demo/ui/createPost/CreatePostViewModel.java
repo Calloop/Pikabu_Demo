@@ -1,6 +1,7 @@
 package ru.calloop.pikabu_demo.ui.createPost;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import ru.calloop.pikabu_demo.R;
@@ -33,7 +33,11 @@ public class CreatePostViewModel extends AndroidViewModel {
     private final ISessionPreferences sessionPreferences;
     private MutableLiveData<Integer> newPostItemType;
     private MutableLiveData<Integer> newPostItemPosition;
-    private MutableLiveData<int[]> newPostItemData;
+    private MutableLiveData<PostItem> newPostItem;
+    private MutableLiveData<String> newPath;
+    private MutableLiveData<Boolean> CP;
+    private MutableLiveData<Boolean> isPermissionsGranted;
+    private int test;
 
     // ПЕРЕМЕСТИТЬ В ОБЩИК СПИСОК ПЕРЕМЕННЫХ
     public static final String ACTION_MODE_STATE_KEY = "actionModeState";
@@ -47,6 +51,19 @@ public class CreatePostViewModel extends AndroidViewModel {
         postRepository = new PostRepository(application);
         createPostPreferences = new createPostPreferences(application);
         sessionPreferences = new SessionPreferences(application);
+
+        newPostItem = new MutableLiveData<>();
+    }
+
+    public LiveData<Boolean> getCP() {
+        if (CP == null) {
+            CP = new MutableLiveData<>();
+        }
+        return CP;
+    }
+
+    public void setCP(boolean CP) {
+        this.CP.postValue(CP);
     }
 
     public void insertPostToDB(int accountId, String postHeadline, List<PostItem> postItemList) {
@@ -57,15 +74,28 @@ public class CreatePostViewModel extends AndroidViewModel {
         return sessionPreferences.getAccountId();
     }
 
-    public LiveData<int[]> getNewPostItemData() {
-        if (newPostItemData == null) {
-            newPostItemData = new MutableLiveData<>();
+    public LiveData<String> getNewPath() {
+        if (newPath == null) {
+            newPath = new MutableLiveData<>();
         }
-        return newPostItemData;
+        return newPath;
     }
 
-    public void setNewPostItemData(int newPostItemType, int newPostItemPosition) {
-        this.newPostItemData.postValue(new int[]{newPostItemType, newPostItemPosition});
+    public void setNewPath(String path) {
+        newPath.postValue(path);
+    }
+
+    public LiveData<PostItem> getNewPostItem() {
+//        if (newPostItem == null) {
+//            newPostItem = new MutableLiveData<>();
+//            Log.d("TAG", "getNewPostItem: ");
+//        }
+        return newPostItem;
+    }
+
+    public void setNewPostItem(PostItem postItem) {
+        newPostItem.postValue(postItem);
+        //Log.d("TAG", "setNewPostItem: " +postItem.getType());
     }
 
     //region [NEW POST_ITEM TYPE]
@@ -112,21 +142,24 @@ public class CreatePostViewModel extends AndroidViewModel {
     }
     //endregion
 
-    public boolean getIsReadPermissionGranted() {
-        return Boolean.TRUE.equals(state.get("read"));
+    public LiveData<Boolean> getIsPermissionsGranted() {
+        if (isPermissionsGranted == null) {
+            isPermissionsGranted = new MutableLiveData<>();
+        }
+        return isPermissionsGranted;
     }
 
-    public void setIsReadPermissionGranted(boolean isReadPermissionGranted) {
-        state.set("read", isReadPermissionGranted);
+    public void setIsPermissionsGranted(boolean isPermissionsGranted) {
+        this.isPermissionsGranted.postValue(isPermissionsGranted);
     }
 
-    public boolean getIsWritePermissionGranted() {
-        return Boolean.TRUE.equals(state.get("write"));
-    }
-
-    public void setIsWritePermissionGranted(boolean isWritePermissionGranted) {
-        state.set("write", isWritePermissionGranted);
-    }
+//    public boolean getIsPermissionsGranted() {
+//        return Boolean.TRUE.equals(state.get("permissionsGranted"));
+//    }
+//
+//    public void setIsPermissionsGranted(boolean isPermissionsGranted) {
+//        state.set("permissionsGranted", isPermissionsGranted);
+//    }
 
     //region [OPERATIONS]
     public boolean upToDateMediaLinks(int postItemsType, @NonNull List<PostItem> postItems) {

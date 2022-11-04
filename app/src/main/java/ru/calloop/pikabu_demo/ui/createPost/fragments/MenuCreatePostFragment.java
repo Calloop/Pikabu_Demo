@@ -13,11 +13,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import ru.calloop.pikabu_demo.databinding.CreatePostContentButtonsBinding;
 import ru.calloop.pikabu_demo.ui.createPost.CreatePostViewModel;
+import ru.calloop.pikabu_demo.ui.createPost.adapters.listeners.ICreatePostListener;
+import ru.calloop.pikabu_demo.ui.createPost.adapters.listeners.ITestListener;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class MenuCreatePostFragment extends Fragment implements View.OnClickListener {
 
     private CreatePostContentButtonsBinding binding;
     private CreatePostViewModel createPostViewModel;
+    private ICreatePostListener createPostListener;
+    private ITestListener testListener;
+    public int test;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +39,7 @@ public class MenuCreatePostFragment extends Fragment implements View.OnClickList
         binding.buttonUseCameraCreatePost.setOnClickListener(this);
         binding.buttonAddImageCreatePost.setOnClickListener(this);
         binding.buttonAddVideoCreatePost.setOnClickListener(this);
+        createPostListener = new CreatePostFragment();
         return binding.getRoot();
     }
 
@@ -57,15 +64,15 @@ public class MenuCreatePostFragment extends Fragment implements View.OnClickList
         }
     }
 
+    // убрать else?
     private void createPostItem(int type) {
         if (createPostViewModel.getPostItems().isEmpty()) {
-            createPostViewModel.setNewPostItemData(type, 0);
+            createPostViewModel.setNewPostItem(new PostItem(type, 0, null));
             Log.d("TAG", "createPostItem: " + type);
         } else {
-            createPostViewModel.setNewPostItemData(type,
-                    createPostViewModel.getPostItems().size());
+            createPostViewModel.setNewPostItem(new PostItem(type,
+                    createPostViewModel.getPostItems().size(), null));
             Log.d("TAG", "createPostItem2: ");
         }
-
     }
 }

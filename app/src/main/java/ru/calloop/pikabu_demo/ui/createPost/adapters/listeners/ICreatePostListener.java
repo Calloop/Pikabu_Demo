@@ -1,9 +1,9 @@
-package ru.calloop.pikabu_demo.ui.createPost;
+package ru.calloop.pikabu_demo.ui.createPost.adapters.listeners;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 public interface ICreatePostListener {
-    void onTextViewUpdated(int position, String contentValue);
+    void setContentValue(int position, String contentValue);
 
     void onClickRemoveItem(int position);
 

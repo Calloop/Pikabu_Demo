@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
-import ru.calloop.pikabu_demo.ui.createPost.ICreatePostListener;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -13,8 +12,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         super(binding.getRoot());
     }
 
-    public void bind(PostItem postItem, ICreatePostListener listener,
-                     boolean actionModeState) {
+    public void bind(PostItem postItem, boolean actionModeState) {
 
     }
 

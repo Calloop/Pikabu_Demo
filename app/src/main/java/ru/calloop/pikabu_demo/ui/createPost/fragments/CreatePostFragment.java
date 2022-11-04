@@ -5,8 +5,9 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
+import android.app.AlertDialog;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -33,10 +34,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -47,18 +50,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.databinding.CreatePostBinding;
 //import ru.calloop.pikabu_demo.ui.createPost.ItemMoveCallback;
 import ru.calloop.pikabu_demo.ui.createPost.CreatePostViewModel;
-import ru.calloop.pikabu_demo.ui.createPost.ICreatePostListener;
 import ru.calloop.pikabu_demo.ui.createPost.ItemMoveCallback;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.CreatePostAdapter;
+import ru.calloop.pikabu_demo.ui.createPost.adapters.listeners.ICreatePostListener;
+import ru.calloop.pikabu_demo.ui.models.PostItem;
 
-public class CreatePostFragment extends Fragment {
+public class CreatePostFragment extends Fragment implements ICreatePostListener {
 
     private CreatePostBinding binding;
     private CreatePostViewModel createPostViewModel;
@@ -71,10 +78,7 @@ public class CreatePostFragment extends Fragment {
     private TextView createPostHeadlineText;
     private boolean actionModeState;
 
-    private boolean isReadPermissionGranted;
-    private boolean isWritePermissionGranted;
-    private int newPostItemType = 0;
-    private int newPostItemPosition = 0;
+    PostItem postItem;
 
 
 //    private final ActivityResultLauncher<Intent> loadImageLauncher = registerForActivityResult(
@@ -106,18 +110,24 @@ public class CreatePostFragment extends Fragment {
 //            });
 
     private final ActivityResultLauncher<Intent> loadImageLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                        Uri imageUri = result.getData().getData();
-                        Bitmap bitmap = getBitmapFromUri(imageUri);
-                        String path = saveImageToInternalStorage(bitmap, "" + newPostItemPosition);
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri imageUri = result.getData().getData();
+                    Bitmap bitmap = getBitmapFromUri(imageUri);
+                    String path = saveImageToInternalStorage(bitmap);
 
-                        if (adapter.createPostItem(newPostItemType, newPostItemPosition, path)) {
-                            setContentToPreferences();
-                            Log.d("TAG", "onActivityResult: " + path);
-                        }
+                    PostItem last = adapter.getLastPostItemCreated();
+                    adapter.getAdapterList().get(last.getPosition()).setValue(path);
+                    //setContentToPreferences();
+                    adapter.clearLastPostItemCreated();
+
+
+                    //PostItem postItem = new PostItem(createPostViewModel.getNewPostItem())
+
+
+//                        if (createPostItem(newPostItemType, newPostItemPosition, path)) {
+//                            setContentToPreferences();
+//                        }
 
 
 //                    Intent intent = result.getData();
@@ -143,7 +153,7 @@ public class CreatePostFragment extends Fragment {
 //                            Toast.makeText(activity, "SUCCESS", Toast.LENGTH_SHORT).show();
 //                            path = test.getPath();
 //                        }
-                    }
+                }
 //
 //                    ImageDecoder.Source source = ImageDecoder
 //                            .createSource(contentResolver, externalImageUri);
@@ -158,21 +168,37 @@ public class CreatePostFragment extends Fragment {
 //                    } catch (IOException e) {
 //                        e.printStackTrace();
 //                    }
-                }
             });
 
     @SuppressLint("ObsoleteSdkInt")
     private final ActivityResultLauncher<String[]> permissionsLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-                @Override
-                public void onActivityResult(Map<String, Boolean> result) {
-                    if (result.get(Manifest.permission.READ_EXTERNAL_STORAGE) != null) {
-                        isReadPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_EXTERNAL_STORAGE));
-                    }
+            new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+                boolean isReadPermissionGranted = false;
+                boolean isWritePermissionGranted = false;
 
-                    if (result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) != null) {
-                        isWritePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE));
+                if (result.get(Manifest.permission.READ_EXTERNAL_STORAGE) != null) {
+                    isReadPermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.READ_EXTERNAL_STORAGE));
+                }
+
+                if (result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) != null) {
+                    @SuppressLint("ObsoleteSdkInt")
+                    boolean minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+
+                    isWritePermissionGranted = Boolean.TRUE.equals(result.get(Manifest.permission.WRITE_EXTERNAL_STORAGE)) || minSdk29;
+                }
+
+                if (!isReadPermissionGranted || !isWritePermissionGranted) {
+                    if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            || !shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        getPermissionsDisallowedDialog().show();
                     }
+                } else {
+                    createPostViewModel.setIsPermissionsGranted(true);
+
+                    Intent intent = new Intent(Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                    loadImageLauncher.launch(intent);
                 }
             });
 
@@ -215,9 +241,7 @@ public class CreatePostFragment extends Fragment {
         activity.addMenuProvider(
                 new menuProvider(), getViewLifecycleOwner(), Lifecycle.State.RESUMED);
         navController = NavHostFragment.findNavController(this);
-
-        CreatePostListener createPostListener = new CreatePostListener();
-        adapter = new CreatePostAdapter(getContext(), createPostListener);
+        adapter = new CreatePostAdapter(getContext(), this);
         setRecyclerView();
         return binding.getRoot();
     }
@@ -226,8 +250,12 @@ public class CreatePostFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         createPostViewModel =
                 new ViewModelProvider(requireActivity()).get(CreatePostViewModel.class);
-        createPostViewModel.getNewPostItemData().observe(getViewLifecycleOwner(),
-                ints -> createPostItem(ints[0], ints[1]));
+        createPostViewModel.getNewPostItem().observe(getViewLifecycleOwner(),
+                postItem1 -> {
+                        Log.d("TAG", "type: " + postItem1.getType() + " |pos: " + postItem1.getPosition() + " |val: " + postItem1.getValue());
+                        createPostItem(postItem1);
+                });
+        //createPostViewModel.getIsPermissionsGranted().observe(getViewLifecycleOwner(), aBoolean -> testMethod());
     }
 
     @Override
@@ -320,6 +348,7 @@ public class CreatePostFragment extends Fragment {
         }
         createPostHeadlineText.setText(createPostViewModel.getPostHeadline());
         adapter.setAdapterList(createPostViewModel.getPostItems());
+        Log.d("TAG", "getContentFromPreferences: " + createPostViewModel.getPostItems());
     }
 
     private void setContentToPreferences() {
@@ -367,26 +396,39 @@ public class CreatePostFragment extends Fragment {
                         ? View.VISIBLE : View.GONE);
     }
 
-    private void createPostItem(int type, int position) {
-        switch (type) {
+    private void testMethod() {
+//        Intent intent = new Intent(Intent.ACTION_PICK,
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//        loadImageLauncher.launch(intent);
+    }
+
+    private void createPostItem(@NonNull PostItem postItem) {
+        Log.d("TAG", "createPostItem: ");
+        switch (postItem.getType()) {
             case 1:
-                if (adapter.createPostItem(type, position, null)) {
-                    setContentToPreferences();
-                }
+                adapter.addItem(postItem);
+                setContentToPreferences();
+                //createPostViewModel.setNewPostItem(0, 0); // можно скрыть?
+
+//                if (adapter.createPostItem(type, position, null)) {
+//                    setContentToPreferences();
+//                }
                 break;
             case 2:
                 break;
             case 3:
-                updateperms();
+                adapter.addItem(postItem);
+                adapter.notifyItemInserted(postItem.getPosition());
 
-                if (isReadPermissionGranted && isWritePermissionGranted) {
-                    this.newPostItemType = type;
-                    this.newPostItemPosition = position;
-                    Intent intent = new Intent(Intent.ACTION_PICK,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //setContentToPreferences();
 
-                    loadImageLauncher.launch(intent);
-                }
+                    String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+                    permissionsLauncher.launch(permissions);
+
+
                 break;
 //                    Intent intent = new Intent(Intent.ACTION_PICK,
 //                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -419,30 +461,127 @@ public class CreatePostFragment extends Fragment {
                 break;
         }
 
-        createPostViewModel.setNewPostItemData(0, 0); // можно скрыть?
+        createPostViewModel.setNewPostItem(new PostItem(0, 0, null));
         setDescriptionTextView();
     }
 //endregion
 
-    private void updateperms() {
+    private void permResult(Map<String, Boolean> grantResults) {
+//        if (grantResults.entrySet().al) {
+//            // granted
+//        } else {
+//            if (!ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//                // dailog
+//            } else {
+//                Toast.makeText(activity, "DENIED", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+    }
+
+    private void updatePermissions() {
+        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
         @SuppressLint("ObsoleteSdkInt")
         boolean minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
-
-        isReadPermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
+        boolean isReadPermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-
-        isWritePermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
+        boolean isWritePermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 || minSdk29;
 
-        Log.d("TAG", "1" + isReadPermissionGranted + "2" + isWritePermissionGranted);
-
         if (!isReadPermissionGranted || !isWritePermissionGranted) {
-            String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
-
-            permissionsLauncher.launch(permissions);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    || ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle("Perms");
+                builder.setMessage("message");
+                builder.setPositiveButton("OK", (dialog, which) -> {
+                    permissionsLauncher.launch(permissions);
+                });
+                builder.setNegativeButton("Canc", null);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), permissions, 0);
+            }
         }
+
+
+//        if (!isWritePermissionGranted) {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                Toast.makeText(activity, "need write", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+
+//        if (!isReadPermissionGranted || !isWritePermissionGranted) {
+//            String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//
+//            permissionsLauncher.launch(permissions);
+//        } else {
+//            createPostViewModel.setIsPermissionsGranted(true);
+//            Log.d("TAG", "updatePermissions: GRANTED");
+//        }
+    }
+
+    private AlertDialog.Builder getPermissionsRequiredDialog() {
+        return new AlertDialog.Builder(getContext())
+                .setTitle("Permissions required")
+                .setMessage("Allow to access to read storage for using content")
+                .setPositiveButton("Allow", (dialog, which) -> {
+                    String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                    permissionsLauncher.launch(permissions);
+                })
+                .setNegativeButton("Reject", (dialog, which) ->
+                        dialog.dismiss());
+    }
+
+    private AlertDialog.Builder getPermissionsDisallowedDialog() {
+        return new AlertDialog.Builder(getContext())
+                .setTitle("Permissions disallowed")
+                .setMessage("Allow to access to read storage for adding content")
+                .setPositiveButton("OK", (dialog, which) ->
+                        dialog.dismiss())
+                .setNegativeButton("Settings", (dialog, which) ->
+                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.fromParts("package",
+                                        requireActivity().getPackageName(), null))));
+    }
+
+    private void testtest() {
+//        @SuppressLint("ObsoleteSdkInt")
+//        boolean minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+//
+//        boolean isReadPermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
+//                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+//
+//        boolean isWritePermissionGranted = ContextCompat.checkSelfPermission(requireContext(),
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+//                || minSdk29;
+//
+//        if (!isReadPermissionGranted || !isWritePermissionGranted) {
+//            createPostViewModel.setIsPermissionsGranted(true);
+//        }
+//
+//        if (ContextCompat.checkSelfPermission(
+//                requireContext(), Manifest.permission.REQUESTED_PERMISSION) ==
+//                PackageManager.PERMISSION_GRANTED) {
+//            // You can use the API that requires the permission.
+//            performAction(...);
+//        } else if (shouldShowRequestPermissionRationale(...)) {
+//            // In an educational UI, explain to the user why your app requires this
+//            // permission for a specific feature to behave as expected, and what
+//            // features are disabled if it's declined. In this UI, include a
+//            // "cancel" or "no thanks" button that lets the user continue
+//            // using your app without granting the permission.
+//            showInContextUI(...);
+//        } else {
+//            // You can directly ask for the permission.
+//            // The registered ActivityResultCallback gets the result of this request.
+//            requestPermissionLauncher.launch(
+//                    Manifest.permission.REQUESTED_PERMISSION);
+//        }
     }
 
     private Bitmap getBitmapFromUri(Uri imageUri) {
@@ -469,7 +608,7 @@ public class CreatePostFragment extends Fragment {
     // ПЕРЕНЕСТИ ВО VIEW MODEL
 //region [IMAGE OPERATIONS]
     @Nullable
-    private String saveImageToInternalStorage(Bitmap bitmap, String name) {
+    private String saveImageToInternalStorage(Bitmap bitmap) {
 //        @SuppressLint("ObsoleteSdkInt") Uri build =
 //                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ?
 //                        MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
@@ -496,7 +635,7 @@ public class CreatePostFragment extends Fragment {
         ContextWrapper contextWrapper = new ContextWrapper(requireContext());
         File fileDirectory = contextWrapper.getDir("Images", MODE_PRIVATE);
         String fileName = String.format(Locale.getDefault(), "%s.%s",
-                name, "jpg");
+                Objects.requireNonNull(fileDirectory.listFiles()).length + 1, "jpg");
         File filePath = new File(fileDirectory, fileName);
 
         try {
@@ -540,6 +679,29 @@ public class CreatePostFragment extends Fragment {
 //    }
 //endregion
 
+    @Override
+    public void setContentValue(int position, String contentValue) {
+        adapter.getAdapterList().get(position).setValue(contentValue);
+    }
+
+    @Override
+    public void onClickRemoveItem(int position) {
+        adapter.getAdapterList().remove(position);
+        adapter.notifyItemRemoved(position);
+    }
+
+    //region [CREATE POST LISTENER]
+    @Override
+    public void onClickAddItem(int type, int position) {
+        createPostViewModel.setNewPostItem(new PostItem(type, position, null));
+    }
+
+    @Override
+    public void requestDrag(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
+    }
+//endregion
+
     // ПЕРЕНЕСТИ В ОТДЕЛЬНЫЙ ФАЙЛ
     private class menuProvider implements MenuProvider {
         @Override
@@ -561,7 +723,7 @@ public class CreatePostFragment extends Fragment {
             if (itemId == R.id.add_post_create_post) {
                 createPostViewModel.insertPostToDB(createPostViewModel.getAccountId(),
                         String.valueOf(createPostHeadlineText.getText()),
-                        adapter.getAdapterList());
+                        createPostViewModel.getPostItems());
                 createPostHeadlineText.setText(null);
                 adapter.getAdapterList().clear();
                 createPostViewModel.clearPreferences();
@@ -570,29 +732,6 @@ public class CreatePostFragment extends Fragment {
             }
 
             return false;
-        }
-    }
-
-    private class CreatePostListener implements ICreatePostListener {
-        @Override
-        public void onTextViewUpdated(int position, String contentValue) {
-            adapter.getAdapterList().get(position).setValue(contentValue);
-        }
-
-        @Override
-        public void onClickRemoveItem(int position) {
-            adapter.removePostItem(position);
-        }
-
-        @Override
-        public void onClickAddItem(int type, int position) {
-            createPostViewModel.setNewPostItemData(type, position);
-            createPostItem(type, position);
-        }
-
-        @Override
-        public void requestDrag(RecyclerView.ViewHolder viewHolder) {
-            itemTouchHelper.startDrag(viewHolder);
         }
     }
 }

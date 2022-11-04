@@ -2,7 +2,6 @@ package ru.calloop.pikabu_demo.ui.createPost.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -16,11 +15,12 @@ import java.util.List;
 
 import ru.calloop.pikabu_demo.databinding.CreatePostImagePostItemBinding;
 import ru.calloop.pikabu_demo.databinding.CreatePostTextPostItemBinding;
-import ru.calloop.pikabu_demo.ui.createPost.ICreatePostListener;
+import ru.calloop.pikabu_demo.ui.createPost.adapters.listeners.ICreatePostListener;
 import ru.calloop.pikabu_demo.ui.createPost.ItemMoveCallback;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.holders.BaseViewHolder;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.holders.ImageViewHolder;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.holders.TextViewHolder;
+import ru.calloop.pikabu_demo.ui.models.Post;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 import ru.calloop.pikabu_demo.ui.models.diffUtils.PostItemsDiffUtil;
 
@@ -30,18 +30,19 @@ public class CreatePostAdapter
 
     private final Context context;
     private final List<PostItem> postItems;
-    private final ICreatePostListener listener;
+    private final ICreatePostListener createPostListener;
     private boolean actionModeState;
+    private PostItem lastPostItemCreated;
 
     // ПЕРЕМЕСТИТЬ В ОБЩИЙ СПИСОК ПЕРЕМЕННЫХ
     public static final int TYPE_TEXT_BLOCK = 1;
     public static final int TYPE_IMAGE_BLOCK = 2;
 
     public CreatePostAdapter(Context context,
-                             ICreatePostListener listener) {
+                             ICreatePostListener createPostListener) {
         this.context = context;
-        this.listener = listener;
-        postItems = new ArrayList<>(1);
+        this.createPostListener = createPostListener;
+        postItems = new ArrayList<>();
     }
 
     @NonNull
@@ -51,18 +52,18 @@ public class CreatePostAdapter
         if (viewType == 1) {
             CreatePostTextPostItemBinding binding =
                     CreatePostTextPostItemBinding.inflate(inflater, parent, false);
-            return new TextViewHolder(binding);
+            return new TextViewHolder(binding, createPostListener);
         } else if (viewType == 3) {
             CreatePostImagePostItemBinding binding =
                     CreatePostImagePostItemBinding.inflate(inflater, parent, false);
-            return new ImageViewHolder(binding);
+            return new ImageViewHolder(binding, createPostListener);
         }
         throw new IllegalArgumentException("The view type value of $viewType is not supported");
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        holder.bind(postItems.get(position), listener, actionModeState);
+        holder.bind(postItems.get(position), actionModeState);
     }
 
     //region [ITEM DATA]
@@ -109,17 +110,17 @@ public class CreatePostAdapter
     //endregion
 
     //region [POST ITEM OPERATIONS]
-    public boolean createPostItem(int type, int position, String postItemValue) {
-        PostItem postItem = new PostItem(type, position, postItemValue);
-        postItems.add(position, postItem);
-        notifyItemInserted(position);
-        return true;
-    }
+//    public boolean createPostItem(int type, int position, String postItemValue) {
+//        PostItem postItem = new PostItem(type, position, postItemValue);
+//        postItems.add(position, postItem);
+//        notifyItemInserted(position);
+//        return true;
+//    }
 
-    public void removePostItem(int position) {
-        postItems.remove(position);
-        notifyItemRemoved(position);
-    }
+//    public void removePostItem(int position) {
+//        postItems.remove(position);
+//        notifyItemRemoved(position);
+//    }
     //endregion
 
     //region [ADAPTER LIST OPERATIONS]
@@ -136,6 +137,20 @@ public class CreatePostAdapter
         postItems.clear();
         postItems.addAll(newPostItems);
         postItemsDiffResult.dispatchUpdatesTo(this);
+    }
+
+    public void addItem(PostItem postItem) {
+        postItems.add(postItem.getPosition(), postItem);
+        lastPostItemCreated = postItem;
+        notifyItemInserted(postItem.getPosition());
+    }
+
+    public PostItem getLastPostItemCreated() {
+        return  lastPostItemCreated;
+    }
+
+    public  void clearLastPostItemCreated() {
+        lastPostItemCreated = null;
     }
     //endregion
 

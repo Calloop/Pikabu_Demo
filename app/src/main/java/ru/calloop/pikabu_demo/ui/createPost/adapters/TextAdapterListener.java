@@ -6,16 +6,25 @@ import android.text.TextWatcher;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ru.calloop.pikabu_demo.ui.createPost.ICreatePostListener;
+import ru.calloop.pikabu_demo.ui.createPost.adapters.listeners.ICreatePostListener;
 
 public class TextAdapterListener implements TextWatcher {
     private Timer timer;
     private ICreatePostListener listener;
     private int position;
+    private String contentValue;
 
     public void setListener(ICreatePostListener listener) {
         this.listener = listener;
     }
+
+    public String getContentValue() {
+        return contentValue;
+    }
+
+//    public int getPosition() {
+//        return position;
+//    }
 
     public void setPosition(int position) {
         this.position = position;
@@ -39,7 +48,7 @@ public class TextAdapterListener implements TextWatcher {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                listener.onTextViewUpdated(position, editable.toString());
+                listener.setContentValue(position, editable.toString());
             }
         }, DELAY);
     }

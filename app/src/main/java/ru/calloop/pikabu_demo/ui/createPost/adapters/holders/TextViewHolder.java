@@ -10,12 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import ru.calloop.pikabu_demo.databinding.CreatePostTextPostItemBinding;
-import ru.calloop.pikabu_demo.ui.createPost.ICreatePostListener;
+import ru.calloop.pikabu_demo.ui.createPost.adapters.listeners.ICreatePostListener;
 import ru.calloop.pikabu_demo.ui.createPost.adapters.TextAdapterListener;
 import ru.calloop.pikabu_demo.ui.models.PostItem;
 
 public class TextViewHolder extends BaseViewHolder {
 
+    private final ICreatePostListener createPostListener;
     private final TextAdapterListener textAdapterListener;
     private final EditText content;
     private final Button addContent;
@@ -27,7 +28,8 @@ public class TextViewHolder extends BaseViewHolder {
     private final Button addTextContent;
 
 
-    public TextViewHolder(@NonNull CreatePostTextPostItemBinding binding) {
+    public TextViewHolder(@NonNull CreatePostTextPostItemBinding binding,
+                          ICreatePostListener createPostListener) {
         super(binding);
         content = binding.createPostTextTypeContent;
         addContent = binding.includeCreatePostAddPostItem.buttonAddBlockCreatePost;
@@ -39,28 +41,29 @@ public class TextViewHolder extends BaseViewHolder {
         addTextContent = binding.includeCreatePostAddPostItem.createPostContentButtons
                 .buttonAddTextCreatePost;
 
+        this.createPostListener = createPostListener;
         textAdapterListener = new TextAdapterListener();
     }
 
 
-    public void bind(@NonNull PostItem data, ICreatePostListener listener,
-                     boolean actionModeState) {
+    public void bind(@NonNull PostItem data, boolean actionModeState) {
+        setListeners(data.getType());
         content.setText(data.getValue());
         content.setEnabled(!actionModeState);
         addContent.setVisibility(actionModeState ? View.GONE : View.VISIBLE);
         editingMenu.setVisibility(actionModeState ? View.VISIBLE : View.GONE);
-        setListeners(listener, data.getType());
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public void setListeners(ICreatePostListener listener, int itemType) {
-        textAdapterListener.setListener(listener);
+    public void setListeners(int itemType) {
+        textAdapterListener.setListener(createPostListener);
         textAdapterListener.setPosition(getBindingAdapterPosition());
         content.addTextChangedListener(textAdapterListener);
 
         moveContent.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                listener.requestDrag(TextViewHolder.this);
+                createPostListener.requestDrag(TextViewHolder.this);
                 return true;
             }
             return false;
@@ -72,12 +75,12 @@ public class TextViewHolder extends BaseViewHolder {
         });
 
         addTextContent.setOnClickListener(v -> {
-            listener.onClickAddItem(itemType, getLayoutPosition());
+            createPostListener.onClickAddItem(itemType, getAbsoluteAdapterPosition());
             addContent.setVisibility(View.VISIBLE);
             addItemMenu.setVisibility(View.GONE);
         });
 
         deleteContent.setOnClickListener(v ->
-                listener.onClickRemoveItem(getBindingAdapterPosition()));
+                createPostListener.onClickRemoveItem(getBindingAdapterPosition()));
     }
 }
