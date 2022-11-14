@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:paddingHorizontal="10dp"
     android:paddingTop="10dp"
-    tools:context=".ui.main.home.tabs.Tab1MainFragment">
+    tools:context=".ui.fragments.main.home.tabs.Tab1MainFragment">
 
     <include
         android:id="@+id/main_post_header"

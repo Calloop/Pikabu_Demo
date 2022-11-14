@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="ru.calloop.pikabu_demo.ui.main.home.HomeFragment"
+        android:name="ru.calloop.pikabu_demo.ui.fragments.main.home.HomeFragment"
         android:label="Пикабу Демо"
         tools:layout="@layout/home">
         <action
@@ -19,17 +19,17 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="ru.calloop.pikabu_demo.ui.main.settings.SettingsFragment"
+        android:name="ru.calloop.pikabu_demo.ui.fragments.main.settings.SettingsFragment"
         android:label="Настройки"
         tools:layout="@layout/settings" />
     <fragment
         android:id="@+id/createPostFragment"
-        android:name="ru.calloop.pikabu_demo.ui.createPost.fragments.CreatePostFragment"
+        android:name="ru.calloop.pikabu_demo.ui.fragments.createPost.CreatePostFragment"
         android:label="Создать пост"
         tools:layout="@layout/create_post" />
     <fragment
         android:id="@+id/signInFragment"
-        android:name="ru.calloop.pikabu_demo.ui.signing.SignInFragment"
+        android:name="ru.calloop.pikabu_demo.ui.fragments.signing.SignInFragment"
         android:label="Авторизация"
         tools:layout="@layout/sign_in">
         <action
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="ru.calloop.pikabu_demo.ui.signing.SignUpFragment"
+        android:name="ru.calloop.pikabu_demo.ui.fragments.signing.SignUpFragment"
         android:label="Регистрация"
         tools:layout="@layout/sign_up"/>
 </navigation>

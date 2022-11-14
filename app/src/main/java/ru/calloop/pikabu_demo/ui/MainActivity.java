@@ -14,8 +14,8 @@ import java.util.Objects;
 import ru.calloop.pikabu_demo.R;
 import ru.calloop.pikabu_demo.databinding.ActivityBinding;
 import ru.calloop.pikabu_demo.databinding.ActivityHeaderDrawer2Binding;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.ISessionPreferences;
-import ru.calloop.pikabu_demo.ui.repositories.SharedPreferences.session.SessionPreferences;
+import ru.calloop.pikabu_demo.data.repositories.SharedPreferences.session.ISessionPreferences;
+import ru.calloop.pikabu_demo.data.repositories.SharedPreferences.session.SessionPreferences;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener {
@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity
         headerBinding = ActivityHeaderDrawer2Binding.bind(headerView);
         headerBinding.buttonDrawerSignIn.setOnClickListener(this);
         headerBinding.buttonDrawerSignOut.setOnClickListener(this);
-
-        setSigningButtonVisibility();
     }
 
     @Override
@@ -62,10 +60,14 @@ public class MainActivity extends AppCompatActivity
                 && Objects.requireNonNull(
                 navController.getCurrentDestination()).getId() != R.id.signInFragment) {
             navController.navigate(R.id.action_homeFragment_to_signInFragment);
-        } else if (id == headerBinding.buttonDrawerSignOut.getId()) {
-            sessionPreferenceRepository.endUserSession();
+            setSigningButtonVisibility();
         }
-        setSigningButtonVisibility();
+
+        if (id == headerBinding.buttonDrawerSignOut.getId()) {
+            sessionPreferenceRepository.endUserSession();
+            setSigningButtonVisibility();
+        }
+
     }
 
     private void setSigningButtonVisibility() {

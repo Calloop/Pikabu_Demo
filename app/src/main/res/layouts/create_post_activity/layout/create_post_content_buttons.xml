@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.createPost.fragments.CreatePostFragment">
+    tools:context=".ui.fragments.createPost.CreatePostFragment">
 
     <Button
         android:id="@+id/button_add_text_create_post"

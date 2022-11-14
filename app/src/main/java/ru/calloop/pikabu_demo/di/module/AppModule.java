@@ -9,17 +9,17 @@ import dagger.Provides;
 
 @Module
 public class AppModule {
-    private Context context;
-
-    public AppModule(Context context) {
-        this.context = context;
-    }
-
-    @Provides
-    @Singleton
-    Context providesContext() {
-        return this.context;
-    }
+//    private Context context;
+//
+//    public AppModule(Context context) {
+//        this.context = context;
+//    }
+//
+//    @Provides
+//    @Singleton
+//    Context providesContext() {
+//        return this.context;
+//    }
 
 //    PostItemRepository providesPostItemRepository(){
 //        return new PostItemRepositoryImpl(context);
